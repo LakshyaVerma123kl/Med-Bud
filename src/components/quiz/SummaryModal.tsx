@@ -19,6 +19,12 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Reset state when the chapter changes
+  useEffect(() => {
+    setSummary(null);
+    setError(null);
+  }, [chapterId, book]);
+
   useEffect(() => {
     if (isOpen && !summary) {
       setLoading(true);
