@@ -99,7 +99,7 @@ export function PDFUploader() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-2xl p-10 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
+          className={`border-2 border-dashed rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
             isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/50"
           }`}
         >
@@ -156,7 +156,7 @@ export function PDFUploader() {
                 onChange={(e) => setQuizName(e.target.value)}
                 disabled={isProcessing}
                 placeholder="e.g. Pathology Chapter 4 Notes"
-                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm font-medium focus:ring-2 focus:ring-primary focus:outline-none transition-all"
+                className="w-full px-4 py-3 sm:py-3.5 rounded-xl border border-border bg-background text-base font-medium focus:ring-2 focus:ring-primary focus:outline-none transition-all"
               />
             </div>
           </div>
@@ -164,7 +164,7 @@ export function PDFUploader() {
           <button
             onClick={processPDF}
             disabled={isProcessing || !quizName.trim()}
-            className="w-full max-w-sm inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold shadow-md hover:bg-primary/90 disabled:opacity-70 transition-all"
+            className="w-full max-w-sm inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[56px] rounded-xl bg-primary text-white font-semibold text-lg shadow-md hover:bg-primary/90 disabled:opacity-70 transition-all active:scale-[0.98]"
           >
             {isProcessing ? (
               <>

@@ -79,14 +79,14 @@ export default function HomePage() {
           >
             <Link
               href="#textbooks"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all hover:-translate-y-1"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95"
             >
               Choose a Textbook
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/dashboard"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-card border border-border text-foreground font-semibold text-base shadow-sm hover:bg-muted transition-all hover:-translate-y-1"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 min-h-[56px] rounded-xl bg-card border border-border text-foreground font-bold text-lg shadow-sm hover:bg-muted transition-all active:scale-95"
             >
               <Trophy className="w-4 h-4 text-amber-500" />
               View Your Dashboard
@@ -189,7 +189,7 @@ export default function HomePage() {
                   {/* Button */}
                   <Link
                     href={`/book/${book.id}`}
-                    className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-md group-hover:shadow-primary/25"
+                    className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-all shadow-md group-hover:shadow-primary/25 active:scale-[0.98]"
                   >
                     Browse Chapters ({book.chapterCount})
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

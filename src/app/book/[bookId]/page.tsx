@@ -18,6 +18,15 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const [search, setSearch] = useState("");
   const { getChapterMastery, isLoaded } = useProgress();
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     async function fetchCounts() {
@@ -63,43 +72,55 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header Band */}
       <div
-        className={`sticky top-16 z-40 border-b py-8 sm:py-12 px-4 sm:px-6 lg:px-8 shadow-sm ${
+        className={`sticky top-16 z-40 border-b px-4 sm:px-6 lg:px-8 shadow-sm transition-all duration-300 ${
+          isScrolled ? "py-3 sm:py-4" : "py-8 sm:py-12"
+        } ${
           isReddy
             ? "bg-gradient-to-r from-blue-950/95 via-slate-900/95 to-indigo-950/95 text-white border-blue-900/40 backdrop-blur-xl"
             : "bg-gradient-to-r from-teal-950/95 via-slate-900/95 to-emerald-950/95 text-white border-teal-900/40 backdrop-blur-xl"
         }`}
       >
         <div className="max-w-5xl mx-auto">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-white/70 hover:text-white transition-colors mb-6"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>All Textbooks</span>
-          </Link>
+          {!isScrolled && (
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-white/70 hover:text-white transition-colors mb-6"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>All Textbooks</span>
+            </Link>
+          )}
 
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-            <div className="flex items-start gap-4">
-              <span className="text-5xl shrink-0">{book.icon}</span>
-              <div>
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
-                  Standard Medical Reference
-                </span>
-                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-1">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-3 sm:gap-4 overflow-hidden">
+              <span className={`shrink-0 transition-all duration-300 ${isScrolled ? "text-2xl sm:text-3xl" : "text-4xl sm:text-5xl"}`}>
+                {book.icon}
+              </span>
+              <div className="min-w-0">
+                {!isScrolled && (
+                  <span className="inline-block text-xs font-bold uppercase tracking-wider text-white/60 mb-1">
+                    Standard Medical Reference
+                  </span>
+                )}
+                <h1 className={`font-extrabold tracking-tight text-white transition-all duration-300 truncate ${
+                  isScrolled ? "text-lg sm:text-xl" : "text-3xl sm:text-4xl mb-1"
+                }`}>
                   {book.subject}
                 </h1>
-                <p className="text-white/80 text-sm font-medium">{book.author}</p>
+                {!isScrolled && (
+                  <p className="text-white/80 text-sm font-medium truncate">{book.author}</p>
+                )}
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-                <span className="block text-xl font-bold text-white">{chapters.length}</span>
-                <span className="text-[10px] uppercase font-semibold text-white/70">Chapters</span>
+            <div className={`flex items-center gap-2 sm:gap-3 shrink-0 transition-all duration-300 ${isScrolled ? "scale-90 origin-right" : "scale-100"}`}>
+              <div className="px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
+                <span className="block text-base sm:text-xl font-bold text-white leading-none mb-0.5">{chapters.length}</span>
+                <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-white/70">Ch</span>
               </div>
-              <div className="px-4 py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-                <span className="block text-xl font-bold text-white">{book.totalQuestions}+</span>
-                <span className="text-[10px] uppercase font-semibold text-white/70">Questions</span>
+              <div className="hidden sm:block px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
+                <span className="block text-base sm:text-xl font-bold text-white leading-none mb-0.5">{book.totalQuestions}+</span>
+                <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-white/70">Qs</span>
               </div>
             </div>
           </div>

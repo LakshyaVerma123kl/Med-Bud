@@ -175,30 +175,30 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
             </div>
 
             {/* Actions */}
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
               <button
                 onClick={() => {
                   restart();
                   setHasRecordedResult(false);
                   setFeedback(null);
                 }}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-all shadow-md"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 min-h-[56px] rounded-xl bg-primary text-white text-base sm:text-lg font-bold hover:bg-primary/90 transition-all shadow-md active:scale-95"
               >
-                <RotateCcw className="w-4 h-4" />
+                <RotateCcw className="w-5 h-5" />
                 Retry Quiz
               </button>
               <Link
                 href={`/book/${bookId}`}
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border border-border text-foreground text-sm font-semibold hover:bg-muted transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 min-h-[56px] rounded-xl bg-card border border-border text-foreground text-base sm:text-lg font-bold hover:bg-muted transition-all active:scale-95"
               >
-                <ArrowLeft className="w-4 h-4" />
+                <ArrowLeft className="w-5 h-5" />
                 Other Chapters
               </Link>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border border-border text-foreground text-sm font-semibold hover:bg-muted transition-all"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 min-h-[56px] rounded-xl bg-card border border-border text-foreground text-base sm:text-lg font-bold hover:bg-muted transition-all active:scale-95"
               >
-                <BarChart3 className="w-4 h-4" />
+                <BarChart3 className="w-5 h-5" />
                 Dashboard
               </Link>
             </div>
@@ -416,8 +416,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              className="space-y-4 mb-8"
+              className="space-y-4 mb-24 sm:mb-8"
             >
               {/* Feedback banner */}
               <div
@@ -442,16 +441,40 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                 </p>
               </div>
 
-              {/* Next Question Button */}
+              {/* Next Question Button (Desktop) */}
               <button
                 onClick={() => {
                   nextQuestion();
                   setFeedback(null);
                 }}
-                className="w-full py-4 px-6 rounded-xl bg-primary text-white font-bold text-base hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2"
+                className="hidden sm:flex w-full py-4 px-6 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 items-center justify-center gap-2 active:scale-[0.98]"
               >
                 <span>{quizProgress.current === quizProgress.total ? "View Results Summary" : "Next Question"}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Mobile Sticky Next Button */}
+        <AnimatePresence>
+          {state.showExplanation && feedback && (
+            <motion.div
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              exit={{ y: 100 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="fixed bottom-0 left-0 right-0 z-50 sm:hidden bg-background/85 backdrop-blur-2xl border-t border-border p-4 pb-[calc(1rem+env(safe-area-inset-bottom))]"
+            >
+              <button
+                onClick={() => {
+                  nextQuestion();
+                  setFeedback(null);
+                }}
+                className="w-full py-4 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-transform"
+              >
+                <span>{quizProgress.current === quizProgress.total ? "View Results" : "Next Question"}</span>
+                <ArrowRight className="w-5 h-5" />
               </button>
             </motion.div>
           )}

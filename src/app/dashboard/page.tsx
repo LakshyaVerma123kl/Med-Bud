@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Trophy, Target, Flame, BookOpen, TrendingUp, Award,
-  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar
+  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar, Trash2
 } from "lucide-react";
 import { useProgress, availableBadges } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
@@ -37,6 +37,21 @@ export default function DashboardPage() {
     };
     fetchPDFs();
   }, []);
+
+  const handleDeletePDF = (e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    if (!window.confirm("Remove this quiz from your dashboard?")) return;
+    
+    const lib = localStorage.getItem("my_pdf_quizzes");
+    if (lib) {
+      try {
+        const ids = JSON.parse(lib);
+        const newIds = ids.filter((pdfId: string) => pdfId !== id);
+        localStorage.setItem("my_pdf_quizzes", JSON.stringify(newIds));
+        setPdfLibrary(prev => prev.filter(pdf => pdf.id !== id));
+      } catch (e) {}
+    }
+  };
 
   if (!isLoaded) {
     return (
@@ -192,10 +207,19 @@ export default function DashboardPage() {
                             </p>
                             <span className="text-muted-foreground flex items-center gap-1 mt-0.5">
                               <Calendar className="w-3 h-3" />
-                              {new Date(pdf.date).toLocaleDateString()} • {pdf.questions?.length || 0} Qs
+                              {new Date(pdf.created_at || pdf.date).toLocaleDateString()} • {pdf.questions?.length || 0} Qs
                             </span>
                           </div>
-                          <ArrowRight className="w-3.5 h-3.5 text-primary shrink-0 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={(e) => handleDeletePDF(e, pdf.id)}
+                              className="p-1.5 rounded-md hover:bg-error/10 text-muted-foreground hover:text-error transition-colors"
+                              title="Remove from Dashboard"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                            <ArrowRight className="w-4 h-4 text-primary shrink-0 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                          </div>
                         </Link>
                       ))}
                     </div>
