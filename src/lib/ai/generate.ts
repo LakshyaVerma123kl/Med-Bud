@@ -120,6 +120,7 @@ export async function generateSummary(book: BookId, chapter: string): Promise<{ 
   2. Include a brief overview paragraph.
   3. Use bullet points for key concepts, high-yield facts, and medicolegal or epidemiological importance.
   4. Keep it concise (300-500 words) but highly informative for exam revision.
+  5. At the very end, include a dedicated "Tips & Suggestions" section with practical advice, memorization mnemonics, or common pitfalls related to the chapter's topics.
   
   Do not include any JSON wrapping. Return ONLY the markdown text.`;
 
