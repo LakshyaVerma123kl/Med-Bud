@@ -115,18 +115,23 @@ export async function generateSummary(book: BookId, chapter: string): Promise<{ 
 
   const prompt = `You are an expert medical educator. Create a high-yield, comprehensive, and well-structured revision summary for "${bookName}", Chapter: "${chapter}".
   
-  Requirements:
-  1. Use Markdown formatting.
-  2. Include a brief overview paragraph.
-  3. Use bullet points for key concepts, high-yield facts, and medicolegal or epidemiological importance.
-  4. Keep it concise (300-500 words) but highly informative for exam revision.
-  5. At the very end, include a dedicated "Tips & Suggestions" section with practical advice, memorization mnemonics, or common pitfalls related to the chapter's topics.
+  Return a JSON object strictly matching this schema, without any markdown formatting wrappers (no \`\`\`json):
+  {
+    "overview": "A comprehensive paragraph summarizing the chapter.",
+    "key_concepts": ["concept 1", "concept 2"],
+    "high_yield_facts": ["fact 1", "fact 2"],
+    "epidemiological_and_medicolegal_importance": ["importance 1", "importance 2"],
+    "tips_and_suggestions": ["mnemonic 1", "pitfall 1", "tip 1"]
+  }
   
-  Do not include any JSON wrapping. Return ONLY the markdown text.`;
+  Requirements:
+  - Keep each bullet point informative and exam-focused.
+  - Use proper LaTeX formatting for any medical formulas or statistics (e.g. $\\text{SD} = \\sqrt{\\text{Variance}}$).
+  - Do not use markdown inside the arrays, just plain text and LaTeX.`;
 
   try {
     const res = await callForGeneration([
-      { role: "system", content: "You are a precise medical summarizer. Output markdown only." },
+      { role: "system", content: "You are a precise medical summarizer. Output raw JSON only without any markdown formatting wrappers." },
       { role: "user", content: prompt }
     ]);
     return { summary: res.content, success: true };

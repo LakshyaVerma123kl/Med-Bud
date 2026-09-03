@@ -103,37 +103,65 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                     </button>
                   </div>
                 ) : summary ? (
-                  <div className="max-w-none">
-                    <ReactMarkdown
-                      remarkPlugins={[remarkMath]}
-                      rehypePlugins={[rehypeKatex]}
-                      components={{
-                        h3: ({ node, ...props }) => (
-                          <h3 className="text-sm font-bold text-primary uppercase tracking-wider mt-8 mb-4 flex items-center gap-2 border-b border-border/50 pb-2" {...props} />
-                        ),
-                        p: ({ node, ...props }) => (
-                          <p className="text-sm sm:text-base text-foreground/80 leading-relaxed mb-4" {...props} />
-                        ),
-                        ul: ({ node, ...props }) => (
-                          <ul className="space-y-3 mb-6" {...props} />
-                        ),
-                        li: ({ node, ...props }) => (
-                          <li className="flex items-start gap-2.5 text-sm sm:text-base text-foreground/80 leading-relaxed">
-                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-2 shrink-0 shadow-[0_0_8px_rgba(var(--primary),0.5)]" />
-                            <span className="flex-1">{props.children}</span>
-                          </li>
-                        ),
-                        strong: ({ node, ...props }) => (
-                          <strong className="font-semibold text-foreground bg-primary/5 px-1 rounded" {...props} />
-                        ),
-                      }}
-                    >
-                      {summary
-                        .replace(/\\n/g, "\n")
-                        .replace(/^#\s+Revision Summary.*\n?/im, "")
-                        .replace(/^##\s+Chapter.*\n?/im, "")
-                        .trim()}
-                    </ReactMarkdown>
+                  <div className="max-w-none space-y-8">
+                    {(() => {
+                      let parsed;
+                      try {
+                        parsed = JSON.parse(summary);
+                      } catch (e) {
+                        return (
+                          <div className="prose prose-sm dark:prose-invert max-w-none">
+                            <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                              {summary}
+                            </ReactMarkdown>
+                          </div>
+                        );
+                      }
+
+                      const renderSection = (title: string, items: string[], icon: React.ReactNode) => {
+                        if (!items || items.length === 0) return null;
+                        return (
+                          <div className="mb-6">
+                            <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-border/50 pb-2">
+                              {icon}
+                              {title}
+                            </h3>
+                            <ul className="space-y-3">
+                              {items.map((item, i) => (
+                                <li key={i} className="flex items-start gap-2.5 text-sm sm:text-base text-foreground/80 leading-relaxed">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-2 shrink-0 shadow-[0_0_8px_rgba(var(--primary),0.5)]" />
+                                  <span className="flex-1">
+                                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]} components={{ p: ({node, ...props}) => <span {...props} /> }}>
+                                      {item}
+                                    </ReactMarkdown>
+                                  </span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      };
+
+                      return (
+                        <>
+                          {parsed.overview && (
+                            <div className="bg-primary/5 rounded-xl p-5 mb-8 border border-primary/10">
+                              <h3 className="text-sm font-bold text-primary uppercase tracking-wider mb-2">Overview</h3>
+                              <p className="text-sm sm:text-base text-foreground/90 leading-relaxed">
+                                <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]} components={{ p: ({node, ...props}) => <span {...props} /> }}>
+                                  {parsed.overview}
+                                </ReactMarkdown>
+                              </p>
+                            </div>
+                          )}
+
+                          {renderSection("Key Concepts", parsed.key_concepts, <Brain className="w-4 h-4" />)}
+                          {renderSection("High-Yield Facts", parsed.high_yield_facts, <Sparkles className="w-4 h-4" />)}
+                          {renderSection("Epidemiological & Medicolegal Importance", parsed.epidemiological_and_medicolegal_importance, <BookOpen className="w-4 h-4" />)}
+                          {renderSection("Tips & Suggestions", parsed.tips_and_suggestions, <Sparkles className="w-4 h-4 text-amber-500" />)}
+                        </>
+                      );
+                    })()}
                   </div>
                 ) : null}
               </div>
