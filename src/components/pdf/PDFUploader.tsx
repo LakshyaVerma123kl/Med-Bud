@@ -1,8 +1,17 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { Upload, FileText, Loader2, AlertCircle } from "lucide-react";
+import { Upload, FileText, Loader2, AlertCircle, Edit2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Question } from "@/lib/types";
+
+export interface SavedPDFQuiz {
+  id: string;
+  name: string;
+  summary: string;
+  questions: Question[];
+  date: string;
+}
 
 export function PDFUploader() {
   const router = useRouter();
@@ -10,6 +19,7 @@ export function PDFUploader() {
   
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [quizName, setQuizName] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +34,7 @@ export function PDFUploader() {
       return;
     }
     setFile(selectedFile);
+    setQuizName(selectedFile.name.replace(".pdf", ""));
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -42,6 +53,7 @@ export function PDFUploader() {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("quizName", quizName);
 
       const res = await fetch("/api/pdf", {
         method: "POST",
@@ -54,15 +66,14 @@ export function PDFUploader() {
         throw new Error(data.error || "Failed to process PDF");
       }
 
-      // Store in session storage for the ephemeral quiz page
-      sessionStorage.setItem("pdf_quiz_data", JSON.stringify({
-        summary: data.summary,
-        questions: data.questions,
-        title: data.title
-      }));
+      // Save ID to localStorage library
+      const existingLib = localStorage.getItem("my_pdf_quizzes");
+      const library: string[] = existingLib ? JSON.parse(existingLib) : [];
+      
+      localStorage.setItem("my_pdf_quizzes", JSON.stringify([data.id, ...library]));
 
       // Redirect to the custom quiz
-      router.push("/pdf-quiz");
+      router.push(`/pdf-quiz?id=${data.id}`);
     } catch (err) {
       console.error(err);
       setError(err instanceof Error ? err.message : "Something went wrong.");
@@ -116,26 +127,44 @@ export function PDFUploader() {
         </div>
       ) : (
         <div className="border border-primary/20 bg-primary/5 rounded-2xl p-6 flex flex-col items-center justify-center">
-          <div className="flex items-center gap-3 mb-6 w-full max-w-xs p-3 rounded-lg bg-background border border-border shadow-sm">
-            <FileText className="w-8 h-8 text-primary shrink-0" />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-foreground truncate">{file.name}</p>
-              <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+          
+          <div className="w-full max-w-sm mb-6 space-y-4">
+            <div className="flex items-center gap-3 p-3 rounded-lg bg-background border border-border shadow-sm">
+              <FileText className="w-8 h-8 text-primary shrink-0" />
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground truncate">{file.name}</p>
+                <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+              </div>
+              {!isProcessing && (
+                <button 
+                  onClick={(e) => { e.stopPropagation(); setFile(null); }}
+                  className="text-xs text-muted-foreground hover:text-error transition-colors p-2"
+                >
+                  Clear
+                </button>
+              )}
             </div>
-            {!isProcessing && (
-              <button 
-                onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                className="text-xs text-muted-foreground hover:text-error transition-colors p-2"
-              >
-                Clear
-              </button>
-            )}
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                <Edit2 className="w-3.5 h-3.5" />
+                Name your Quiz
+              </label>
+              <input 
+                type="text" 
+                value={quizName}
+                onChange={(e) => setQuizName(e.target.value)}
+                disabled={isProcessing}
+                placeholder="e.g. Pathology Chapter 4 Notes"
+                className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm font-medium focus:ring-2 focus:ring-primary focus:outline-none transition-all"
+              />
+            </div>
           </div>
 
           <button
             onClick={processPDF}
-            disabled={isProcessing}
-            className="w-full max-w-xs inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold shadow-md hover:bg-primary/90 disabled:opacity-70 transition-all"
+            disabled={isProcessing || !quizName.trim()}
+            className="w-full max-w-sm inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary text-white font-semibold shadow-md hover:bg-primary/90 disabled:opacity-70 transition-all"
           >
             {isProcessing ? (
               <>
@@ -145,7 +174,7 @@ export function PDFUploader() {
             ) : (
               <>
                 <SparklesIcon className="w-5 h-5" />
-                Generate Quiz
+                Save & Generate Quiz
               </>
             )}
           </button>

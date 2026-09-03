@@ -1,18 +1,42 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Trophy, Target, Flame, BookOpen, TrendingUp, Award,
-  BarChart3, ArrowRight, Clock, Star, AlertCircle
+  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar
 } from "lucide-react";
 import { useProgress, availableBadges } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
 import { getChapterById } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
+import { supabase } from "@/lib/supabase";
 
 export default function DashboardPage() {
   const { progress, isLoaded, getWeakChapters } = useProgress();
   const weakChapters = isLoaded ? getWeakChapters() : [];
+  
+  const [pdfLibrary, setPdfLibrary] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchPDFs = async () => {
+      const lib = localStorage.getItem("my_pdf_quizzes");
+      if (lib) {
+        try {
+          const ids = JSON.parse(lib);
+          if (Array.isArray(ids) && ids.length > 0) {
+            const { data } = await supabase
+              .from("pdf_quizzes")
+              .select("id, name, created_at, questions")
+              .in("id", ids);
+            
+            if (data) setPdfLibrary(data);
+          }
+        } catch (e) {}
+      }
+    };
+    fetchPDFs();
+  }, []);
 
   if (!isLoaded) {
     return (
@@ -146,8 +170,37 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Right Col: Weak Areas + Badges */}
+              {/* Right Col: Weak Areas + Badges + Custom PDFs */}
               <div className="space-y-6">
+                {/* Custom PDF Library */}
+                {pdfLibrary.length > 0 && (
+                  <div className="clean-card rounded-3xl p-6 border-primary/20">
+                    <h3 className="text-sm font-bold text-foreground flex items-center gap-2 mb-4">
+                      <FileText className="w-4 h-4 text-primary" />
+                      Your Custom PDF Quizzes
+                    </h3>
+                    <div className="space-y-2.5">
+                      {pdfLibrary.slice(0, 5).map((pdf) => (
+                        <Link
+                          key={pdf.id}
+                          href={`/pdf-quiz?id=${pdf.id}`}
+                          className="flex items-center justify-between p-3 rounded-xl bg-primary/5 border border-primary/10 text-xs hover:border-primary/30 transition-colors group"
+                        >
+                          <div className="min-w-0 pr-2">
+                            <p className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">
+                              {pdf.name}
+                            </p>
+                            <span className="text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <Calendar className="w-3 h-3" />
+                              {new Date(pdf.date).toLocaleDateString()} • {pdf.questions?.length || 0} Qs
+                            </span>
+                          </div>
+                          <ArrowRight className="w-3.5 h-3.5 text-primary shrink-0 opacity-50 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {/* Weak Areas */}
                 {weakChapters.length > 0 && (
                   <div className="clean-card rounded-3xl p-6 border-rose-200 dark:border-rose-950/60">

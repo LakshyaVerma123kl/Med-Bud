@@ -1,17 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { QuizContent } from "@/components/quiz/QuizContent";
 import { Question } from "@/lib/types";
 import { ArrowLeft, FileText } from "lucide-react";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
-export default function PDFQuizPage() {
+function PDFQuizContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [data, setData] = useState<{ summary: string; questions: Question[]; title: string } | null>(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
+    const id = searchParams.get("id");
+    
+    if (id) {
+      // Fetch from Supabase
+      supabase
+        .from("pdf_quizzes")
+        .select("*")
+        .eq("id", id)
+        .single()
+        .then(({ data: quizData, error }) => {
+          if (error || !quizData) {
+            console.error("Failed to fetch PDF quiz", error);
+            setError(true);
+            return;
+          }
+          setData({
+            summary: quizData.summary,
+            questions: quizData.questions,
+            title: quizData.name,
+          });
+        });
+      return;
+    }
+    
     const stored = sessionStorage.getItem("pdf_quiz_data");
     if (!stored) {
       router.push("/");
@@ -24,7 +51,22 @@ export default function PDFQuizPage() {
       console.error("Failed to parse PDF quiz data", e);
       router.push("/");
     }
-  }, [router]);
+  }, [router, searchParams]);
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center p-4">
+        <FileText className="w-12 h-12 text-muted-foreground mb-4" />
+        <h2 className="text-xl font-bold mb-2">Quiz Not Found</h2>
+        <p className="text-muted-foreground mb-6 text-center max-w-sm">
+          This custom PDF quiz doesn't exist or has been deleted.
+        </p>
+        <Link href="/" className="px-6 py-3 rounded-xl bg-primary text-white font-semibold">
+          Return to Home
+        </Link>
+      </div>
+    );
+  }
 
   if (!data) return null;
 
@@ -66,5 +108,13 @@ export default function PDFQuizPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function PDFQuizPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+      <PDFQuizContent />
+    </Suspense>
   );
 }

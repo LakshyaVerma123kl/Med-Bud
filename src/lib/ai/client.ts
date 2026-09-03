@@ -1,3 +1,4 @@
+import "server-only";
 import { AIProvider, AIProviderConfig } from "../types";
 
 // ─── Multi-Provider AI Client ────────────────────────────────────────────────

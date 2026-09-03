@@ -16,9 +16,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MedQuiz Pro — Forensic Medicine & Community Medicine",
+  title: "MedQuiz Pro — Master Forensic & Community Medicine",
   description:
-    "Premium medical quiz platform for Narayan Reddy (Forensic Medicine & Toxicology) and Park (Community Medicine). Practice high-quality MCQs with instant feedback, progress tracking, and motivational learning.",
+    "Premium AI-powered medical quiz platform. Master K.S. Narayan Reddy's Forensic Medicine and Park's Community Medicine with instant feedback and progress tracking.",
   keywords: [
     "medical quiz",
     "forensic medicine",
@@ -27,8 +27,22 @@ export const metadata: Metadata = {
     "Park textbook",
     "MCQ",
     "MBBS",
+    "NEET PG",
+    "USMLE",
     "medical exam preparation",
   ],
+  authors: [{ name: "MedQuiz Team" }],
+  openGraph: {
+    title: "MedQuiz Pro",
+    description: "Premium AI-powered medical quiz platform for MBBS students.",
+    type: "website",
+    siteName: "MedQuiz Pro",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MedQuiz Pro",
+    description: "Premium AI-powered medical quiz platform for MBBS students.",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

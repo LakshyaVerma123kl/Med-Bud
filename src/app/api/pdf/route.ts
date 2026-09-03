@@ -20,65 +20,95 @@ export async function POST(request: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Parse PDF
-    console.log(`[PDF] Parsing uploaded file: ${file.name} (${file.size} bytes)`);
-    const pdfData = await pdfParse(buffer);
+    // Parse the PDF
+    const data = await pdfParse(Buffer.from(buffer));
+    const text = data.text;
     
-    // We only take the first 15000 characters to avoid huge token costs or context limits
-    const textChunk = pdfData.text.substring(0, 15000);
+    // Extract name from formData, fallback to file name, fallback to title
+    let quizName = formData.get("quizName") as string;
+    if (!quizName || !quizName.trim()) {
+      quizName = file.name ? file.name.replace(".pdf", "") : "Untitled Document";
+    }
 
-    console.log(`[PDF] Extracted ${pdfData.text.length} chars. Using ${textChunk.length} for AI.`);
+    if (!text || text.trim().length === 0) {
+      return NextResponse.json({ success: false, error: "Could not extract text from PDF. It might be scanned or image-based." });
+    }
 
-    const systemPrompt = `You are an expert medical educator. Your job is to read the provided text extracted from a medical PDF and generate a highly educational quiz and summary based STRICTLY on the text provided.
-
-Do not invent facts outside of the text.
-
-Output strictly in valid JSON format matching this schema:
+    // Prepare messages for Gemini
+    const messages: ChatMessage[] = [
+      {
+        role: "system",
+        content: `You are an expert medical educator. Your task is to analyze the provided medical document text and create a high-quality quiz.
+Return a JSON object with EXACTLY this structure:
 {
-  "summary": "A concise 2-3 paragraph summary of the key concepts in this text.",
+  "title": "A short, descriptive title for the document",
+  "summary": "A concise 2-3 sentence summary of the core concepts in the text",
   "questions": [
     {
-      "question": "The question text",
+      "id": "q1",
+      "question": "Clear, challenging multiple choice question?",
       "options": ["Option A", "Option B", "Option C", "Option D"],
       "correct_index": 0,
-      "explanation": "Why this is correct based on the text.",
+      "explanation": "Detailed clinical rationale explaining why the answer is correct.",
       "difficulty": "medium",
-      "topic": "Topic Name"
+      "topic": "Specific sub-topic"
     }
   ]
-}`;
-
-    const userPrompt = `Please generate a summary and exactly 10 high-quality MCQs based on the following text:\n\n---\n${textChunk}\n---`;
-
-    const messages: ChatMessage[] = [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt }
+}
+Generate 5 high-quality, clinical-vignette style questions if possible.`
+      },
+      {
+        role: "user",
+        content: `Document Text:\n\n${text.substring(0, 30000)}` // Limit to ~30k chars to avoid token limits
+      }
     ];
 
-    console.log("[PDF] Calling AI for summary and generation...");
-    const aiResponse = await callForGeneration(messages);
-    
-    const parsed = JSON.parse(aiResponse.content);
-    
-    // Ensure all questions conform to the type we expect on the frontend
-    const validQuestions = (parsed.questions || []).map((q: any, i: number) => ({
-      id: `pdf-q-${i}`,
-      book: "custom_pdf",
-      chapter: file.name,
-      question: q.question,
-      options: q.options,
-      correct_index: q.correct_index,
-      explanation: q.explanation,
-      difficulty: q.difficulty || "medium",
-      source: "ai_generated",
-      verified: true
-    }));
+    // Call the unified AI generation client
+    const response = await callForGeneration(messages);
+
+    if (!response || !response.content) {
+      console.error("AI Generation failed: No content returned");
+      return NextResponse.json({ success: false, error: "Failed to generate quiz from AI. Please try again." });
+    }
+
+    // Get the parsed data from the AI
+    let quizData: any;
+    try {
+      quizData = JSON.parse(response.content);
+    } catch (e) {
+      return NextResponse.json({ success: false, error: "AI returned invalid JSON format." });
+    }
+
+    if (!quizData.questions || !Array.isArray(quizData.questions) || quizData.questions.length === 0) {
+      return NextResponse.json({ success: false, error: "AI could not generate questions from this document." });
+    }
+
+    // Import Supabase inside the function to avoid top-level issues
+    const { getAdminSupabase } = require("@/lib/supabase");
+    const supabaseAdmin = getAdminSupabase();
+
+    // Insert into Supabase
+    const { data: insertedData, error: insertError } = await supabaseAdmin
+      .from("pdf_quizzes")
+      .insert({
+        name: quizName,
+        summary: quizData.summary || "Custom Quiz",
+        questions: quizData.questions,
+      })
+      .select("id")
+      .single();
+
+    if (insertError || !insertedData) {
+      console.error("Supabase insert error:", insertError);
+      return NextResponse.json({ success: false, error: "Failed to save quiz to database." });
+    }
 
     return NextResponse.json({
       success: true,
-      summary: parsed.summary || "No summary provided.",
-      questions: validQuestions,
-      title: file.name
+      id: insertedData.id,
+      title: quizName,
+      summary: quizData.summary,
+      questionCount: quizData.questions.length
     });
 
   } catch (error) {

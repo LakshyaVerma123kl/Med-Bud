@@ -145,3 +145,21 @@ CREATE TRIGGER questions_updated_at
   BEFORE UPDATE ON questions
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();
+
+-- ══════════════════════════════════════════════════════════════════════════════
+-- 8. PDF Quizzes Table
+-- ══════════════════════════════════════════════════════════════════════════════
+
+CREATE TABLE IF NOT EXISTS pdf_quizzes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  summary TEXT NOT NULL,
+  questions JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Anyone can read pdf quizzes for shareable links, but no public inserts
+ALTER TABLE pdf_quizzes ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Anyone can read pdf quizzes" ON pdf_quizzes
+  FOR SELECT USING (true);
+
