@@ -17,6 +17,7 @@ import {
 import { books } from "@/lib/data/books";
 import { seedQuestions } from "@/lib/data/seed-questions";
 import { narayanReddyChapters, parkChapters } from "@/lib/data/chapters";
+import { PDFUploader } from "@/components/pdf/PDFUploader";
 
 export default function HomePage() {
   const totalQuestions = seedQuestions.length;
@@ -115,6 +116,13 @@ export default function HomePage() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ── PDF Upload Section ────────────────────────────────────────── */}
+      <section className="py-12 bg-muted/20 border-b border-border/60">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 w-full">
+          <PDFUploader />
         </div>
       </section>
 

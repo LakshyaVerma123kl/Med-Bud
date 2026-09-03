@@ -22,13 +22,17 @@ function getGenerationPrompt(book: BookId, chapter: string): string {
   const bookName = book === "narayan_reddy" 
     ? "K.S. Narayan Reddy's Essentials of Forensic Medicine & Toxicology"
     : "Park's Textbook of Preventive & Social Medicine";
+    
+  // Inject a random seed/timestamp so the AI doesn't generate the exact same questions repeatedly
+  const seed = Date.now().toString().slice(-4);
 
-  return `Generate 10 high-quality MCQs from the book "${bookName}", Chapter: "${chapter}".
+  return `Generate exactly 5 high-quality MCQs from the book "${bookName}", Chapter: "${chapter}".
+[Randomization Seed: ${seed} - Focus on distinct subtopics, exceptions, and unique clinical scenarios not commonly asked.]
 
 Requirements:
 - Focus on important, frequently tested concepts from this chapter.
 - Mix of factual recall and application questions.
-- Difficulty distribution: 3 easy, 5 medium, 2 hard.
+- Difficulty distribution: 1 easy, 3 medium, 1 hard.
 - Explanation must be educational and accurate.
 - Avoid unfair trick questions.
 

@@ -29,13 +29,14 @@ interface QuizContentProps {
   bookId: BookId;
   chapterId: string;
   mode: string;
+  questions?: Question[];
 }
 
-export function QuizContent({ bookId, chapterId, mode }: QuizContentProps) {
+export function QuizContent({ bookId, chapterId, mode, questions: initialQuestions }: QuizContentProps) {
   const chapter = getChapterById(chapterId);
   const book = getBookById(bookId);
-  const [dbQuestions, setDbQuestions] = useState<Question[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dbQuestions, setDbQuestions] = useState<Question[]>(initialQuestions || []);
+  const [loading, setLoading] = useState(!initialQuestions);
 
   // Fallback static questions
   const staticQuestions = chapterId
@@ -43,6 +44,8 @@ export function QuizContent({ bookId, chapterId, mode }: QuizContentProps) {
     : getQuestionsForBook(bookId);
 
   useEffect(() => {
+    if (initialQuestions) return; // Skip fetch if questions provided
+
     async function fetchQuestions() {
       try {
         const { supabase } = await import("@/lib/supabase");
@@ -74,7 +77,7 @@ export function QuizContent({ bookId, chapterId, mode }: QuizContentProps) {
       }
     }
     fetchQuestions();
-  }, [bookId, chapterId]);
+  }, [bookId, chapterId, initialQuestions]);
 
   const questions = dbQuestions;
 
