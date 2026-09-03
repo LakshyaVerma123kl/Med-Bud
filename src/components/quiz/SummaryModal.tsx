@@ -3,6 +3,8 @@ import { X, Brain, Sparkles, BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BookId } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 interface SummaryModalProps {
   isOpen: boolean;
@@ -103,6 +105,8 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                 ) : summary ? (
                   <div className="max-w-none">
                     <ReactMarkdown
+                      remarkPlugins={[remarkMath]}
+                      rehypePlugins={[rehypeKatex]}
                       components={{
                         h3: ({ node, ...props }) => (
                           <h3 className="text-sm font-bold text-primary uppercase tracking-wider mt-8 mb-4 flex items-center gap-2 border-b border-border/50 pb-2" {...props} />

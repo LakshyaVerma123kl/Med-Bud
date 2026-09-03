@@ -9,6 +9,8 @@ import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 function PDFQuizContent() {
   const router = useRouter();
@@ -96,7 +98,12 @@ function PDFQuizContent() {
         <div className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-6 shadow-sm">
           <h2 className="text-lg font-bold text-primary mb-3">AI Document Summary</h2>
           <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
-            <ReactMarkdown>{formattedSummary}</ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+            >
+              {formattedSummary}
+            </ReactMarkdown>
           </div>
         </div>
 

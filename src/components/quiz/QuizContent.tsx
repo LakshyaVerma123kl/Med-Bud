@@ -24,6 +24,9 @@ import { getBookById } from "@/lib/data/books";
 import { getMotivationalFeedback, getStreakMessage, getCompletionMessage } from "@/lib/feedback";
 import { ProgressRing } from "./ProgressRing";
 import { BookId, QuizMode, Question } from "@/lib/types";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 
 interface QuizContentProps {
   bookId: BookId;
@@ -352,9 +355,11 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
           </div>
 
           {/* Question Text */}
-          <h2 className="text-lg sm:text-xl font-bold text-foreground leading-relaxed mb-6">
-            {currentQuestion.question}
-          </h2>
+          <div className="text-lg sm:text-xl font-bold text-foreground leading-relaxed mb-6 prose dark:prose-invert prose-p:my-0 max-w-none">
+            <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+              {currentQuestion.question}
+            </ReactMarkdown>
+          </div>
 
           {/* Options */}
           <div className="space-y-3.5 sm:space-y-4">
@@ -388,8 +393,10 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                       String.fromCharCode(65 + displayIndex)
                     )}
                   </span>
-                  <span className="flex-1 text-[15px] sm:text-base font-medium leading-relaxed">
-                    {optionText}
+                  <span className="flex-1 text-[15px] sm:text-base font-medium leading-relaxed prose dark:prose-invert prose-p:my-0 max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                      {optionText}
+                    </ReactMarkdown>
                   </span>
                 </button>
               );
@@ -430,9 +437,12 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                   <Lightbulb className="w-4 h-4 text-amber-500" />
                   <span>Clinical Rationale & Textbook Reference</span>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {currentQuestion.explanation}
-                </p>
+                <div className="text-sm text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
+                  <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                    {currentQuestion.explanation}
+                  </ReactMarkdown>
+                </div>
+
               </div>
 
               {/* Next Question Button (Desktop) */}
