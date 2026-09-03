@@ -24,13 +24,10 @@ export const metadata: Metadata = {
     "medical quiz",
     "forensic medicine",
     "community medicine",
-    "Narayan Reddy",
-    "Park textbook",
-    "MCQ",
+    "AI quiz generator",
     "MBBS",
-    "NEET PG",
-    "USMLE",
-    "medical exam preparation",
+    "medical students",
+    "NEET PG"
   ],
   authors: [{ name: "MedQuiz Team" }],
   openGraph: {

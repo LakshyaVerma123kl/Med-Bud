@@ -1,44 +1,81 @@
-# 🩺 MedQuiz Pro – The Ultimate AI-Powered Medical Quiz Engine
+<div align="center">
+  <img src="public/icon.jpg" alt="MedQuiz Pro Logo" width="120" />
+  <h1>🩺 MedQuiz Pro</h1>
+  <p><strong>The Elite AI-Powered Medical Revision Engine</strong></p>
 
-Welcome to **MedQuiz Pro**, a premium, elite-tier medical revision platform tailored specifically for MBBS students and medical professionals. Designed meticulously around standard Indian medical literature (*K.S. Narayan Reddy's Forensic Medicine* and *Park's Preventive & Social Medicine*).
+  [![Next.js](https://img.shields.io/badge/Next.js-15+-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+  [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+  [![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+  [![Gemini AI](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+</div>
 
-## 🌟 The 10/10 Experience
+---
 
-This project has been an incredible venture, and I rate the final output a solid **10/10**. 
-We took a great concept and elevated it to an absolute premium, highly robust, and polished application.
+## 🌟 Overview
 
-### Why It's a 10/10:
-- **Flawless Data Integrity:** We rescued corrupted data files and ensured 100% of all 61 chapters have high-yield, perfectly accurate questions. No blank screens. No missing data.
-- **Glassmorphic AI Summaries:** A stunning, animated UI overlay that generates beautiful, markdown-rendered medical summaries on-the-fly with smart database caching.
-- **Serverless AI PDF Uploads:** Users can upload any custom PDF, name it, and our robust Gemini AI prompt will extract pristine clinical vignettes and save them directly to a globally accessible Supabase PostgreSQL database. 
-- **Absolute Privacy:** A dedicated, highly secure backend deletion route permanently eradicates user data if they choose to remove a custom PDF quiz from their dashboard.
-- **Native App Feel:** Dynamic `active:scale` micro-animations, collapsing sticky mobile headers, and custom favicons make it feel less like a website and more like a premium iOS application.
-- **Dynamic SEO:** Fully optimized server-side metadata generation for perfect social media link sharing and discoverability.
+MedQuiz Pro is a production-grade, highly scalable Medical Revision Platform built for MBBS students preparing for NEET PG and university exams. It bridges the gap between static textbook reading and active recall by transforming standard Indian medical literature (*K.S. Narayan Reddy's Forensic Medicine* and *Park's Preventive & Social Medicine*) into an **interactive, AI-driven learning experience.**
 
-## 🚀 Features at a Glance
+## 🚀 Key Technical Features
 
-*   **📚 Standard Textbooks:** Comprehensive question banks for *Forensic Medicine* and *PSM*.
-*   **✨ AI Document Summaries:** Instantly generate bulleted revision notes for any chapter using Google Gemini.
-*   **🧠 Custom PDF Quizzes:** Upload your own notes or past papers; the AI acts as your examiner, creating tailored questions, summarizing the text, and storing it safely in the cloud.
-*   **📊 Smart Analytics Dashboard:** Track mastery, spot weak chapters, and earn milestone badges based on your performance.
-*   **🌙 Premium UI:** Glassmorphism, tailored typography (`@tailwindcss/typography`), beautiful dark mode, and seamless responsive design.
+### 1. Retrieval-Augmented Generation (RAG) for Custom PDFs
+Users can upload any medical PDF, lecture note, or research paper. The backend parses the document using a memory-safe `pdf-parse` implementation across Next.js Server Components. The extracted text is processed by Google's **Gemini AI** to automatically generate:
+- A structured Markdown summary with key concepts and mnemonics.
+- High-yield, clinical-vignette style MCQs.
+- All stored persistently via Supabase for community access.
 
-## 🛠️ Tech Stack
+### 2. Hybrid Data Architecture
+To ensure high availability and minimize API costs, the application employs a hybrid data strategy:
+- **Offline Seed Data**: Statically bundled JSON questions for zero-latency initial loads.
+- **Dynamic Database Caching**: AI-generated chapter questions and summaries are instantly cached in **Supabase (PostgreSQL)**, meaning the AI is only invoked for entirely new requests.
 
-*   **Framework:** [Next.js 15+ App Router](https://nextjs.org/) (React 19)
-*   **Styling:** Tailwind CSS v4 + Framer Motion
-*   **Database:** Supabase (PostgreSQL) + Row Level Security (RLS)
-*   **AI Engine:** Google Gemini SDK (`@google/genai`)
-*   **Markdown:** `react-markdown` for beautiful summary rendering
-*   **Deployment:** Ready for Vercel
+### 3. Advanced Hydration & State Management
+Built entirely with React 19 and Next.js 15 (App Router), the application uses custom hooks (`useQuiz`, `useProgress`) that elegantly handle complex client-side states (like pseudo-random array shuffling and `localStorage` syncing) without triggering React Hydration Mismatch errors.
+
+### 4. Mathematical Formatting & Typographical Excellence
+Complex medical statistics, epidemiological formulas, and LaTeX symbols ($\chi^2$, standard deviation) are beautifully rendered on the fly utilizing a customized `react-markdown` engine injected with `remark-math` and `rehype-katex` plugins. 
+
+### 5. Gamification Engine
+Features a robust `localStorage`-synced Progress Dashboard that tracks:
+- **Current & Longest Streaks**
+- **Chapter Mastery & Global Accuracy**
+- **Achievement Badges** (Dynamically unlocked based on performance algorithms)
+
+---
+
+## 🛠️ System Architecture
+
+- **Frontend**: Next.js (App Router), React 19, Tailwind CSS v4, Framer Motion
+- **Backend**: Next.js Route Handlers (`/api`), Node.js Runtime
+- **Database**: Supabase PostgreSQL with Row Level Security (RLS)
+- **AI Integrations**: `@google/genai` (Gemini 1.5 Flash/Pro)
+- **Typography & Parsing**: `react-markdown`, `katex`, `@tailwindcss/typography`
 
 ## 📖 Quick Start
 
-1.  **Clone the repository.**
-2.  **Install dependencies:** `npm install`
-3.  **Set up `.env.local`** with your Supabase and Gemini keys.
-4.  **Run the database migrations** in your Supabase SQL Editor (see `walkthrough.md`).
-5.  **Start the dev server:** `npm run dev`
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/medquiz-pro.git
+   cd medquiz-pro
+   ```
+2. **Install dependencies:** 
+   ```bash
+   npm install
+   ```
+3. **Environment Setup:** Create a `.env.local` file at the root.
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+   GEMINI_API_KEY=your_gemini_key
+   ```
+4. **Database Migration:** Use the Supabase SQL editor to create the `questions`, `pdf_quizzes`, and `chapter_summaries` tables.
+5. **Launch:** 
+   ```bash
+   npm run dev
+   ```
 
 ---
-*Built with an uncompromising pursuit of perfection.*
+<div align="center">
+  <i>Engineered with an uncompromising pursuit of perfection.</i>
+</div>
