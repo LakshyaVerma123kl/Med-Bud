@@ -1226,6 +1226,28 @@ export const seedQuestions: Question[] = [
   // Ch 23 — More International Health
   q("pk-q075","park","pk-23","SDGs","The total number of Sustainable Development Goals (SDGs) adopted by the UN in 2015 is:","8|12|17|21".split("|") as [string,string,string,string],2,"The 2030 Agenda for Sustainable Development comprises 17 SDGs and 169 targets, adopted by all UN Member States in September 2015.","easy"),
   q("pk-q076","park","pk-23","WHO","The World Health Assembly is the:","Executive body of WHO|Supreme decision-making body of WHO|Regional advisory committee|Research wing of WHO".split("|") as [string,string,string,string],1,"The World Health Assembly (WHA) is the supreme decision-making body of WHO, attended by delegations from all 194 Member States, held annually in Geneva.","easy"),
+
+  // Missing Narayan Reddy Chapters (21-36)
+  q("nr-q080","narayan_reddy","nr-21","Trace Evidence","Locard's exchange principle states that:","Every contact leaves a trace|Only biological evidence leaves a trace|Fingerprints are unique|DNA is the only conclusive evidence".split("|") as [string,string,string,string],0,"Every contact leaves a trace.","easy"),
+  q("nr-q081","narayan_reddy","nr-22","Psychiatry","Testamentary capacity refers to the ability to:","Make a valid will|Stand trial|Consent to surgery|Understand crime".split("|") as [string,string,string,string],0,"Testamentary capacity is the capacity to make a valid will.","easy"),
+  q("nr-q082","narayan_reddy","nr-23","Toxicology","Which is the most common route of poisoning in India?","Inhalation|Injection|Ingestion|Absorption".split("|") as [string,string,string,string],2,"Ingestion is the most common route of poisoning.","easy"),
+  q("nr-q083","narayan_reddy","nr-24","Agro Poisons","Antidote for organophosphorus poisoning is:","Flumazenil|Naloxone|Atropine|N-acetylcysteine".split("|") as [string,string,string,string],2,"Atropine antagonizes muscarinic effects.","easy"),
+  q("nr-q084","narayan_reddy","nr-25","Corrosives","Carboluria is seen in poisoning by:","Nitric acid|Carbolic acid (Phenol)|Sulfuric acid|Oxalic acid".split("|") as [string,string,string,string],1,"Phenol causes dark or green urine.","easy"),
+  q("nr-q085","narayan_reddy","nr-26","Metals","Burtonian line on gums is seen in poisoning by:","Arsenic|Mercury|Lead|Copper".split("|") as [string,string,string,string],2,"Lead poisoning causes blue-black lines on gums.","easy"),
+  q("nr-q086","narayan_reddy","nr-27","Inorganic Poisons","Cherry red color of blood is seen in poisoning with:","Carbon dioxide|Carbon monoxide|Cyanide|Hydrogen sulphide".split("|") as [string,string,string,string],1,"CO poisoning causes carboxyhemoglobin which is cherry red.","easy"),
+  q("nr-q087","narayan_reddy","nr-28","Somniferous","Pinpoint pupils are a characteristic feature of:","Cocaine|Atropine|Opium|Cannabis".split("|") as [string,string,string,string],2,"Opioid overdose causes pinpoint pupils.","easy"),
+  q("nr-q088","narayan_reddy","nr-29","Deliriants","Active principle of Datura is:","Morphine|Hyoscine|Strychnine|Cocaine".split("|") as [string,string,string,string],1,"Datura contains hyoscine (scopolamine) and hyoscyamine.","easy"),
+  q("nr-q089","narayan_reddy","nr-30","Spinal Poisons","Risus sardonicus is a feature of poisoning by:","Opium|Strychnine|Aconite|Oleander".split("|") as [string,string,string,string],1,"Strychnine causes facial muscle spasms (risus sardonicus).","easy"),
+  q("nr-q090","narayan_reddy","nr-31","Cardiac Poisons","Aconite poisoning primarily affects the:","Lungs|Liver|Heart|Kidneys".split("|") as [string,string,string,string],2,"Aconite is a potent cardiac poison.","easy"),
+  q("nr-q091","narayan_reddy","nr-32","Miscellaneous","The antidote for paracetamol overdose is:","Flumazenil|Naloxone|N-acetylcysteine|Atropine".split("|") as [string,string,string,string],2,"N-acetylcysteine replenishes glutathione.","easy"),
+  q("nr-q092","narayan_reddy","nr-33","Animal Poisons","Krait venom is predominantly:","Hemotoxic|Neurotoxic|Myotoxic|Cardiotoxic".split("|") as [string,string,string,string],1,"Krait venom is highly neurotoxic.","easy"),
+  q("nr-q093","narayan_reddy","nr-34","Food Poisoning","Botulism is caused by:","Salmonella|Staphylococcus|Clostridium botulinum|Escherichia coli".split("|") as [string,string,string,string],2,"Clostridium botulinum produces botulinum toxin in improperly canned foods.","easy"),
+  q("nr-q094","narayan_reddy","nr-35","Drug Abuse","The psychoactive component of Cannabis is:","Cocaine|THC|Morphine|Amphetamine".split("|") as [string,string,string,string],1,"Delta-9-THC is the psychoactive substance in Cannabis.","easy"),
+  q("nr-q095","narayan_reddy","nr-36","Legal Acts","BNSS stands for:","Bharatiya Nyaya Sanhita|Bharatiya Nagarik Suraksha Sanhita|Bharatiya Sakshya Adhiniyam|None".split("|") as [string,string,string,string],1,"BNSS replaced the CrPC.","easy"),
+
+  // Missing Park Chapters (24-25)
+  q("pk-q077","park","pk-24","STIs/HIV","The syndromic management kit for urethral discharge is color-coded:","Green|Red|Grey|White".split("|") as [string,string,string,string],2,"Kit 1 for urethral discharge is Grey.","easy"),
+  q("pk-q078","park","pk-25","NTDs","Mass Drug Administration (MDA) is used primarily for the elimination of:","Malaria|Tuberculosis|Lymphatic Filariasis|HIV".split("|") as [string,string,string,string],2,"MDA is the main strategy for Lymphatic Filariasis elimination.","easy"),
 ];
 
 // Helper functions

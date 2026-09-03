@@ -9,8 +9,8 @@ export const books: Book[] = [
     description:
       "The definitive Indian textbook on forensic medicine, covering identification, thanatology, injuries, asphyxia, sexual offences, toxicology, and medical jurisprudence.",
     icon: "⚖️",
-    chapterCount: 20,
-    totalQuestions: 295,
+    chapterCount: 36,
+    totalQuestions: 485,
     color: "#1E3A8A",
     gradient: "from-blue-900 via-blue-800 to-indigo-900",
   },
@@ -22,8 +22,8 @@ export const books: Book[] = [
     description:
       "The gold-standard reference for community medicine, covering epidemiology, communicable and non-communicable diseases, nutrition, MCH, immunization, and national health programmes.",
     icon: "🏥",
-    chapterCount: 23,
-    totalQuestions: 324,
+    chapterCount: 25,
+    totalQuestions: 350,
     color: "#065F46",
     gradient: "from-emerald-900 via-teal-800 to-green-900",
   },

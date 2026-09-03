@@ -43,6 +43,10 @@ export const metadata: Metadata = {
     title: "MedQuiz Pro",
     description: "Premium AI-powered medical quiz platform for MBBS students.",
   },
+  icons: {
+    icon: "/icon.jpg",
+    shortcut: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

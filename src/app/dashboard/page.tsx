@@ -20,36 +20,34 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const fetchPDFs = async () => {
-      const lib = localStorage.getItem("my_pdf_quizzes");
-      if (lib) {
-        try {
-          const ids = JSON.parse(lib);
-          if (Array.isArray(ids) && ids.length > 0) {
-            const { data } = await supabase
-              .from("pdf_quizzes")
-              .select("id, name, created_at, questions")
-              .in("id", ids);
-            
-            if (data) setPdfLibrary(data);
-          }
-        } catch (e) {}
+      try {
+        const { data } = await supabase
+          .from("pdf_quizzes")
+          .select("id, name, created_at, questions")
+          .order('created_at', { ascending: false });
+        
+        if (data) setPdfLibrary(data);
+      } catch (e) {
+        console.error("Error fetching PDFs:", e);
       }
     };
     fetchPDFs();
   }, []);
 
-  const handleDeletePDF = (e: React.MouseEvent, id: string) => {
+  const handleDeletePDF = async (e: React.MouseEvent, id: string) => {
     e.preventDefault();
-    if (!window.confirm("Remove this quiz from your dashboard?")) return;
+    e.stopPropagation();
     
-    const lib = localStorage.getItem("my_pdf_quizzes");
-    if (lib) {
-      try {
-        const ids = JSON.parse(lib);
-        const newIds = ids.filter((pdfId: string) => pdfId !== id);
-        localStorage.setItem("my_pdf_quizzes", JSON.stringify(newIds));
-        setPdfLibrary(prev => prev.filter(pdf => pdf.id !== id));
-      } catch (e) {}
+    if (!window.confirm("Remove this quiz and permanently delete it?")) return;
+    
+    try {
+      // Call API to delete from Supabase to ensure security and prevent data leaks
+      const res = await fetch(`/api/pdf/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete from database");
+
+      setPdfLibrary(prev => prev.filter(pdf => pdf.id !== id));
+    } catch (err) {
+      console.error("Error deleting PDF quiz:", err);
     }
   };
 

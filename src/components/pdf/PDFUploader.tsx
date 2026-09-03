@@ -66,11 +66,7 @@ export function PDFUploader() {
         throw new Error(data.error || "Failed to process PDF");
       }
 
-      // Save ID to localStorage library
-      const existingLib = localStorage.getItem("my_pdf_quizzes");
-      const library: string[] = existingLib ? JSON.parse(existingLib) : [];
-      
-      localStorage.setItem("my_pdf_quizzes", JSON.stringify([data.id, ...library]));
+      // Removed localStorage tracking since we are querying the DB directly now
 
       // Redirect to the custom quiz
       router.push(`/pdf-quiz?id=${data.id}`);
