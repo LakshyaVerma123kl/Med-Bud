@@ -1,26 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-error: var(--error);
+  --color-error-foreground: var(--error-foreground);
+  --color-ring: var(--ring);
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Make Tailwind's dark: variant respect the .dark class toggle */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ═══ LIGHT MODE ═══ */
+:root {
+  --background: #FFFFFF;
+  --foreground: #111827;
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F3F4F6;
+  --secondary-foreground: #1F2937;
+  --accent: #0D9488;
+  --accent-foreground: #FFFFFF;
+  --muted: #F9FAFB;
+  --muted-foreground: #6B7280;
+  --card: #FFFFFF;
+  --card-foreground: #111827;
+  --border: #E5E7EB;
+  --success: #059669;
+  --success-foreground: #FFFFFF;
+  --error: #DC2626;
+  --error-foreground: #FFFFFF;
+  --ring: #2563EB;
+}
+
+/* ═══ DARK MODE ═══ */
+.dark {
+  --background: #111827;
+  --foreground: #F9FAFB;
+  --primary: #60A5FA;
+  --primary-foreground: #111827;
+  --secondary: #1F2937;
+  --secondary-foreground: #E5E7EB;
+  --accent: #2DD4BF;
+  --accent-foreground: #111827;
+  --muted: #1F2937;
+  --muted-foreground: #9CA3AF;
+  --card: #1F2937;
+  --card-foreground: #F9FAFB;
+  --border: #374151;
+  --success: #34D399;
+  --success-foreground: #111827;
+  --error: #FB7185;
+  --error-foreground: #111827;
+  --ring: #60A5FA;
+}
+
+/* ═══ Base layer (so Tailwind utilities can override) ═══ */
+@layer base {
+
+  *,
+  *::before,
+  *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.6;
+  }
+
+  /* Scrollbar – WebKit */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted-foreground);
+    border-radius: 9999px;
+    opacity: 0.5;
+  }
+
+  /* Scrollbar – Firefox */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ═══ Components layer ═══ */
+@layer components {
+
+  /* Card System */
+  .clean-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .dark .clean-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Quiz Option Buttons */
+  .quiz-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    width: 100%;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    border-radius: 0.875rem;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    color: var(--foreground);
+    font-weight: 500;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+
+  /* Only apply hover lift/shadow when not answered and not disabled */
+  .quiz-option:hover:not(:disabled):not(.correct):not(.incorrect) {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 5%, var(--card));
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  }
+
+  .quiz-option:disabled,
+  .quiz-option.is-disabled {
+    cursor: default;
+  }
+
+  .quiz-option.selected {
+    border-color: var(--primary);
+    background: color-mix(in srgb, var(--primary) 8%, var(--card));
+  }
+
+  .quiz-option.correct {
+    border-color: var(--success) !important;
+    background: color-mix(in srgb, var(--success) 8%, var(--card)) !important;
+  }
+
+  .quiz-option.incorrect {
+    border-color: var(--error) !important;
+    background: color-mix(in srgb, var(--error) 8%, var(--card)) !important;
+  }
+
+  /* Focus ring for keyboard users */
+  .quiz-option:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  /* Option Letter Badge */
+  .option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: var(--muted);
+    color: var(--muted-foreground);
+    transition: all 0.15s ease;
+    margin-top: 2px;
+  }
+
+  .quiz-option:hover:not(:disabled):not(.correct):not(.incorrect) .option-letter {
+    background: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  .quiz-option.correct .option-letter {
+    background: var(--success) !important;
+    color: white !important;
+  }
+
+  .quiz-option.incorrect .option-letter {
+    background: var(--error) !important;
+    color: white !important;
+  }
 }
