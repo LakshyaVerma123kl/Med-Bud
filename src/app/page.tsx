@@ -153,11 +153,10 @@ export default function HomePage() {
               >
                 {/* Header Band */}
                 <div
-                  className={`p-6 sm:p-8 ${
-                    isReddy
+                  className={`p-6 sm:p-8 ${isReddy
                       ? "bg-gradient-to-br from-blue-900 via-indigo-900 to-slate-900 text-white"
                       : "bg-gradient-to-br from-teal-900 via-emerald-950 to-slate-900 text-white"
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-4xl sm:text-5xl">{book.icon}</span>
@@ -209,9 +208,7 @@ export default function HomePage() {
       <section className="border-t border-border/60 bg-muted/30 py-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
-            <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground mb-2">
-              Why Medical Students Choose MedQuiz
-            </h3>
+
             <p className="text-sm sm:text-base text-muted-foreground">
               Designed specifically for MBBS profs and competitive PG entrance preparation.
             </p>

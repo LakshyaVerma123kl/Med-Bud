@@ -43,8 +43,26 @@ export function PDFLibrary() {
     }
   };
 
-  if (isLoading || pdfLibrary.length === 0) {
-    return null; // Don't show the section if it's loading or empty
+  if (pdfLibrary.length === 0 && !isLoading) {
+    return null;
+  }
+
+  if (isLoading) {
+    return (
+      <section className="py-12 bg-background border-b border-border/60">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 w-full">
+          <div className="mb-6">
+            <div className="h-8 w-64 bg-muted animate-pulse rounded-md mb-2"></div>
+            <div className="h-4 w-96 bg-muted animate-pulse rounded-md"></div>
+          </div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="clean-card rounded-2xl h-36 bg-muted/20 animate-pulse border border-border/50"></div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
   }
 
   return (

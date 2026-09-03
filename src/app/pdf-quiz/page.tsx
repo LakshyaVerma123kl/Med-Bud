@@ -8,6 +8,8 @@ import { ArrowLeft, FileText } from "lucide-react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
+import ReactMarkdown from "react-markdown";
+
 function PDFQuizContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -70,6 +72,8 @@ function PDFQuizContent() {
 
   if (!data) return null;
 
+  const formattedSummary = data.summary ? data.summary.replace(/\\n/g, '\n') : "";
+
   return (
     <div className="min-h-screen bg-background pt-24 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -91,8 +95,8 @@ function PDFQuizContent() {
         {/* AI Summary */}
         <div className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-2xl p-6 shadow-sm">
           <h2 className="text-lg font-bold text-primary mb-3">AI Document Summary</h2>
-          <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed whitespace-pre-wrap">
-            {data.summary}
+          <div className="prose prose-sm dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+            <ReactMarkdown>{formattedSummary}</ReactMarkdown>
           </div>
         </div>
 
