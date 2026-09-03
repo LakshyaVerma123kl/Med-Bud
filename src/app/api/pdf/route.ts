@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 Return a JSON object with EXACTLY this structure:
 {
   "title": "A short, descriptive title for the document",
-  "summary": "A concise 2-3 sentence summary of the core concepts in the text",
+  "summary": "A comprehensive markdown-formatted summary of the document. Include a brief overview paragraph, bullet points for key concepts and topics, and a dedicated 'Tips & Suggestions' section with practical advice, mnemonics, or common pitfalls at the very end.",
   "questions": [
     {
       "id": "q1",
