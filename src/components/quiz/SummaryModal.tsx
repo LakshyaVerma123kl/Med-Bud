@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Brain, Sparkles, BookOpen } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BookId } from "@/lib/types";
+import ReactMarkdown from "react-markdown";
 
 interface SummaryModalProps {
   isOpen: boolean;
@@ -100,8 +101,35 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                     </button>
                   </div>
                 ) : summary ? (
-                  <div className="prose prose-sm sm:prose-base dark:prose-invert max-w-none prose-p:leading-relaxed prose-li:my-1 whitespace-pre-wrap text-foreground/90">
-                    {summary}
+                  <div className="max-w-none">
+                    <ReactMarkdown
+                      components={{
+                        h3: ({ node, ...props }) => (
+                          <h3 className="text-sm font-bold text-primary uppercase tracking-wider mt-8 mb-4 flex items-center gap-2 border-b border-border/50 pb-2" {...props} />
+                        ),
+                        p: ({ node, ...props }) => (
+                          <p className="text-sm sm:text-base text-foreground/80 leading-relaxed mb-4" {...props} />
+                        ),
+                        ul: ({ node, ...props }) => (
+                          <ul className="space-y-3 mb-6" {...props} />
+                        ),
+                        li: ({ node, ...props }) => (
+                          <li className="flex items-start gap-2.5 text-sm sm:text-base text-foreground/80 leading-relaxed">
+                            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 mt-2 shrink-0 shadow-[0_0_8px_rgba(var(--primary),0.5)]" />
+                            <span className="flex-1">{props.children}</span>
+                          </li>
+                        ),
+                        strong: ({ node, ...props }) => (
+                          <strong className="font-semibold text-foreground bg-primary/5 px-1 rounded" {...props} />
+                        ),
+                      }}
+                    >
+                      {summary
+                        .replace(/\\n/g, "\n")
+                        .replace(/^#\s+Revision Summary.*\n?/im, "")
+                        .replace(/^##\s+Chapter.*\n?/im, "")
+                        .trim()}
+                    </ReactMarkdown>
                   </div>
                 ) : null}
               </div>
