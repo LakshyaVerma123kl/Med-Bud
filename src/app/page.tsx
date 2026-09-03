@@ -18,6 +18,7 @@ import { books } from "@/lib/data/books";
 import { seedQuestions } from "@/lib/data/seed-questions";
 import { narayanReddyChapters, parkChapters } from "@/lib/data/chapters";
 import { PDFUploader } from "@/components/pdf/PDFUploader";
+import { PDFLibrary } from "@/components/pdf/PDFLibrary";
 
 export default function HomePage() {
   const totalQuestions = seedQuestions.length;
@@ -125,6 +126,9 @@ export default function HomePage() {
           <PDFUploader />
         </div>
       </section>
+
+      {/* ── Community PDF Quizzes ─────────────────────────────────────── */}
+      <PDFLibrary />
 
       {/* ── Textbook Selection Section ──────────────────────────────────── */}
       <section id="textbooks" className="py-16 sm:py-20 max-w-6xl mx-auto px-4 sm:px-6 w-full">
