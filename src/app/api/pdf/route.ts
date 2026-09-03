@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require("pdf-parse");
 import { callForGeneration, ChatMessage } from "@/lib/ai/client";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function POST(request: Request) {
+  // Require pdf-parse dynamically inside the function to prevent Vercel static evaluation errors (DOMMatrix, canvas)
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const pdfParse = require("pdf-parse");
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
