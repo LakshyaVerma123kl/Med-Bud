@@ -79,14 +79,14 @@ export default function HomePage() {
           >
             <Link
               href="#textbooks"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-white font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all hover:-translate-y-0.5"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary text-white font-semibold text-base shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all hover:-translate-y-1"
             >
               Choose a Textbook
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               href="/dashboard"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-card border border-border text-foreground font-semibold text-base hover:bg-muted transition-all"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-card border border-border text-foreground font-semibold text-base shadow-sm hover:bg-muted transition-all hover:-translate-y-1"
             >
               <Trophy className="w-4 h-4 text-amber-500" />
               View Your Dashboard
@@ -189,7 +189,7 @@ export default function HomePage() {
                   {/* Button */}
                   <Link
                     href={`/book/${book.id}`}
-                    className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-all shadow-md group-hover:shadow-primary/25"
+                    className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl bg-primary text-white font-semibold text-base hover:bg-primary/90 transition-all shadow-md group-hover:shadow-primary/25"
                   >
                     Browse Chapters ({book.chapterCount})
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -213,7 +213,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="clean-card rounded-2xl p-6">
               <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center mb-4 font-bold">
                 <ShieldCheck className="w-5 h-5" />

@@ -36,7 +36,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-2">
             {links.map((link) => {
               const isActive = pathname === link.href;
               const Icon = link.icon;
@@ -44,7 +44,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 ${
                     isActive
                       ? "bg-primary/10 text-primary dark:bg-primary/20"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -89,10 +89,10 @@ export function Navbar() {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden overflow-hidden border-t border-border/50"
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden overflow-hidden border-t border-border/50 bg-background/95 backdrop-blur-xl absolute top-16 left-0 right-0 shadow-2xl"
           >
-            <div className="px-4 py-3 space-y-1">
+            <div className="px-4 py-4 space-y-2 pb-6">
               {links.map((link) => {
                 const isActive = pathname === link.href;
                 const Icon = link.icon;
@@ -101,13 +101,13 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all ${
+                    className={`flex items-center gap-3 px-4 py-3.5 min-h-[48px] rounded-xl text-base font-semibold transition-all ${
                       isActive
                         ? "bg-primary/10 text-primary"
                         : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-5 h-5" />
                     {link.label}
                   </Link>
                 );

@@ -363,7 +363,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
           </h2>
 
           {/* Options */}
-          <div className="space-y-3">
+          <div className="space-y-3.5 sm:space-y-4">
             {shuffledOptionIndices.map((originalIndex, displayIndex) => {
               const optionText = currentQuestion.options[originalIndex];
               const isSelected = state.selectedOption === originalIndex;
@@ -383,7 +383,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                   key={originalIndex}
                   onClick={() => handleSelect(originalIndex)}
                   disabled={isAnswered}
-                  className={`quiz-option ${optionStateClass}`}
+                  className={`quiz-option min-h-[64px] ${optionStateClass}`}
                 >
                   <span className="option-letter">
                     {isAnswered && isCorrect ? (
@@ -394,7 +394,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                       String.fromCharCode(65 + displayIndex)
                     )}
                   </span>
-                  <span className="flex-1 text-sm sm:text-base leading-snug">
+                  <span className="flex-1 text-[15px] sm:text-base font-medium leading-relaxed">
                     {optionText}
                   </span>
                 </button>

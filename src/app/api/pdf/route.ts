@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-// @ts-expect-error - pdf-parse has no default export in some environments
-import pdfParse from "pdf-parse";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const pdfParse = require("pdf-parse");
 import { callForGeneration, ChatMessage } from "@/lib/ai/client";
 
 export async function POST(request: Request) {

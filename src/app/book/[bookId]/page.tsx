@@ -63,10 +63,10 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header Band */}
       <div
-        className={`border-b py-10 sm:py-14 px-4 sm:px-6 lg:px-8 ${
+        className={`sticky top-16 z-40 border-b py-8 sm:py-12 px-4 sm:px-6 lg:px-8 shadow-sm ${
           isReddy
-            ? "bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 text-white border-blue-900/40"
-            : "bg-gradient-to-r from-teal-950 via-slate-900 to-emerald-950 text-white border-teal-900/40"
+            ? "bg-gradient-to-r from-blue-950/95 via-slate-900/95 to-indigo-950/95 text-white border-blue-900/40 backdrop-blur-xl"
+            : "bg-gradient-to-r from-teal-950/95 via-slate-900/95 to-emerald-950/95 text-white border-teal-900/40 backdrop-blur-xl"
         }`}
       >
         <div className="max-w-5xl mx-auto">
@@ -121,7 +121,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
         </div>
 
         {/* Chapters Grid */}
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 sm:gap-6">
           {filtered.map((chapter, idx) => {
             const chapterQuestions = getQuestionsForChapter(chapter.id);
             const liveCount = counts[chapter.id];
