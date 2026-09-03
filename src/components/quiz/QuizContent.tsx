@@ -48,27 +48,21 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
 
     async function fetchQuestions() {
       try {
-        const { supabase } = await import("@/lib/supabase");
-        let query = supabase.from("questions").select("*").eq("verified", true);
+        setLoading(true);
+        // Call the dynamic API route which guarantees LIVE filesystem reading
+        const url = chapterId 
+          ? `/api/questions?chapter=${chapterId}` 
+          : `/api/questions?book=${bookId}`;
+          
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Failed to fetch questions");
         
-        if (chapterId) {
-          query = query.eq("chapter", chapterId);
+        const data = await res.json();
+        if (data.questions && data.questions.length > 0) {
+          setDbQuestions(data.questions);
         } else {
-          query = query.eq("book", bookId);
-        }
-
-        const { data, error } = await query;
-        
-        if (error || !data || data.length === 0) {
-          console.log("Falling back to static seed questions (DB might be empty or uninitialized)");
+          // Absolute fallback if API is empty
           setDbQuestions(staticQuestions);
-        } else {
-          // Parse options if they are stored as JSON string
-          const parsed = data.map(q => ({
-            ...q,
-            options: typeof q.options === 'string' ? JSON.parse(q.options) : q.options
-          }));
-          setDbQuestions(parsed as Question[]);
         }
       } catch (err) {
         setDbQuestions(staticQuestions);
