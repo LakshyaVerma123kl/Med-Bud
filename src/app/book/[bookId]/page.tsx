@@ -32,19 +32,20 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
 
   useEffect(() => {
     async function fetchCounts() {
-      const { supabase } = await import("@/lib/supabase");
-      const { data } = await supabase
-        .from("questions")
-        .select("chapter")
-        .eq("book", bookId)
-        .eq("verified", true);
-        
-      if (data) {
-        const newCounts = data.reduce((acc: Record<string, number>, curr) => {
-          acc[curr.chapter] = (acc[curr.chapter] || 0) + 1;
-          return acc;
-        }, {});
-        setCounts(newCounts);
+      try {
+        const res = await fetch(`/api/questions?book=${bookId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.questions) {
+            const newCounts = data.questions.reduce((acc: Record<string, number>, curr: any) => {
+              acc[curr.chapter] = (acc[curr.chapter] || 0) + 1;
+              return acc;
+            }, {});
+            setCounts(newCounts);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch accurate counts", err);
       }
     }
     fetchCounts();
@@ -121,7 +122,11 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                 <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-white/70">Ch</span>
               </div>
               <div className="hidden sm:block px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
-                <span className="block text-base sm:text-xl font-bold text-white leading-none mb-0.5">{book.totalQuestions}+</span>
+                <span className="block text-base sm:text-xl font-bold text-white leading-none mb-0.5">
+                  {Object.keys(counts).length > 0 
+                    ? Object.values(counts).reduce((a, b) => a + b, 0) 
+                    : book.totalQuestions}+
+                </span>
                 <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-white/70">Qs</span>
               </div>
             </div>
