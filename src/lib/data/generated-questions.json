@@ -1,0 +1,1107 @@
+[
+  {
+    "id": "na-gen-1788464971996-961",
+    "book": "narayan_reddy",
+    "chapter": "nr-10",
+    "topic": "Wound Types",
+    "question": "What type of instrument typically causes an incised wound?",
+    "options": [
+      "Sharp instrument",
+      "Blunt object",
+      "Fire",
+      "Self‑inflicted pressure"
+    ],
+    "correct_index": 0,
+    "explanation": "Incised wounds are produced by sharp, cutting instruments such as knives or scalpels, resulting in clean, linear edges.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464971996-209",
+    "book": "narayan_reddy",
+    "chapter": "nr-10",
+    "topic": "Suicidal Wounds",
+    "question": "Which feature best characterizes a hesitation cut?",
+    "options": [
+      "Deep, regular, straight line",
+      "Superficial, irregular, multiple cuts",
+      "Single deep cut in a vital area",
+      "Parallel, uniform cuts"
+    ],
+    "correct_index": 1,
+    "explanation": "Hesitation cuts are usually superficial, irregular, and appear as multiple small incisions, reflecting indecision or self‑inflicted intent.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464971996-883",
+    "book": "narayan_reddy",
+    "chapter": "nr-10",
+    "topic": "Wound Age Determination",
+    "question": "In the histological assessment of wound age, which change appears earliest?",
+    "options": [
+      "Neutrophil infiltration",
+      "Granulation tissue formation",
+      "Fibroblast proliferation",
+      "Collagen deposition"
+    ],
+    "correct_index": 0,
+    "explanation": "Neutrophils migrate to the wound site within the first few hours, making their presence the earliest reliable microscopic indicator of wound age.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464971996-788",
+    "book": "narayan_reddy",
+    "chapter": "nr-10",
+    "topic": "Legal Implications",
+    "question": "What is the legal significance of a defensive wound?",
+    "options": [
+      "Indicates the victim was the aggressor",
+      "Shows the victim attempted to defend himself",
+      "Means the wound is self‑inflicted",
+      "Has no legal relevance"
+    ],
+    "correct_index": 1,
+    "explanation": "A defensive wound suggests the victim tried to protect themselves from an attack, which can influence culpability and the interpretation of events.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464971996-869",
+    "book": "narayan_reddy",
+    "chapter": "nr-10",
+    "topic": "Specific Wound Types",
+    "question": "According to K.S. Narayan Reddy, which mechanism most commonly produces a contused abrasion?",
+    "options": [
+      "Blunt force with a hard object",
+      "Sharp instrument with a glancing blow",
+      "Gunshot wound",
+      "Thermal injury"
+    ],
+    "correct_index": 0,
+    "explanation": "A contused abrasion results when a blunt object strikes the skin, causing both abrasion of the epidermis and underlying contusion of the dermis.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464977077-841",
+    "book": "narayan_reddy",
+    "chapter": "nr-11",
+    "topic": "Antemortem vs postmortem burns",
+    "question": "Which of the following is the most reliable indicator of antemortem fire exposure?",
+    "options": [
+      "Soot in the airway",
+      "Carbonization of skin",
+      "Cherry red lividity",
+      "Absence of rigor mortis"
+    ],
+    "correct_index": 0,
+    "explanation": "Soot in the airway proves that the victim inhaled smoke while alive, distinguishing antemortem from post‑mortem burns.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464977077-583",
+    "book": "narayan_reddy",
+    "chapter": "nr-11",
+    "topic": "Carbon monoxide poisoning",
+    "question": "The typical carboxyhemoglobin level in a fatal accidental carbon monoxide poisoning is:",
+    "options": [
+      "10-20%",
+      "30-40%",
+      "50-60%",
+      "70-80%"
+    ],
+    "correct_index": 2,
+    "explanation": "Fatal CO poisoning usually produces a COHb level of 50‑60% or higher; lower levels are rarely lethal.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464977077-424",
+    "book": "narayan_reddy",
+    "chapter": "nr-11",
+    "topic": "Internal findings",
+    "question": "In thermal deaths, which internal organ change is most characteristic of a rapid, high‑temperature fire?",
+    "options": [
+      "Uniform coagulative necrosis of liver",
+      "Patchy hemorrhagic necrosis of lungs",
+      "Blackening and charring of the trachea and bronchi",
+      "Diffuse fatty degeneration of the heart"
+    ],
+    "correct_index": 2,
+    "explanation": "High‑temperature fires cause direct thermal injury to the airway, producing blackening and charring of the trachea and bronchi, a hallmark of rapid fire deaths.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464977077-372",
+    "book": "narayan_reddy",
+    "chapter": "nr-11",
+    "topic": "Burn classification",
+    "question": "Which type of burn is defined as damage limited to the epidermis with blanching and pain?",
+    "options": [
+      "First degree",
+      "Second degree",
+      "Third degree",
+      "Fourth degree"
+    ],
+    "correct_index": 0,
+    "explanation": "First‑degree burns involve only the epidermis, present with blanching and pain, unlike deeper burns.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464977078-589",
+    "book": "narayan_reddy",
+    "chapter": "nr-11",
+    "topic": "Heat stroke",
+    "question": "Heat stroke is distinguished from other hyperthermic conditions by all of the following EXCEPT:",
+    "options": [
+      "Central nervous system dysfunction",
+      "Body temperature > 40°C",
+      "Presence of cutaneous erythema",
+      "Absence of sweating in classic form"
+    ],
+    "correct_index": 2,
+    "explanation": "Cutaneous erythema is not a defining feature; classic (anhidrotic) heat stroke is characterized by absent sweating, CNS dysfunction, and temperature >40°C.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464988887-545",
+    "book": "narayan_reddy",
+    "chapter": "nr-12",
+    "topic": "Postmortem Findings",
+    "question": "Which of the following is the most characteristic postmortem finding in a case of pure starvation?",
+    "options": [
+      "Hepatomegaly with fatty change",
+      "Marked loss of subcutaneous fat and muscle wasting",
+      "Congested lungs with edema",
+      "Enlarged mesenteric lymph nodes"
+    ],
+    "correct_index": 1,
+    "explanation": "Pure starvation is characterized by profound emaciation with marked loss of subcutaneous fat and skeletal muscle wasting. The body's adipose reserves are depleted first, followed by protein catabolism.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464988887-578",
+    "book": "narayan_reddy",
+    "chapter": "nr-12",
+    "topic": "Organ Pathology",
+    "question": "In chronic starvation, the liver typically undergoes which of the following changes?",
+    "options": [
+      "Fatty degeneration with enlargement",
+      "Passive congestion with nutmeg pattern",
+      "Shrunken, firm, and brownish appearance",
+      "Cirrhotic nodular transformation"
+    ],
+    "correct_index": 2,
+    "explanation": "Unlike malnutrition with poor diet quality (which causes fatty liver), pure chronic starvation leads to hepatic atrophy. The liver becomes small, firm, and brownish due to depletion of glycogen and lipid reserves.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464988887-163",
+    "book": "narayan_reddy",
+    "chapter": "nr-12",
+    "topic": "Forensic Differentiation",
+    "question": "Which finding best helps differentiate starvation from cancer cachexia during autopsy?",
+    "options": [
+      "Complete absence of food in the GI tract with thin, pale mucosa",
+      "Presence of severe anemia",
+      "Marked edema of dependent parts",
+      "Elevated serum urea levels"
+    ],
+    "correct_index": 0,
+    "explanation": "While anemia, edema, and elevated urea can occur in both conditions, a completely empty gastrointestinal tract with thin, pale mucosa and profound fat loss without an underlying malignancy is highly specific for pure starvation.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464988887-85",
+    "book": "narayan_reddy",
+    "chapter": "nr-12",
+    "topic": "Legal Medicine",
+    "question": "In forensic practice, infanticide by starvation is most commonly associated with which of the following findings?",
+    "options": [
+      "Congenital malformations",
+      "Signs of blunt force trauma",
+      "Meconium staining of nails",
+      "Extreme emaciation with empty stomach and intestines"
+    ],
+    "correct_index": 3,
+    "explanation": "Infanticide by starvation typically presents with extreme emaciation, loss of subcutaneous fat, and an empty gastrointestinal tract. It is often seen in cases of neglect or deliberate withholding of nourishment in neonates.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788464988887-996",
+    "book": "narayan_reddy",
+    "chapter": "nr-12",
+    "topic": "Pathophysiology",
+    "question": "Which of the following is NOT a typical pathological feature of prolonged starvation?",
+    "options": [
+      "Atrophy of skeletal muscles",
+      "Empty and collapsed gastrointestinal tract",
+      "Fatty degeneration of the myocardium",
+      "Shrunken and firm kidneys"
+    ],
+    "correct_index": 2,
+    "explanation": "In pure starvation, the heart undergoes atrophy and becomes small and firm. Fatty degeneration of the myocardium is not a feature of starvation; it is more commonly associated with malnutrition with poor diet quality, alcoholism, or hypoxia.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465001554-615",
+    "book": "narayan_reddy",
+    "chapter": "nr-13",
+    "topic": "Hanging",
+    "question": "In a typical case of hanging, the ligature mark is characteristically described as:",
+    "options": [
+      "Horizontal and complete",
+      "Oblique and incomplete",
+      "Vertical and complete",
+      "Circular and at the level of the mandible"
+    ],
+    "correct_index": 1,
+    "explanation": "In typical hanging, the ligature mark is oblique, incomplete, and situated above the thyroid cartilage, with the highest point corresponding to the knot. This contrasts with ligature strangulation, where the mark is typically horizontal and complete.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465001554-519",
+    "book": "narayan_reddy",
+    "chapter": "nr-13",
+    "topic": "Strangulation",
+    "question": "Petechial hemorrhages in the conjunctiva and facial skin (Tardieu spots) are most commonly associated with which form of mechanical asphyxia?",
+    "options": [
+      "Typical hanging",
+      "Ligature strangulation",
+      "Immersion asphyxia",
+      "Positional asphyxia"
+    ],
+    "correct_index": 1,
+    "explanation": "Petechial hemorrhages result from complete obstruction of venous return from the head while arterial flow continues, causing capillary rupture. They are characteristic of strangulation and smothering but are typically absent or rare in hanging due to the different mechanism of neck compression.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465001554-318",
+    "book": "narayan_reddy",
+    "chapter": "nr-13",
+    "topic": "Smothering",
+    "question": "Which of the following postmortem findings is highly suggestive of homicidal smothering in an infant?",
+    "options": [
+      "Fracture of the hyoid bone",
+      "Fracture of the nasal bones",
+      "Incomplete ligature mark on the neck",
+      "Absence of facial congestion"
+    ],
+    "correct_index": 1,
+    "explanation": "Fractures of the nasal bones or alar cartilages are frequently observed in smothering cases, especially in infants, due to direct pressure applied over the nose and mouth. Hyoid fractures are more typical of manual strangulation, while ligature marks are absent in smothering.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465001554-438",
+    "book": "narayan_reddy",
+    "chapter": "nr-13",
+    "topic": "Drowning",
+    "question": "The diatom test in forensic medicine is primarily used to:",
+    "options": [
+      "Differentiate between suicidal and homicidal hanging",
+      "Confirm antemortem immersion in water",
+      "Estimate the time since death in drowning cases",
+      "Identify the type of ligature used in strangulation"
+    ],
+    "correct_index": 1,
+    "explanation": "The diatom test detects diatoms in internal organs such as bone marrow, spleen, or lungs. A positive result indicates that the individual was breathing while immersed in water containing diatoms, allowing them to enter the systemic circulation. It helps confirm antemortem drowning versus postmortem immersion.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465001554-146",
+    "book": "narayan_reddy",
+    "chapter": "nr-13",
+    "topic": "General Asphyxia",
+    "question": "In a body recovered from a hanging incident, livor mortis is typically observed in which distribution?",
+    "options": [
+      "Upper limbs, face, and neck",
+      "Posterior trunk and lower limbs",
+      "Anterior chest and abdomen",
+      "Entire body uniformly"
+    ],
+    "correct_index": 0,
+    "explanation": "Livor mortis settles in the dependent parts of the body. In hanging, the upright posture causes blood to pool in the face, neck, and upper limbs. This pattern helps differentiate hanging from other forms of asphyxia where the body is usually found supine, resulting in posterior lividity.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465010684-261",
+    "book": "narayan_reddy",
+    "chapter": "nr-14",
+    "topic": "Definitions & Forensic Distinction",
+    "question": "In forensic medicine, the primary distinction between impotence and sterility is based on:",
+    "options": [
+      "Ability to achieve penile erection",
+      "Ability to complete sexual intercourse",
+      "Ability to produce viable offspring",
+      "Presence of psychological distress"
+    ],
+    "correct_index": 2,
+    "explanation": "Impotence refers to the inability to achieve or maintain an erection sufficient for coitus, whereas sterility (infertility) denotes the inability to produce viable offspring despite normal sexual function. This distinction is fundamental in forensic and legal evaluations.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465010684-319",
+    "book": "narayan_reddy",
+    "chapter": "nr-14",
+    "topic": "Etiology & Forensic Practice",
+    "question": "Which of the following is the most common etiology of impotence encountered in forensic practice?",
+    "options": [
+      "Congenital penile anomalies",
+      "Psychological or functional factors",
+      "Tertiary syphilis",
+      "Diabetes mellitus"
+    ],
+    "correct_index": 1,
+    "explanation": "Psychological or functional impotence accounts for the majority of cases presented in forensic practice. It is often related to performance anxiety, relationship conflicts, or stress, whereas organic causes are comparatively less frequent in legal disputes.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465010684-760",
+    "book": "narayan_reddy",
+    "chapter": "nr-14",
+    "topic": "Diagnostic Evaluation",
+    "question": "During a forensic examination for suspected impotence, which test is classically used to differentiate psychological from organic causes?",
+    "options": [
+      "Nocturnal penile tumescence test",
+      "Patient's self-reported sexual history",
+      "Serum testosterone and prolactin levels",
+      "Penile color Doppler ultrasonography"
+    ],
+    "correct_index": 0,
+    "explanation": "The nocturnal penile tumescence (NPT) test helps differentiate psychological from organic impotence. Normal nocturnal erections strongly suggest a psychological etiology, while absent or diminished erections point toward an organic/neurovascular cause.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465010684-676",
+    "book": "narayan_reddy",
+    "chapter": "nr-14",
+    "topic": "Legal Aspects",
+    "question": "In Indian forensic and legal practice, impotence may be grounds for annulment of marriage if it is:",
+    "options": [
+      "Temporary and stress-induced",
+      "Present at the time of marriage and incurable",
+      "Diagnosed after 5 years of marriage",
+      "Associated with normal semen analysis"
+    ],
+    "correct_index": 1,
+    "explanation": "For impotence to be legally recognized as grounds for marriage annulment, it must be established that the condition existed at the time of marriage and is of a permanent or incurable nature, thereby preventing consummation.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465010684-759",
+    "book": "narayan_reddy",
+    "chapter": "nr-14",
+    "topic": "Sterility Diagnosis",
+    "question": "According to standard forensic guidelines, male sterility is typically confirmed by:",
+    "options": [
+      "Single semen analysis showing azoospermia",
+      "Absence of spermatozoa in three consecutive semen analyses after appropriate abstinence",
+      "Serum FSH levels above 20 IU/L",
+      "Testicular biopsy showing Sertoli cell only syndrome"
+    ],
+    "correct_index": 1,
+    "explanation": "Forensic and clinical guidelines require at least three consecutive semen analyses demonstrating azoospermia or severe oligospermia after 2-7 days of abstinence to conclusively diagnose male sterility, accounting for physiological variability and collection errors.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465026546-576",
+    "book": "narayan_reddy",
+    "chapter": "nr-15",
+    "topic": "Virginity, Pregnancy and Delivery",
+    "question": "Small, rounded, fleshy nodules formed by the cicatrization and complete tearing of the hymen following vaginal childbirth are known as:",
+    "options": [
+      "Hymeneal tags",
+      "Carunculae myrtiformes",
+      "Striae gravidarum",
+      "Linea albicantes"
+    ],
+    "correct_index": 1,
+    "explanation": "Carunculae myrtiformes are small, isolated, fleshy tags formed after childbirth due to severe tearing and scarring of the hymen during vaginal delivery. In contrast, simple defloration (intercourse) produces linear tears that leave hymeneal tags.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465026546-184",
+    "book": "narayan_reddy",
+    "chapter": "nr-15",
+    "topic": "Virginity, Pregnancy and Delivery",
+    "question": "A medical examiner evaluates a female 7 days post-delivery. Vaginal examination reveals a yellowish-brown/pale discharge without fresh blood. This lochia is classified as:",
+    "options": [
+      "Lochia rubra",
+      "Lochia serosa",
+      "Lochia alba",
+      "Lochia purulenta"
+    ],
+    "correct_index": 1,
+    "explanation": "Lochia serosa is a yellowish-pink or pale brown serous discharge occurring from day 5 to day 9-10 post-delivery. Lochia rubra occurs during the first 1-4 days (red/bloody), and Lochia alba occurs from day 10 to 14 (white/yellowish).",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465026546-197",
+    "book": "narayan_reddy",
+    "chapter": "nr-15",
+    "topic": "Virginity, Pregnancy and Delivery",
+    "question": "Which of the following is considered an absolute (sure) sign of pregnancy during medicolegal examination?",
+    "options": [
+      "Amenorrhea for 3 months",
+      "Hegar's sign",
+      "Auscultation of fetal heart sound (FHS)",
+      "Positive immunologic urine pregnancy test"
+    ],
+    "correct_index": 2,
+    "explanation": "Auscultation of fetal heart sounds, palpation of active fetal movements by the examiner, and radiological/ultrasound visualization of the fetus are absolute (positive) signs of pregnancy. Amenorrhea, Hegar's sign, and urine hCG are presumptive or probable signs.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465026546-607",
+    "book": "narayan_reddy",
+    "chapter": "nr-15",
+    "topic": "Virginity, Pregnancy and Delivery",
+    "question": "The fertilization of two ova released during two different menstrual cycles, resulting in two fetuses of significantly different gestational ages in the same uterus, is called:",
+    "options": [
+      "Superfecundation",
+      "Superfetation",
+      "Foetus in foetu",
+      "Heterotopic pregnancy"
+    ],
+    "correct_index": 1,
+    "explanation": "Superfetation refers to the fertilization of a second ovum released in a subsequent menstrual cycle after a pregnancy has already established. Superfecundation, by contrast, is the fertilization of two ova released during the same menstrual cycle by two separate acts of coitus.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465026546-350",
+    "book": "narayan_reddy",
+    "chapter": "nr-15",
+    "topic": "Virginity, Pregnancy and Delivery",
+    "question": "On medicolegal autopsy of a adult female, the cervical external os is found to be a transverse slit with irregular, scarred, and fissured margins. This feature indicates that the deceased was a:",
+    "options": [
+      "Virgin female",
+      "Nulliparous female",
+      "Parous female",
+      "Female with pseudocyesis"
+    ],
+    "correct_index": 2,
+    "explanation": "In a nulliparous or virgin female, the external cervical os is small, smooth, and circular or oval. In a parous female (who has given birth vaginally), the external os becomes a transverse slit with fissured or scarred anterior and posterior lips.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465042511-812",
+    "book": "narayan_reddy",
+    "chapter": "nr-21",
+    "topic": "Principles of Trace Evidence",
+    "question": "Which fundamental principle of forensic science, essential to the study of trace evidence, states that 'every contact leaves a trace'?",
+    "options": [
+      "Locard's Exchange Principle",
+      "Galton's Law of Comparison",
+      "Frye Standard of Admissibility",
+      "Simpson's Rule of Evidence"
+    ],
+    "correct_index": 0,
+    "explanation": "Locard's Exchange Principle states that whenever two objects come into contact with one another, there is a cross-transfer of material (trace evidence).",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465042511-384",
+    "book": "narayan_reddy",
+    "chapter": "nr-21",
+    "topic": "Hair Evidence",
+    "question": "During microscopic examination of a hair sample collected from a crime scene, a medullary index of less than 0.33 (1/3) is observed. This finding strongly suggests that the hair belongs to:",
+    "options": [
+      "An animal",
+      "A human",
+      "A synthetic fiber source",
+      "An avian species"
+    ],
+    "correct_index": 1,
+    "explanation": "The medullary index (ratio of the diameter of the medulla to the diameter of the whole hair) is less than 0.33 (1/3) in human hair, whereas in animal hair it is usually 0.5 (1/2) or greater.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465042511-33",
+    "book": "narayan_reddy",
+    "chapter": "nr-21",
+    "topic": "Crime Scene Investigation",
+    "question": "Which reagent is sprayed at a crime scene to detect latent bloodstains by producing chemiluminescence under dark conditions?",
+    "options": [
+      "Takayama reagent",
+      "Luminol reagent",
+      "Teichmann reagent",
+      "Kastle-Meyer reagent"
+    ],
+    "correct_index": 1,
+    "explanation": "Luminol reacts with the iron present in hemoglobin to produce chemiluminescence (a blue glow), making it ideal for searching large crime scenes for invisible or cleaned bloodstains.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465042511-165",
+    "book": "narayan_reddy",
+    "chapter": "nr-21",
+    "topic": "Trace Evidence in Drowning",
+    "question": "In the forensic analysis of a body recovered from water, detection of diatoms in which body tissue provides strong proof of antemortem drowning?",
+    "options": [
+      "Stomach contents",
+      "Bone marrow",
+      "Pleural cavity fluid",
+      "External skin surface"
+    ],
+    "correct_index": 1,
+    "explanation": "In antemortem drowning, diatoms penetrate the alveolar-capillary membrane, enter systemic circulation, and reach distant closed organs like bone marrow. Finding diatoms in bone marrow excludes postmortem immersion.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465042511-219",
+    "book": "narayan_reddy",
+    "chapter": "nr-21",
+    "topic": "Physical Trace Analysis",
+    "question": "When physical trace evidence such as broken glass or paint chips recovered from a suspect's vehicle fits perfectly into the missing section of a crime scene sample, it is referred to as:",
+    "options": [
+      "Class characteristic identification",
+      "Jigsaw (Mechanical) fit match",
+      "Comparative density matching",
+      "Refractive index correlation"
+    ],
+    "correct_index": 1,
+    "explanation": "A mechanical or jigsaw fit occurs when broken fragments physically fit together perfectly along unique fracture lines, providing conclusive proof of common origin.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465061760-28",
+    "book": "narayan_reddy",
+    "chapter": "nr-23",
+    "topic": "Viscera Preservation",
+    "question": "Which of the following preservatives is indicated for preserving viscera during an autopsy in a suspected case of acute carbolic acid (phenol) poisoning?",
+    "options": [
+      "90% Rectified spirit",
+      "Saturated solution of common salt",
+      "10% Neutral buffered formalin",
+      "Liquid paraffin"
+    ],
+    "correct_index": 1,
+    "explanation": "Rectified spirit is the routine viscera preservative; however, it is contraindicated in alcohol, phenol, phosphorus, paraldehyde, and mineral acid poisonings because it interferes with chemical analysis. In these cases, a saturated solution of common salt is preferred.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465061760-987",
+    "book": "narayan_reddy",
+    "chapter": "nr-23",
+    "topic": "Legal Aspects of Toxicology",
+    "question": "Under the Indian Penal Code (IPC), administering poison with the intent to cause hurt or facilitate the commission of an offence is punishable under which section?",
+    "options": [
+      "Section 284 IPC",
+      "Section 304A IPC",
+      "Section 324 IPC",
+      "Section 328 IPC"
+    ],
+    "correct_index": 3,
+    "explanation": "Section 328 IPC specifically deals with causing hurt by means of poison, stupefying, intoxicating, or unwholesome drugs with intent to commit an offence. Section 284 IPC relates to negligent conduct regarding poisonous substances.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465061760-15",
+    "book": "narayan_reddy",
+    "chapter": "nr-23",
+    "topic": "Decontamination and Treatment",
+    "question": "Gastric lavage is generally contraindicated in corrosive poisoning due to the risk of esophageal perforation. However, it may be cautiously performed using a soft tube in poisoning caused by which substance?",
+    "options": [
+      "Sulfuric acid",
+      "Carbolic acid",
+      "Sodium hydroxide",
+      "Potassium hydroxide"
+    ],
+    "correct_index": 1,
+    "explanation": "Carbolic acid (phenol) produces coagulation necrosis rather than liquefactive necrosis and acts as a local anesthetic on the stomach wall, making the mucosa less prone to immediate traumatic perforation compared to strong mineral acids or alkalis.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465061760-327",
+    "book": "narayan_reddy",
+    "chapter": "nr-23",
+    "topic": "Antidotes",
+    "question": "What is the classic composition ratio of Powdered Charcoal, Magnesium Oxide, and Tannic Acid in the traditional 'Universal Antidote'?",
+    "options": [
+      "1 : 1 : 1",
+      "2 : 1 : 1",
+      "1 : 2 : 1",
+      "2 : 2 : 1"
+    ],
+    "correct_index": 1,
+    "explanation": "The Universal Antidote consists of 2 parts powdered charcoal (adsorbent), 1 part magnesium oxide (mild antacid/neutralizer), and 1 part tannic acid (precipitant for alkaloids and metals).",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465061760-624",
+    "book": "narayan_reddy",
+    "chapter": "nr-23",
+    "topic": "Chelating Agents",
+    "question": "Dimercaprol (British Anti-Lewisite / BAL) is a heavy metal chelating agent. It is explicitly CONTRAINDICATED in poisoning caused by which of the following metals?",
+    "options": [
+      "Arsenic",
+      "Mercury",
+      "Cadmium",
+      "Gold"
+    ],
+    "correct_index": 2,
+    "explanation": "BAL is contraindicated in Cadmium, Iron, and Selenium poisoning because the BAL-metal complex formed is nephrotoxic and increases toxicity compared to the metal alone.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465072766-955",
+    "book": "narayan_reddy",
+    "chapter": "nr-24",
+    "topic": "Organophosphates",
+    "question": "Which of the following best describes the primary mechanism of toxicity in organophosphate poisoning?",
+    "options": [
+      "Reversible inhibition of acetylcholinesterase",
+      "Irreversible phosphorylation of acetylcholinesterase",
+      "Direct stimulation of muscarinic receptors",
+      "Inhibition of cytochrome c oxidase"
+    ],
+    "correct_index": 1,
+    "explanation": "Organophosphates irreversibly phosphorylate acetylcholinesterase, leading to accumulation of acetylcholine at cholinergic synapses. This causes the classic cholinergic crisis. Carbamates, in contrast, cause reversible inhibition.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465072766-327",
+    "book": "narayan_reddy",
+    "chapter": "nr-24",
+    "topic": "Herbicides",
+    "question": "A patient presents with acute renal failure and progressive respiratory distress after ingesting a weed killer. Urine analysis shows a characteristic green color. Which poison is most likely responsible?",
+    "options": [
+      "Glyphosate",
+      "Paraquat",
+      "Atrazine",
+      "2,4-D"
+    ],
+    "correct_index": 1,
+    "explanation": "Paraquat ingestion classically produces green-colored urine and causes progressive, often fatal, pulmonary fibrosis due to free radical generation in type I and II pneumocytes. Management is primarily supportive as no specific antidote exists.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465072766-49",
+    "book": "narayan_reddy",
+    "chapter": "nr-24",
+    "topic": "Rodenticides",
+    "question": "During autopsy of a suspected rodenticide poisoning, a distinct garlic-like odor is noted in the stomach contents. Which gas is primarily responsible for this finding?",
+    "options": [
+      "Hydrogen sulfide",
+      "Phosphine gas",
+      "Hydrogen cyanide",
+      "Carbon monoxide"
+    ],
+    "correct_index": 1,
+    "explanation": "Zinc phosphide reacts with gastric acid to release phosphine gas, which has a characteristic garlic or decaying fish odor. Phosphine is a potent mitochondrial toxin that inhibits cellular respiration.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465072766-741",
+    "book": "narayan_reddy",
+    "chapter": "nr-24",
+    "topic": "Carbamates",
+    "question": "In cases of carbamate insecticide poisoning, which of the following statements regarding oxime therapy is correct?",
+    "options": [
+      "Pralidoxime is the first-line antidote",
+      "Pralidoxime is contraindicated as it may worsen toxicity",
+      "Atropine should be withheld until oximes are given",
+      "Oximes effectively reverse neuromuscular blockade"
+    ],
+    "correct_index": 1,
+    "explanation": "Unlike organophosphates, carbamates reversibly inhibit acetylcholinesterase. Pralidoxime is generally contraindicated or ineffective in carbamate poisoning and may potentially exacerbate toxicity, particularly with carbaryl. Atropine remains the mainstay of treatment.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465072766-727",
+    "book": "narayan_reddy",
+    "chapter": "nr-24",
+    "topic": "Fumigants",
+    "question": "Aluminum phosphide poisoning is associated with high mortality primarily due to:",
+    "options": [
+      "Direct corrosive injury to the gastrointestinal tract",
+      "Inhibition of mitochondrial cytochrome c oxidase leading to histotoxic hypoxia",
+      "Massive release of histamine causing anaphylaxis",
+      "Severe hypokalemia-induced arrhythmias"
+    ],
+    "correct_index": 1,
+    "explanation": "Aluminum phosphide releases phosphine gas, which acts as a mitochondrial toxin by inhibiting cytochrome c oxidase (Complex IV). This causes histotoxic hypoxia, severe metabolic acidosis, and refractory cardiogenic shock, leading to high mortality.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465087709-564",
+    "book": "narayan_reddy",
+    "chapter": "nr-33",
+    "topic": "Plant Poisons",
+    "question": "Which of the following is the most characteristic clinical feature of strychnine poisoning?",
+    "options": [
+      "Flaccid paralysis",
+      "Opisthotonos",
+      "Miosis",
+      "Bradycardia"
+    ],
+    "correct_index": 1,
+    "explanation": "Strychnine acts as a competitive antagonist at glycine receptors in the spinal cord, leading to severe muscle spasms. Opisthotonos (severe hyperextension) and risus sardonicus are pathognomonic. Flaccid paralysis is seen in curare, miosis in opioids, and bradycardia in digitalis/aconite.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465087709-288",
+    "book": "narayan_reddy",
+    "chapter": "nr-33",
+    "topic": "Animal Poisons",
+    "question": "In forensic practice, which of the following snake venoms is primarily classified as neurotoxic and typically causes death due to respiratory paralysis?",
+    "options": [
+      "Naja naja (Indian cobra)",
+      "Bungarus caeruleus (Krait)",
+      "Daboia russelii (Russell's viper)",
+      "Echis carinatus (Saw-scaled viper)"
+    ],
+    "correct_index": 1,
+    "explanation": "Krait venom is predominantly neurotoxic, causing descending flaccid paralysis and respiratory failure, often with minimal local signs. Cobra venom has both neurotoxic and cytotoxic components. Russell's viper and saw-scaled viper are primarily hemotoxic/cytotoxic, causing coagulopathy and renal failure.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465087709-780",
+    "book": "narayan_reddy",
+    "chapter": "nr-33",
+    "topic": "Plant Poisons",
+    "question": "A patient presents with delirium, mydriasis, dry skin, tachycardia, and urinary retention. Which plant poison is most likely responsible?",
+    "options": [
+      "Calotropis",
+      "Datura",
+      "Aconite",
+      "Curare"
+    ],
+    "correct_index": 1,
+    "explanation": "Datura contains tropane alkaloids (atropine, scopolamine, hyoscyamine) which are competitive muscarinic antagonists. This produces the classic anticholinergic toxidrome: 'blind as a bat' (mydriasis), 'mad as a hatter' (delirium), 'red as a beet' (flushing), 'hot as a hare' (hyperthermia), and 'dry as a bone' (dry mucous membranes/skin).",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465087709-130",
+    "book": "narayan_reddy",
+    "chapter": "nr-33",
+    "topic": "Animal Poisons",
+    "question": "Which of the following is the most characteristic post-mortem finding in sea snake envenomation?",
+    "options": [
+      "Generalized petechial hemorrhages",
+      "Dark red blood and myoglobinuria",
+      "Localized tissue necrosis",
+      "Pulmonary edema"
+    ],
+    "correct_index": 1,
+    "explanation": "Sea snake venom is highly myotoxic and hemolytic. It causes massive rhabdomyolysis leading to myoglobinuria, which can result in acute renal failure. Blood remains fluid and dark red due to hemolysis. Local tissue necrosis is typically absent, unlike terrestrial vipers.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "na-gen-1788465087709-333",
+    "book": "narayan_reddy",
+    "chapter": "nr-33",
+    "topic": "Plant Poisons",
+    "question": "Aconite poisoning is classically associated with which of the following clinical features?",
+    "options": [
+      "Paresthesia of lips and extremities followed by arrhythmias",
+      "Severe abdominal cramps and bloody diarrhea",
+      "Progressive flaccid paralysis",
+      "Bronchospasm and cyanosis"
+    ],
+    "correct_index": 0,
+    "explanation": "Aconite (Monkshood) contains aconitine, which opens voltage-gated sodium channels. Early signs include intense paresthesia (tingling/numbness) of the lips, tongue, and extremities, followed by gastrointestinal symptoms and life-threatening cardiac arrhythmias (ventricular tachycardia/fibrillation). It is known as 'blue poison' in some regions.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465111907-553",
+    "book": "park",
+    "chapter": "pk-09",
+    "topic": "Preventive Medicine in Obstetrics, Paediatrics and Geriatrics",
+    "question": "According to the World Health Organization (WHO), Maternal Mortality Ratio (MMR) is expressed as the number of maternal deaths per how many live births?",
+    "options": [
+      "1,000 live births",
+      "10,000 live births",
+      "100,000 live births",
+      "1,000,000 live births"
+    ],
+    "correct_index": 2,
+    "explanation": "Maternal Mortality Ratio (MMR) is defined as the number of maternal deaths during a given time period per 100,000 live births during the same time period. In contrast, Maternal Mortality Rate is calculated per 1,000 women of reproductive age.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465111907-345",
+    "book": "park",
+    "chapter": "pk-09",
+    "topic": "Preventive Medicine in Obstetrics, Paediatrics and Geriatrics",
+    "question": "For international comparison of Perinatal Mortality Rate (PMR), the WHO recommends including late fetal deaths starting from which gestational age threshold?",
+    "options": [
+      "20 completed weeks",
+      "22 completed weeks",
+      "28 completed weeks",
+      "37 completed weeks"
+    ],
+    "correct_index": 2,
+    "explanation": "For international comparisons, WHO recommends including late fetal deaths (stillbirths) weighing 1000 grams or more, which corresponds to approximately 28 completed weeks of gestation.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465111907-307",
+    "book": "park",
+    "chapter": "pk-09",
+    "topic": "Preventive Medicine in Obstetrics, Paediatrics and Geriatrics",
+    "question": "An infant is classified as having 'Low Birth Weight' (LBW) according to WHO guidelines if the birth weight measured within the first hour of life is less than:",
+    "options": [
+      "2000 grams",
+      "2200 grams",
+      "2500 grams",
+      "3000 grams"
+    ],
+    "correct_index": 2,
+    "explanation": "Low Birth Weight (LBW) is defined as a birth weight of less than 2,500 grams (up to and including 2,499 grams), irrespective of gestational age, measured within the first hour after birth.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465111907-291",
+    "book": "park",
+    "chapter": "pk-09",
+    "topic": "Preventive Medicine in Obstetrics, Paediatrics and Geriatrics",
+    "question": "On the 'Road to Health' growth monitoring chart, what does a growth curve running parallel to the reference lines signify?",
+    "options": [
+      "Adequate and normal growth",
+      "Growth faltering requiring intervention",
+      "Severe acute malnutrition",
+      "Overnutrition and obesity"
+    ],
+    "correct_index": 0,
+    "explanation": "A child's growth line that moves upward and runs parallel to the reference curves on the Road to Health card indicates good, normal child growth. A flat or downward line indicates growth faltering.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465111907-445",
+    "book": "park",
+    "chapter": "pk-09",
+    "topic": "Preventive Medicine in Obstetrics, Paediatrics and Geriatrics",
+    "question": "According to the updated WHO 2016 Antenatal Care (ANC) model for a positive pregnancy experience, what is the minimum number of ANC contacts recommended?",
+    "options": [
+      "4 contacts",
+      "6 contacts",
+      "8 contacts",
+      "12 contacts"
+    ],
+    "correct_index": 2,
+    "explanation": "The 2016 WHO ANC model increased the minimum recommended antenatal care contacts from 4 to 8 to reduce perinatal mortality and provide a more comprehensive assessment during pregnancy.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465120923-942",
+    "book": "park",
+    "chapter": "pk-10",
+    "topic": "Protein Energy Malnutrition",
+    "question": "Which of the following is a characteristic feature of marasmus but not kwashiorkor?",
+    "options": [
+      "Edema",
+      "Hepatomegaly",
+      "Preserved subcutaneous fat",
+      "Severe muscle wasting"
+    ],
+    "correct_index": 3,
+    "explanation": "Marasmus results from severe deficiency of both calories and protein, leading to profound muscle wasting and loss of subcutaneous fat without edema. Kwashiorkor is primarily a protein deficiency with adequate calorie intake, characterized by edema, hepatomegaly (fatty liver), and relatively preserved subcutaneous fat.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465120923-984",
+    "book": "park",
+    "chapter": "pk-10",
+    "topic": "Micronutrient Deficiencies",
+    "question": "According to Park's textbook, what is the recommended daily iodine intake for pregnant and lactating women in India?",
+    "options": [
+      "150 mcg",
+      "200 mcg",
+      "250 mcg",
+      "300 mcg"
+    ],
+    "correct_index": 2,
+    "explanation": "The ICMR-NIN guidelines, as cited in Park, recommend 250 mcg of iodine daily for pregnant and lactating women. This higher requirement supports increased maternal thyroid hormone production and ensures adequate fetal/neonatal neurodevelopment, preventing iodine deficiency disorders.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465120923-696",
+    "book": "park",
+    "chapter": "pk-10",
+    "topic": "Nutritional Assessment",
+    "question": "In community nutritional assessment, which anthropometric indicator is most sensitive for detecting acute malnutrition in children under 5 years?",
+    "options": [
+      "Height-for-age",
+      "Weight-for-height",
+      "Mid-upper arm circumference",
+      "Head circumference"
+    ],
+    "correct_index": 1,
+    "explanation": "Weight-for-height (or weight-for-length) reflects recent weight loss and is the most sensitive indicator for acute malnutrition (wasting). Height-for-age indicates chronic malnutrition (stunting), while MUAC is a useful screening tool but weight-for-height remains the primary diagnostic indicator for acute cases per WHO and Park guidelines.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465120923-872",
+    "book": "park",
+    "chapter": "pk-10",
+    "topic": "Micronutrient Deficiencies",
+    "question": "Which stage of xerophthalmia is characterized by the presence of Bitot's spots?",
+    "options": [
+      "X1A",
+      "X1B",
+      "X2",
+      "X3A"
+    ],
+    "correct_index": 1,
+    "explanation": "According to the WHO classification adopted in Park, X1A denotes conjunctival xerosis, X1B denotes Bitot's spots (foamy, triangular patches on the conjunctiva), X2 denotes corneal xerosis, X3A/B denote corneal ulceration/keratomalacia, and XS denotes corneal scars.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465120923-592",
+    "book": "park",
+    "chapter": "pk-10",
+    "topic": "National Nutrition Programs",
+    "question": "Under the 'Anemia Mukt Bharat' strategy, what is the recommended weekly iron and folic acid supplementation for pregnant and lactating women?",
+    "options": [
+      "60 mg iron + 400 mcg folic acid daily",
+      "100 mg iron + 500 mcg folic acid weekly",
+      "60 mg iron + 500 mcg folic acid weekly",
+      "100 mg iron + 400 mcg folic acid daily"
+    ],
+    "correct_index": 2,
+    "explanation": "The Anemia Mukt Bharat strategy recommends weekly iron and folic acid supplementation (60 mg elemental iron + 500 mcg folic acid) for pregnant and lactating women. Weekly dosing improves compliance, reduces gastrointestinal side effects, and is more effective than daily dosing in community settings.",
+    "difficulty": "hard",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465131868-522",
+    "book": "park",
+    "chapter": "pk-12",
+    "topic": "Water Quality",
+    "question": "According to standard drinking water guidelines, what is the recommended residual chlorine concentration after 30 minutes of contact time?",
+    "options": [
+      "0.05-0.1 mg/L",
+      "0.2-0.5 mg/L",
+      "0.5-1.0 mg/L",
+      "1.0-2.0 mg/L"
+    ],
+    "correct_index": 1,
+    "explanation": "A residual chlorine level of 0.2-0.5 mg/L after 30 minutes of contact time ensures effective disinfection while maintaining acceptable taste and odor. Lower levels may be inadequate for pathogen control, while higher levels cause sensory complaints and potential health risks.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465131868-150",
+    "book": "park",
+    "chapter": "pk-12",
+    "topic": "Air Pollution",
+    "question": "As per the Central Pollution Control Board (CPCB) ambient air quality standards, what is the annual average permissible limit for PM2.5?",
+    "options": [
+      "10 µg/m³",
+      "25 µg/m³",
+      "40 µg/m³",
+      "60 µg/m³"
+    ],
+    "correct_index": 2,
+    "explanation": "The CPCB sets the annual average limit for PM2.5 at 40 µg/m³. The WHO guideline is stricter at 5 µg/m³. PM2.5 particles penetrate deep into the alveoli and are strongly associated with cardiopulmonary morbidity and mortality.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465131868-908",
+    "book": "park",
+    "chapter": "pk-12",
+    "topic": "Noise Pollution",
+    "question": "What is the permissible occupational noise exposure limit for an 8-hour workday as recommended by environmental health standards?",
+    "options": [
+      "65 dB",
+      "85 dB",
+      "90 dB",
+      "115 dB"
+    ],
+    "correct_index": 1,
+    "explanation": "The permissible noise limit for an 8-hour workday is 85 dB. Exposure above this threshold mandates the use of hearing protection. For every 3 dB increase in noise level, the permissible exposure time is halved to prevent noise-induced hearing loss.",
+    "difficulty": "medium",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465131868-326",
+    "book": "park",
+    "chapter": "pk-12",
+    "topic": "Biomedical Waste Management",
+    "question": "In biomedical waste management, which color container is specifically designated for the disposal of sharps such as needles, scalpels, and broken glass?",
+    "options": [
+      "Yellow bag",
+      "Red bag",
+      "Blue container",
+      "White puncture-proof container"
+    ],
+    "correct_index": 3,
+    "explanation": "White puncture-proof containers are designated for sharps to prevent needle-stick injuries and subsequent blood-borne pathogen transmission. Yellow bags are for anatomical/soiled waste, red for recyclable plastics/syringes without needles, and blue for glassware/thermometers.",
+    "difficulty": "easy",
+    "verified": true
+  },
+  {
+    "id": "pa-gen-1788465131868-377",
+    "book": "park",
+    "chapter": "pk-12",
+    "topic": "Indoor Air Pollution",
+    "question": "Which naturally occurring radioactive gas is a leading cause of lung cancer among non-smokers and commonly accumulates in indoor environments due to soil emanation?",
+    "options": [
+      "Radon",
+      "Asbestos",
+      "Formaldehyde",
+      "Carbon monoxide"
+    ],
+    "correct_index": 0,
+    "explanation": "Radon-222 is a colorless, odorless radioactive gas produced by uranium decay in soil and rock. It seeps into buildings and accumulates indoors, making it the second leading cause of lung cancer after smoking. Proper ventilation and sealing of foundation cracks are key preventive measures.",
+    "difficulty": "hard",
+    "verified": true
+  }
+]

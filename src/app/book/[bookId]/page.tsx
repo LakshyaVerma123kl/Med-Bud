@@ -10,6 +10,7 @@ import { getQuestionsForChapter } from "@/lib/data/seed-questions";
 import { useProgress } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
 import { BookId } from "@/lib/types";
+import { SummaryModal } from "@/components/quiz/SummaryModal";
 
 export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const { bookId } = use(params);
@@ -19,6 +20,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const { getChapterMastery, isLoaded } = useProgress();
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSummaryChapter, setActiveSummaryChapter] = useState<{id: string, name: string} | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -221,9 +223,16 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                         Generate AI
                       </button>
                     )}
+                    <button
+                      onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
+                      className="text-[10px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
+                    >
+                      <Brain className="w-3.5 h-3.5" />
+                      Summary
+                    </button>
                     <Link
                       href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                      className="text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
+                      className="text-[10px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
                     >
                       Start Quiz
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -243,6 +252,14 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
           </div>
         )}
       </div>
+
+      <SummaryModal 
+        isOpen={!!activeSummaryChapter}
+        onClose={() => setActiveSummaryChapter(null)}
+        book={bookId as BookId}
+        chapterId={activeSummaryChapter?.id || ""}
+        chapterName={activeSummaryChapter?.name || ""}
+      />
     </div>
   );
 }

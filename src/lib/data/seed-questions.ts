@@ -1,4 +1,8 @@
 import { Question } from "../types";
+import generatedQuestionsJson from "./generated-questions.json";
+
+// Helper to gracefully merge the generated questions
+const generatedQuestions = (generatedQuestionsJson as unknown) as Question[];
 
 function makeHash(text: string): string {
   let hash = 0;
@@ -1248,7 +1252,7 @@ export const seedQuestions: Question[] = [
   // Missing Park Chapters (24-25)
   q("pk-q077","park","pk-24","STIs/HIV","The syndromic management kit for urethral discharge is color-coded:","Green|Red|Grey|White".split("|") as [string,string,string,string],2,"Kit 1 for urethral discharge is Grey.","easy"),
   q("pk-q078","park","pk-25","NTDs","Mass Drug Administration (MDA) is used primarily for the elimination of:","Malaria|Tuberculosis|Lymphatic Filariasis|HIV".split("|") as [string,string,string,string],2,"MDA is the main strategy for Lymphatic Filariasis elimination.","easy"),
-];
+].concat(generatedQuestions);
 
 // Helper functions
 export function getQuestionsForChapter(chapterId: string): Question[] {

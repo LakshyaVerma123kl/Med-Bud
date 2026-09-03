@@ -3,9 +3,9 @@ import { getAdminSupabase } from "@/lib/supabase";
 
 export const dynamic = "force-dynamic";
 
-export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
 
     if (!id) {
       return NextResponse.json({ success: false, error: "No ID provided" }, { status: 400 });

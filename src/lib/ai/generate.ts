@@ -107,3 +107,30 @@ export async function generateQuestions(
     };
   }
 }
+
+export async function generateSummary(book: BookId, chapter: string): Promise<{ summary: string; success: boolean }> {
+  const bookName = book === "narayan_reddy" 
+    ? "K.S. Narayan Reddy's Essentials of Forensic Medicine & Toxicology"
+    : "Park's Textbook of Preventive & Social Medicine";
+
+  const prompt = `You are an expert medical educator. Create a high-yield, comprehensive, and well-structured revision summary for "${bookName}", Chapter: "${chapter}".
+  
+  Requirements:
+  1. Use Markdown formatting.
+  2. Include a brief overview paragraph.
+  3. Use bullet points for key concepts, high-yield facts, and medicolegal or epidemiological importance.
+  4. Keep it concise (300-500 words) but highly informative for exam revision.
+  
+  Do not include any JSON wrapping. Return ONLY the markdown text.`;
+
+  try {
+    const res = await callForGeneration([
+      { role: "system", content: "You are a precise medical summarizer. Output markdown only." },
+      { role: "user", content: prompt }
+    ]);
+    return { summary: res.content, success: true };
+  } catch (error) {
+    console.error("Failed to generate summary:", error);
+    return { summary: "Failed to generate summary. Please try again.", success: false };
+  }
+}
