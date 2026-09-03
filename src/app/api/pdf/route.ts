@@ -5,10 +5,21 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-  // Require pdf-parse dynamically inside the function to prevent Vercel static evaluation errors (DOMMatrix, canvas)
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const pdfParse = require("pdf-parse");
   try {
+    if (typeof globalThis !== 'undefined') {
+      (globalThis as any).DOMMatrix = class DOMMatrix {};
+      (globalThis as any).ImageData = class ImageData {};
+      (globalThis as any).Path2D = class Path2D {};
+    }
+    if (typeof global !== 'undefined') {
+      (global as any).DOMMatrix = class DOMMatrix {};
+      (global as any).ImageData = class ImageData {};
+      (global as any).Path2D = class Path2D {};
+    }
+
+    // Require pdf-parse dynamically inside the try/catch block to prevent unhandled crashing
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PDFParse } = require("pdf-parse");
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -21,8 +32,9 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Parse the PDF
-    const data = await pdfParse(Buffer.from(buffer));
-    const text = data.text;
+    const parser = new PDFParse({ data: buffer });
+    const parsedData = await parser.getText();
+    const text = parsedData.text;
     
     // Extract name from formData, fallback to file name, fallback to title
     let quizName = formData.get("quizName") as string;
