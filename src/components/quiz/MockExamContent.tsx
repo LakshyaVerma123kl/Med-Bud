@@ -253,26 +253,26 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
         </div>
 
         {/* Question */}
-        <div className="clean-card rounded-3xl p-6 sm:p-10 mb-8 min-h-[400px]">
-          <h2 className="text-xl sm:text-2xl font-bold mb-8 leading-relaxed">
+        <div className="clean-card rounded-3xl p-5 sm:p-10 mb-8 sm:min-h-[400px]">
+          <h2 className="text-[17px] sm:text-2xl font-bold mb-6 sm:mb-8 leading-relaxed">
             {currentQuestion.question}
           </h2>
           
-          <div className="space-y-3">
+          <div className="space-y-2.5 sm:space-y-3">
             {currentQuestion.options.map((opt, idx) => {
               const isSelected = answers[currentQuestion.id] === idx;
               return (
                 <button
                   key={idx}
                   onClick={() => handleSelect(idx)}
-                  className={`w-full text-left p-4 sm:p-5 rounded-2xl border-2 transition-all text-base sm:text-lg font-medium
+                  className={`w-full text-left p-3.5 sm:p-5 rounded-2xl border-2 transition-all text-[15px] sm:text-lg font-medium leading-snug
                     ${isSelected 
                       ? 'border-primary bg-primary/5 text-primary' 
                       : 'border-border/50 bg-card hover:border-primary/30 hover:bg-muted/50'
                     }
                   `}
                 >
-                  <span className="inline-block w-8 text-muted-foreground font-bold">
+                  <span className="inline-block w-7 sm:w-8 text-muted-foreground font-bold">
                     {String.fromCharCode(65 + idx)}.
                   </span>
                   {opt}
