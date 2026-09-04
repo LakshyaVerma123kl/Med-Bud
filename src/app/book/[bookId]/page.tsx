@@ -199,12 +199,12 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                 </div>
 
                 <div className="pt-4 border-t border-border mt-auto">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                    <span className="text-xs font-medium text-muted-foreground shrink-0">
+                  <div className="flex flex-col gap-3">
+                    <span className="text-xs font-medium text-muted-foreground">
                       <strong className="text-foreground">{displayCount}</strong> Qs available
                     </span>
                     
-                    <div className="flex flex-wrap items-center gap-2">
+                    <div className="grid grid-cols-2 sm:flex sm:flex-nowrap items-center gap-2 w-full">
                       {!hasEnoughQuestions && (
                         <button
                           onClick={async () => {
@@ -225,31 +225,31 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                               alert("Error generating questions.");
                             }
                           }}
-                          className="text-[10px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors flex-1 sm:flex-none justify-center whitespace-nowrap"
+                          className="col-span-2 sm:col-span-1 text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center gap-1 transition-colors justify-center whitespace-nowrap w-full"
                         >
-                          <Brain className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                          <Brain className="w-3.5 h-3.5" />
                           Generate AI
                         </button>
                       )}
                       <button
                         onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[10px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
+                        className="text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
                       >
-                        <Brain className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        <Brain className="w-3.5 h-3.5" />
                         Summary
                       </button>
                       <button
                         onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[10px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
+                        className="text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
                       >
-                        <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        <FileText className="w-3.5 h-3.5" />
                         Notes
                       </button>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                        className="text-[10px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
+                        className="col-span-2 sm:col-span-1 text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full mt-1 sm:mt-0"
                       >
-                        Start Quiz <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        Start Quiz <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
                     </div>
                   </div>

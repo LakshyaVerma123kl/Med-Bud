@@ -282,8 +282,8 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
           </div>
         </div>
 
-        {/* Navigation */}
-        <div className="flex items-center justify-between">
+        {/* Navigation - Desktop */}
+        <div className="hidden sm:flex items-center justify-between mt-8">
           <button
             onClick={prevQuestion}
             disabled={currentIndex === 0}
@@ -295,16 +295,43 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
           {currentIndex < questions.length - 1 ? (
             <button
               onClick={nextQuestion}
-              className="px-6 py-4 rounded-2xl font-bold inline-flex items-center gap-2 bg-primary text-white shadow-lg hover:bg-primary/90 transition-colors"
+              className="px-6 py-4 rounded-2xl font-bold inline-flex items-center gap-2 bg-primary text-white shadow-lg hover:bg-primary/90 transition-colors active:scale-95"
             >
               Next <ArrowRight className="w-5 h-5" />
             </button>
           ) : (
             <button
               onClick={() => setViewState("grid")}
-              className="px-6 py-4 rounded-2xl font-bold inline-flex items-center gap-2 bg-amber-500 text-white shadow-lg hover:bg-amber-600 transition-colors"
+              className="px-6 py-4 rounded-2xl font-bold inline-flex items-center gap-2 bg-amber-500 text-white shadow-lg hover:bg-amber-600 transition-colors active:scale-95"
             >
               Review All <ListTodo className="w-5 h-5" />
+            </button>
+          )}
+        </div>
+        
+        {/* Navigation - Mobile Sticky */}
+        <div className="flex sm:hidden fixed bottom-0 left-0 right-0 p-4 bg-background/85 backdrop-blur-2xl border-t border-border z-50 gap-3 pb-[calc(1rem+env(safe-area-inset-bottom))] shadow-[0_-10px_20px_rgba(0,0,0,0.05)]">
+          <button
+            onClick={prevQuestion}
+            disabled={currentIndex === 0}
+            className="flex-1 py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 bg-card border border-border hover:bg-muted disabled:opacity-50 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" /> Prev
+          </button>
+          
+          {currentIndex < questions.length - 1 ? (
+            <button
+              onClick={nextQuestion}
+              className="flex-[1.5] py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 bg-primary text-white shadow-lg active:scale-95 transition-transform"
+            >
+              Next <ArrowRight className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              onClick={() => setViewState("grid")}
+              className="flex-[1.5] py-3.5 rounded-xl font-bold inline-flex items-center justify-center gap-2 bg-amber-500 text-white shadow-lg active:scale-95 transition-transform"
+            >
+              Review <ListTodo className="w-4 h-4" />
             </button>
           )}
         </div>

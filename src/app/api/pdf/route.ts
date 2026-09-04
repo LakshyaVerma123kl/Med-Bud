@@ -19,7 +19,7 @@ export async function POST(request: Request) {
 
     // Require pdf-parse dynamically inside the try/catch block to prevent unhandled crashing
     // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const pdfParse = require("pdf-parse");
+    const { PDFParse } = require("pdf-parse");
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -32,7 +32,8 @@ export async function POST(request: Request) {
     const buffer = Buffer.from(arrayBuffer);
 
     // Parse the PDF
-    const parsedData = await pdfParse(buffer);
+    const parser = new PDFParse({ data: buffer });
+    const parsedData = await parser.getText();
     const text = parsedData.text;
     
     // Extract name from formData, fallback to file name, fallback to title
