@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2 } from "lucide-react";
+import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2, FileText } from "lucide-react";
 import { getChaptersForBook } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
 import { getQuestionsForChapter } from "@/lib/data/seed-questions";
@@ -11,6 +11,7 @@ import { useProgress } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
 import { BookId } from "@/lib/types";
 import { SummaryModal } from "@/components/quiz/SummaryModal";
+import { NotesModal } from "@/components/quiz/NotesModal";
 
 export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const { bookId } = use(params);
@@ -21,6 +22,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSummaryChapter, setActiveSummaryChapter] = useState<{id: string, name: string} | null>(null);
+  const [activeNotesChapter, setActiveNotesChapter] = useState<{id: string, name: string} | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -235,6 +237,13 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                       <Brain className="w-3.5 h-3.5" />
                       Summary
                     </button>
+                    <button
+                      onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
+                      className="text-[10px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      Notes
+                    </button>
                     <Link
                       href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
                       className="text-[10px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
@@ -264,6 +273,14 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
         book={bookId as BookId}
         chapterId={activeSummaryChapter?.id || ""}
         chapterName={activeSummaryChapter?.name || ""}
+      />
+
+      <NotesModal 
+        isOpen={!!activeNotesChapter}
+        onClose={() => setActiveNotesChapter(null)}
+        book={bookId as BookId}
+        chapterId={activeNotesChapter?.id || ""}
+        chapterName={activeNotesChapter?.name || ""}
       />
     </div>
   );
