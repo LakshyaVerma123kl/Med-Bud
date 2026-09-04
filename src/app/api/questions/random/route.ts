@@ -9,6 +9,9 @@ export async function GET(request: Request) {
     const countStr = searchParams.get("count");
     const count = countStr ? parseInt(countStr, 10) : 100;
 
+    const chaptersStr = searchParams.get("chapters");
+    const difficultyStr = searchParams.get("difficulty");
+
     let allQuestions = [...seedQuestions];
 
     // Read generated questions
@@ -17,6 +20,17 @@ export async function GET(request: Request) {
       const rawData = fs.readFileSync(jsonPath, "utf8");
       const generated = JSON.parse(rawData);
       allQuestions = allQuestions.concat(generated);
+    }
+
+    // Filter by chapters if provided
+    if (chaptersStr) {
+      const allowedChapters = new Set(chaptersStr.split(","));
+      allQuestions = allQuestions.filter((q) => allowedChapters.has(q.chapter));
+    }
+
+    // Filter by difficulty if provided (and not "all" or "mixed")
+    if (difficultyStr && difficultyStr !== "all" && difficultyStr !== "mixed") {
+      allQuestions = allQuestions.filter((q) => q.difficulty === difficultyStr);
     }
 
     // Shuffle array
