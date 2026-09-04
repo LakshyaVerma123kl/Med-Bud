@@ -12,6 +12,8 @@ import { getChapterById } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
 import { supabase } from "@/lib/supabase";
 
+import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
+
 export default function DashboardPage() {
   const { progress, isLoaded, getWeakChapters } = useProgress();
   const weakChapters = isLoaded ? getWeakChapters() : [];
@@ -170,6 +172,9 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+
+            {/* Advanced Analytics Charts */}
+            <AnalyticsCharts progress={progress} />
 
             <div className="grid lg:grid-cols-3 gap-8">
               {/* Left 2 Cols: Chapter Progress Table */}
