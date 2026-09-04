@@ -12,7 +12,8 @@ import {
   ShieldCheck,
   GraduationCap,
   ChevronRight,
-  CheckCircle2
+  CheckCircle2,
+  Timer
 } from "lucide-react";
 import { books } from "@/lib/data/books";
 import { seedQuestions } from "@/lib/data/seed-questions";
@@ -86,11 +87,18 @@ export default function HomePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
+              href="/mock-exam"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 min-h-[56px] rounded-xl bg-card border border-border text-foreground font-bold text-lg shadow-sm hover:bg-muted transition-all active:scale-95"
+            >
+              <Timer className="w-4 h-4 text-primary" />
+              Grand Mock Exam
+            </Link>
+            <Link
               href="/dashboard"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 sm:py-5 min-h-[56px] rounded-xl bg-card border border-border text-foreground font-bold text-lg shadow-sm hover:bg-muted transition-all active:scale-95"
             >
               <Trophy className="w-4 h-4 text-amber-500" />
-              View Your Dashboard
+              Dashboard
             </Link>
           </motion.div>
 
