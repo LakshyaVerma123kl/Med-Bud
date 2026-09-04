@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Trophy, Target, Flame, BookOpen, TrendingUp, Award,
-  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar, Trash2
+  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar, Trash2, Timer, Bookmark
 } from "lucide-react";
 import { useProgress, availableBadges } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
@@ -96,6 +96,37 @@ export default function DashboardPage() {
         ) : (
           /* Active Dashboard */
           <div className="space-y-8">
+            {/* Quick Actions / Study Tools */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <Link href="/mock-exam" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-primary/50 transition-colors group">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Timer className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Grand Mock Exam</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Test your readiness</p>
+                </div>
+              </Link>
+              <Link href="/review" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-amber-500/50 transition-colors group">
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Daily Review</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Spaced repetition</p>
+                </div>
+              </Link>
+              <Link href="/bookmarks" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-blue-500/50 transition-colors group">
+                <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <Bookmark className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Bookmarks</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Your saved questions</p>
+                </div>
+              </Link>
+            </div>
+
             {/* Top 4 Metrics Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[

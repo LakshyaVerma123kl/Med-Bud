@@ -18,8 +18,11 @@ import {
   ExternalLink,
   MessageCircleQuestion,
   CirclePlay,
-  Sparkles
+  Sparkles,
+  Bookmark
 } from "lucide-react";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useProgress } from "@/hooks/useProgress";
 import { getQuestionsForChapter, getQuestionsForBook } from "@/lib/data/seed-questions";
@@ -100,6 +103,8 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
   });
 
   const { updateAfterQuiz } = useProgress();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { processAnswer } = useSpacedRepetition();
   const [feedback, setFeedback] = useState<{ message: string; emoji: string; type: string } | null>(null);
   const [deepExplanation, setDeepExplanation] = useState<string | null>(null);
   const [deepExplanationLoading, setDeepExplanationLoading] = useState(false);
@@ -327,6 +332,12 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
     const isCorrect = originalIndex === currentQuestion.correct_index;
     const fb = getMotivationalFeedback(isCorrect);
     setFeedback(fb);
+    
+    // Process spaced repetition only if we haven't answered this yet
+    if (!state.isAnswered) {
+      processAnswer(currentQuestion.id, isCorrect);
+    }
+    
     selectOption(originalIndex);
   };
 
@@ -395,10 +406,21 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
               {currentQuestion.difficulty}
             </span>
             {currentQuestion.topic && (
-              <span className="text-xs text-muted-foreground font-medium">
+              <span className="text-xs text-muted-foreground font-medium flex-1">
                 • {currentQuestion.topic}
               </span>
             )}
+            <button
+              onClick={() => toggleBookmark(currentQuestion.id)}
+              className={`p-1.5 rounded-full transition-colors ${
+                isBookmarked(currentQuestion.id)
+                  ? "bg-blue-500/10 text-blue-500"
+                  : "text-muted-foreground hover:bg-muted"
+              }`}
+              title={isBookmarked(currentQuestion.id) ? "Remove bookmark" : "Bookmark question"}
+            >
+              <Bookmark className="w-4 h-4" fill={isBookmarked(currentQuestion.id) ? "currentColor" : "none"} />
+            </button>
           </div>
 
           {/* Question Text */}
