@@ -14,7 +14,11 @@ import {
   Trophy,
   Flame,
   Clock,
-  BookOpen
+  BookOpen,
+  ExternalLink,
+  MessageCircleQuestion,
+  CirclePlay,
+  Sparkles
 } from "lucide-react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useProgress } from "@/hooks/useProgress";
@@ -97,6 +101,49 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
 
   const { updateAfterQuiz } = useProgress();
   const [feedback, setFeedback] = useState<{ message: string; emoji: string; type: string } | null>(null);
+  const [deepExplanation, setDeepExplanation] = useState<string | null>(null);
+  const [deepExplanationLoading, setDeepExplanationLoading] = useState(false);
+
+  // Build a YouTube search URL from the question's topic and book context
+  function getYouTubeSearchUrl(q: Question): string {
+    const bookLabel = q.book === "narayan_reddy" ? "Forensic Medicine" : "Community Medicine PSM";
+    const searchQuery = q.topic
+      ? `${q.topic} ${bookLabel} MBBS`
+      : `${q.question.substring(0, 60)} ${bookLabel}`;
+    return `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`;
+  }
+
+  // Fetch a deep AI explanation for the current question
+  async function fetchDeepExplanation() {
+    if (deepExplanation || deepExplanationLoading) return;
+    setDeepExplanationLoading(true);
+    try {
+      const bookLabel = currentQuestion.book === "narayan_reddy"
+        ? "K.S. Narayan Reddy's Forensic Medicine & Toxicology"
+        : "Park's Textbook of Preventive & Social Medicine";
+      const res = await fetch("/api/explain", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          question: currentQuestion.question,
+          correctAnswer: currentQuestion.options[currentQuestion.correct_index],
+          explanation: currentQuestion.explanation,
+          topic: currentQuestion.topic || "",
+          book: bookLabel,
+        }),
+      });
+      const data = await res.json();
+      if (data.explanation) {
+        setDeepExplanation(data.explanation);
+      } else {
+        setDeepExplanation("Could not generate a detailed explanation. Please try again.");
+      }
+    } catch {
+      setDeepExplanation("Failed to connect. Check your internet and try again.");
+    } finally {
+      setDeepExplanationLoading(false);
+    }
+  }
   const [hasRecordedResult, setHasRecordedResult] = useState(false);
 
   // If no questions found
@@ -443,6 +490,64 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                   </ReactMarkdown>
                 </div>
 
+                {/* Action buttons: Explain Me + YouTube */}
+                <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-border/50">
+                  <button
+                    onClick={fetchDeepExplanation}
+                    disabled={deepExplanationLoading || !!deepExplanation}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-primary/10 text-primary hover:bg-primary/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {deepExplanationLoading ? (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5 animate-spin" />
+                        <span>Generating...</span>
+                      </>
+                    ) : deepExplanation ? (
+                      <>
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Explained</span>
+                      </>
+                    ) : (
+                      <>
+                        <MessageCircleQuestion className="w-3.5 h-3.5" />
+                        <span>Explain in Detail</span>
+                      </>
+                    )}
+                  </button>
+
+                  <a
+                    href={getYouTubeSearchUrl(currentQuestion)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-red-500/10 text-red-600 dark:text-red-400 hover:bg-red-500/20 transition-all"
+                  >
+                    <CirclePlay className="w-3.5 h-3.5" />
+                    <span>Watch on YouTube</span>
+                    <ExternalLink className="w-3 h-3 opacity-60" />
+                  </a>
+                </div>
+
+                {/* Deep AI Explanation */}
+                <AnimatePresence>
+                  {deepExplanation && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-4 pt-4 border-t border-primary/20"
+                    >
+                      <div className="flex items-center gap-2 text-sm font-bold text-primary mb-2">
+                        <Sparkles className="w-4 h-4" />
+                        <span>AI Deep Dive</span>
+                      </div>
+                      <div className="text-sm text-foreground/80 leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                          {deepExplanation}
+                        </ReactMarkdown>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Next Question Button (Desktop) */}
@@ -450,6 +555,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                 onClick={() => {
                   nextQuestion();
                   setFeedback(null);
+                  setDeepExplanation(null);
                 }}
                 className="hidden sm:flex w-full py-4 px-6 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 items-center justify-center gap-2 active:scale-[0.98]"
               >
@@ -474,6 +580,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                 onClick={() => {
                   nextQuestion();
                   setFeedback(null);
+                  setDeepExplanation(null);
                 }}
                 className="w-full py-4 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-transform"
               >

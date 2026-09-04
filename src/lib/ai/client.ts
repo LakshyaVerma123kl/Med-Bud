@@ -70,7 +70,7 @@ function getAvailableProviders(): AIProviderConfig[] {
 
 // ─── Gemini API Call ─────────────────────────────────────────────────────────
 
-async function callGemini(config: AIProviderConfig, messages: ChatMessage[]): Promise<string> {
+async function callGemini(config: AIProviderConfig, messages: ChatMessage[], jsonMode: boolean): Promise<string> {
   const systemPrompt = messages.find((m) => m.role === "system")?.content || "";
   const userMessages = messages.filter((m) => m.role !== "system");
 
@@ -78,6 +78,14 @@ async function callGemini(config: AIProviderConfig, messages: ChatMessage[]): Pr
     role: m.role === "user" ? "user" : "model",
     parts: [{ text: m.content }],
   }));
+
+  const generationConfig: Record<string, unknown> = {
+    temperature: 0.3,
+    maxOutputTokens: 8192,
+  };
+  if (jsonMode) {
+    generationConfig.responseMimeType = "application/json";
+  }
 
   const response = await fetch(
     `${config.baseUrl}/models/${config.model}:generateContent?key=${config.apiKey}`,
@@ -87,11 +95,7 @@ async function callGemini(config: AIProviderConfig, messages: ChatMessage[]): Pr
       body: JSON.stringify({
         system_instruction: systemPrompt ? { parts: [{ text: systemPrompt }] } : undefined,
         contents,
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 8192,
-          responseMimeType: "application/json",
-        },
+        generationConfig,
       }),
     }
   );
@@ -107,20 +111,24 @@ async function callGemini(config: AIProviderConfig, messages: ChatMessage[]): Pr
 
 // ─── OpenAI-Compatible API Call (Groq, OpenAI) ──────────────────────────────
 
-async function callOpenAICompatible(config: AIProviderConfig, messages: ChatMessage[]): Promise<string> {
+async function callOpenAICompatible(config: AIProviderConfig, messages: ChatMessage[], jsonMode: boolean): Promise<string> {
+  const body: Record<string, unknown> = {
+    model: config.model,
+    messages,
+    temperature: 0.3,
+    max_tokens: 8192,
+  };
+  if (jsonMode) {
+    body.response_format = { type: "json_object" };
+  }
+
   const response = await fetch(`${config.baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${config.apiKey}`,
     },
-    body: JSON.stringify({
-      model: config.model,
-      messages,
-      temperature: 0.3,
-      max_tokens: 8192,
-      response_format: { type: "json_object" },
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!response.ok) {
@@ -167,16 +175,16 @@ async function callAnthropic(config: AIProviderConfig, messages: ChatMessage[]):
 
 // ─── Universal Call with Provider Routing ─────────────────────────────────────
 
-async function callProvider(config: AIProviderConfig, messages: ChatMessage[]): Promise<string> {
+async function callProvider(config: AIProviderConfig, messages: ChatMessage[], jsonMode: boolean): Promise<string> {
   switch (config.provider) {
     case "gemini":
-      return callGemini(config, messages);
+      return callGemini(config, messages, jsonMode);
     case "anthropic":
       return callAnthropic(config, messages);
     case "groq_gen":
     case "groq_verify":
     case "openai":
-      return callOpenAICompatible(config, messages);
+      return callOpenAICompatible(config, messages, jsonMode);
     default:
       throw new Error(`Unsupported provider: ${config.provider}`);
   }
@@ -187,7 +195,8 @@ async function callProvider(config: AIProviderConfig, messages: ChatMessage[]): 
 export async function callAIWithFallback(
   messages: ChatMessage[],
   preferredOrder?: AIProvider[],
-  excludeProvider?: AIProvider
+  excludeProvider?: AIProvider,
+  jsonMode: boolean = true
 ): Promise<AIResponse> {
   const available = getAvailableProviders().filter(
     (p) => p.provider !== excludeProvider
@@ -214,7 +223,7 @@ export async function callAIWithFallback(
   for (const config of ordered) {
     try {
       console.log(`[AI] Trying ${config.provider} (${config.model})...`);
-      const content = await callProvider(config, messages);
+      const content = await callProvider(config, messages, jsonMode);
       console.log(`[AI] ✓ ${config.provider} succeeded`);
       return { content, provider: config.provider, model: config.model };
     } catch (error) {
@@ -231,9 +240,9 @@ export async function callAIWithFallback(
 
 // ─── Specialized Calls ───────────────────────────────────────────────────────
 
-/** Call for question GENERATION — prefers Gemini, falls back to others */
-export async function callForGeneration(messages: ChatMessage[]): Promise<AIResponse> {
-  return callAIWithFallback(messages, ["groq_gen", "gemini", "openai", "anthropic", "groq_verify"]);
+/** Call for question GENERATION (JSON output) — prefers Gemini, falls back to others */
+export async function callForGeneration(messages: ChatMessage[], jsonMode: boolean = true): Promise<AIResponse> {
+  return callAIWithFallback(messages, ["groq_gen", "gemini", "openai", "anthropic", "groq_verify"], undefined, jsonMode);
 }
 
 /**
