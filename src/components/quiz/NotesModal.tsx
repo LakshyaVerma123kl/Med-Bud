@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { BookId } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 
 interface NotesModalProps {
@@ -126,7 +127,7 @@ export function NotesModal({ isOpen, onClose, book, chapterId, chapterName }: No
                     prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-xs
                   ">
                     <ReactMarkdown
-                      remarkPlugins={[remarkMath]}
+                      remarkPlugins={[remarkMath, remarkGfm]}
                       rehypePlugins={[rehypeKatex]}
                     >
                       {notes}

@@ -37,7 +37,7 @@ export async function GET(request: Request) {
     const messages: ChatMessage[] = [
       {
         role: "system",
-        content: `You are a world-class medical educator who writes the most effective, exam-oriented study notes for MBBS students. Your notes are comprehensive yet concise, covering all exam-relevant content. Output in clean Markdown format. Use LaTeX for formulas.`,
+        content: `You are a world-class medical educator who writes the most effective, exam-oriented study notes for MBBS students. Your notes are comprehensive yet concise. Output in clean Markdown format. IMPORTANT: When creating tables, use standard Markdown tables with proper spacing and newlines. For LaTeX formulas, you MUST use the \`$$\` wrapper for block equations and \`$\` wrapper for inline equations (e.g. $E=mc^2$). Do NOT use \\[ \\] syntax.`,
       },
       {
         role: "user",
