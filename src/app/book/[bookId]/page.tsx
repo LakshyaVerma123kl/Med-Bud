@@ -198,59 +198,60 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-border flex items-center justify-between mt-auto">
-                  <span className="text-xs font-medium text-muted-foreground">
-                    <strong className="text-foreground">{displayCount}</strong> questions available
-                  </span>
-                  
-                  <div className="flex gap-2">
-                    {!hasEnoughQuestions && (
-                      <button
-                        onClick={async () => {
-                          alert(`Generating 10 more questions for ${chapter.name} via AI... This may take 15-30 seconds.`);
-                          try {
-                            const res = await fetch("/api/admin/generate", {
-                              method: "POST",
-                              headers: { "Content-Type": "application/json", "x-admin-key": "super-secret-admin-key-2026" },
-                              body: JSON.stringify({ book: bookId, chapter: chapter.id })
-                            });
-                            if (res.ok) {
-                              alert("Questions generated and added to offline bank!");
-                              window.location.reload();
-                            } else {
-                              alert("Failed to generate questions. Check logs.");
+                <div className="pt-4 border-t border-border mt-auto">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                    <span className="text-xs font-medium text-muted-foreground shrink-0">
+                      <strong className="text-foreground">{displayCount}</strong> Qs available
+                    </span>
+                    
+                    <div className="flex flex-wrap items-center gap-2">
+                      {!hasEnoughQuestions && (
+                        <button
+                          onClick={async () => {
+                            alert(`Generating 10 more questions for ${chapter.name} via AI... This may take 15-30 seconds.`);
+                            try {
+                              const res = await fetch("/api/admin/generate", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json", "x-admin-key": "super-secret-admin-key-2026" },
+                                body: JSON.stringify({ book: bookId, chapter: chapter.id })
+                              });
+                              if (res.ok) {
+                                alert("Questions generated and added to offline bank!");
+                                window.location.reload();
+                              } else {
+                                alert("Failed to generate questions. Check logs.");
+                              }
+                            } catch (e) {
+                              alert("Error generating questions.");
                             }
-                          } catch (e) {
-                            alert("Error generating questions.");
-                          }
-                        }}
-                        className="text-[10px] uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1.5 rounded-lg flex items-center gap-1 transition-colors"
+                          }}
+                          className="text-[10px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors flex-1 sm:flex-none justify-center whitespace-nowrap"
+                        >
+                          <Brain className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                          Generate AI
+                        </button>
+                      )}
+                      <button
+                        onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
+                        className="text-[10px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
                       >
-                        <Brain className="w-3 h-3" />
-                        Generate AI
+                        <Brain className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        Summary
                       </button>
-                    )}
-                    <button
-                      onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                      className="text-[10px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
-                    >
-                      <Brain className="w-3.5 h-3.5" />
-                      Summary
-                    </button>
-                    <button
-                      onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                      className="text-[10px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
-                    >
-                      <FileText className="w-3.5 h-3.5" />
-                      Notes
-                    </button>
-                    <Link
-                      href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                      className="text-[10px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm"
-                    >
-                      Start Quiz
-                      <ChevronRight className="w-3.5 h-3.5" />
-                    </Link>
+                      <button
+                        onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
+                        className="text-[10px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
+                      >
+                        <FileText className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                        Notes
+                      </button>
+                      <Link
+                        href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
+                        className="text-[10px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-1.5 rounded-lg flex items-center gap-1 transition-colors shadow-sm flex-1 sm:flex-none justify-center whitespace-nowrap"
+                      >
+                        Start Quiz <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
