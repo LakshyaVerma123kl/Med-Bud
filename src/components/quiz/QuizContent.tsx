@@ -19,7 +19,9 @@ import {
   MessageCircleQuestion,
   CirclePlay,
   Sparkles,
-  Bookmark
+  Bookmark,
+  Download,
+  Printer
 } from "lucide-react";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
@@ -35,6 +37,7 @@ import { BookId, QuizMode, Question } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { generateAnkiTSV, downloadFile } from "@/lib/export";
 
 interface QuizContentProps {
   bookId: BookId;
@@ -251,6 +254,28 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                 <BarChart3 className="w-5 h-5" />
                 Dashboard
               </Link>
+            </div>
+            
+            {/* Export Options */}
+            <div className="flex items-center justify-center gap-3 pt-6">
+              <button
+                onClick={() => {
+                  const tsv = generateAnkiTSV(questions);
+                  const deckName = chapter?.name || chapterId || "MedQuiz";
+                  downloadFile(tsv, `${deckName}_anki.txt`, "text/tab-separated-values");
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition-all active:scale-95 shadow-sm"
+              >
+                <Download className="w-4 h-4" />
+                Export to Anki
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border border-border text-foreground text-sm font-semibold hover:bg-muted transition-all active:scale-95"
+              >
+                <Printer className="w-4 h-4" />
+                Save as PDF
+              </button>
             </div>
           </div>
 

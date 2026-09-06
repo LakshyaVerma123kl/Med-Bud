@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Brain, Sparkles, BookOpen } from "lucide-react";
+import { X, Brain, Sparkles, BookOpen, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BookId } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
@@ -7,6 +7,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
 import { TTSButton } from "@/components/ui/TTSButton";
+import { downloadMarkdown } from "@/lib/export";
 
 interface SummaryModalProps {
   isOpen: boolean;
@@ -80,6 +81,15 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                   </h2>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  {summary && (
+                    <button
+                      onClick={() => downloadMarkdown(summary, `${chapterName} — AI Summary`, `${chapterName.replace(/\s+/g, "_")}_summary.md`)}
+                      title="Download Summary"
+                      className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-primary"
+                    >
+                      <Download className="w-4.5 h-4.5" />
+                    </button>
+                  )}
                   {summary && <TTSButton text={summary} />}
                   <button
                     onClick={onClose}

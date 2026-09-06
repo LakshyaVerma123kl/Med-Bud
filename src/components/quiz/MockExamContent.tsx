@@ -12,10 +12,13 @@ import {
   Lightbulb,
   RotateCcw,
   BarChart3,
-  ListTodo
+  ListTodo,
+  Download,
+  Printer
 } from "lucide-react";
 import { Question } from "@/lib/types";
 import { TTSButton } from "@/components/ui/TTSButton";
+import { generateAnkiTSV, downloadFile } from "@/lib/export";
 
 interface MockExamContentProps {
   questions: Question[];
@@ -122,6 +125,27 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
                 <BarChart3 className="w-5 h-5" />
                 Dashboard
               </Link>
+            </div>
+
+            {/* Export Options */}
+            <div className="flex items-center justify-center gap-3 pt-4">
+              <button
+                onClick={() => {
+                  const tsv = generateAnkiTSV(questions);
+                  downloadFile(tsv, "MockExam_anki.txt", "text/tab-separated-values");
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-700 transition-all active:scale-95 shadow-sm"
+              >
+                <Download className="w-4 h-4" />
+                Export to Anki
+              </button>
+              <button
+                onClick={() => window.print()}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-card border border-border text-foreground text-sm font-semibold hover:bg-muted transition-all active:scale-95"
+              >
+                <Printer className="w-4 h-4" />
+                Save as PDF
+              </button>
             </div>
           </div>
 

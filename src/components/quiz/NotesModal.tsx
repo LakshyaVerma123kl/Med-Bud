@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 
 import { TTSButton } from "@/components/ui/TTSButton";
+import { downloadMarkdown } from "@/lib/export";
 
 interface NotesModalProps {
   isOpen: boolean;
@@ -84,6 +85,15 @@ export function NotesModal({ isOpen, onClose, book, chapterId, chapterName }: No
                   </h2>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
+                  {notes && (
+                    <button
+                      onClick={() => downloadMarkdown(notes, `${chapterName} — Short Notes`, `${chapterName.replace(/\s+/g, "_")}_notes.md`)}
+                      title="Download Notes"
+                      className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-blue-500"
+                    >
+                      <Download className="w-4.5 h-4.5" />
+                    </button>
+                  )}
                   {notes && <TTSButton text={notes} />}
                   <button
                     onClick={onClose}
