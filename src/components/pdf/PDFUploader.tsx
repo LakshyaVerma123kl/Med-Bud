@@ -30,8 +30,8 @@ export function PDFUploader() {
       setError("Please upload a valid PDF or Word Document (.docx).");
       return;
     }
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      setError("File is too large. Please upload a document under 5MB.");
+    if (selectedFile.size > 50 * 1024 * 1024) {
+      setError("File is too large. Please upload a document under 50MB.");
       return;
     }
     setFile(selectedFile);
@@ -111,7 +111,7 @@ export function PDFUploader() {
             <Upload className="w-7 h-7 text-primary" />
           </div>
           <p className="text-foreground font-semibold mb-1">Click to upload or drag and drop</p>
-          <p className="text-xs text-muted-foreground">PDF or DOCX files up to 5MB</p>
+          <p className="text-xs text-muted-foreground">PDF or DOCX files up to 50MB</p>
           
           {error && (
             <div className="mt-4 flex items-center gap-2 text-error text-sm font-medium">

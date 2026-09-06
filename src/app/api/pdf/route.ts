@@ -24,6 +24,11 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    // Server-side size validation (50MB)
+    if (file.size > 50 * 1024 * 1024) {
+      return NextResponse.json({ error: "File size exceeds 50MB limit" }, { status: 413 });
+    }
+
     // Read file buffer
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -54,7 +59,57 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Could not extract text from document. It might be scanned, image-based, or empty." });
     }
 
-    // Prepare messages for Gemini
+    // Import Supabase inside the function to avoid top-level issues
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { getAdminSupabase } = require("@/lib/supabase");
+    const supabaseAdmin = getAdminSupabase();
+
+    if (text.length > 30000) {
+      // Chunking logic for large documents
+      const chunkSize = 20000;
+      const chapters = [];
+      for (let i = 0; i < text.length; i += chunkSize) {
+        chapters.push({
+          index: i / chunkSize,
+          title: `Part ${Math.floor(i / chunkSize) + 1}`,
+          text: text.substring(i, i + chunkSize),
+          summary: "",
+          questions: []
+        });
+      }
+
+      // Save chunked data in the flexible questions column
+      const chunkedData = {
+        is_chunked: true,
+        raw_text: text,
+        chapters: chapters
+      };
+
+      const { data: insertedData, error: insertError } = await supabaseAdmin
+        .from("pdf_quizzes")
+        .insert({
+          name: quizName,
+          summary: "Large document processed into chapters.",
+          questions: chunkedData, // Storing our structure here
+        })
+        .select("id")
+        .single();
+
+      if (insertError || !insertedData) {
+        console.error("Supabase insert error:", insertError);
+        return NextResponse.json({ success: false, error: "Failed to save document to database." });
+      }
+
+      return NextResponse.json({
+        success: true,
+        id: insertedData.id,
+        title: quizName,
+        summary: "Document chunked",
+        questionCount: chapters.length
+      });
+    }
+
+    // Prepare messages for Gemini (Legacy single-shot generation for small docs)
     const messages: ChatMessage[] = [
       {
         role: "system",
@@ -79,7 +134,7 @@ Generate 5 high-quality, clinical-vignette style questions if possible.`
       },
       {
         role: "user",
-        content: `Document Text:\n\n${text.substring(0, 30000)}` // Limit to ~30k chars to avoid token limits
+        content: `Document Text:\n\n${text}` 
       }
     ];
 
@@ -103,9 +158,11 @@ Generate 5 high-quality, clinical-vignette style questions if possible.`
       return NextResponse.json({ success: false, error: "AI could not generate questions from this document." });
     }
 
-    // Import Supabase inside the function to avoid top-level issues
-    const { getAdminSupabase } = require("@/lib/supabase");
-    const supabaseAdmin = getAdminSupabase();
+    const finalQuestions = {
+      is_chunked: false,
+      raw_text: text,
+      questions: quizData.questions
+    };
 
     // Insert into Supabase
     const { data: insertedData, error: insertError } = await supabaseAdmin
@@ -113,7 +170,7 @@ Generate 5 high-quality, clinical-vignette style questions if possible.`
       .insert({
         name: quizName,
         summary: quizData.summary || "Custom Quiz",
-        questions: quizData.questions,
+        questions: finalQuestions,
       })
       .select("id")
       .single();
