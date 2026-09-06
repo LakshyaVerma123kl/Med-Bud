@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: Request) {
   try {
@@ -8,46 +11,37 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Message is required" }, { status: 400 });
     }
 
-    const targetEmail = "lakshya123kl@gmail.com";
+    if (!process.env.RESEND_API_KEY) {
+      return NextResponse.json(
+        { success: false, error: "RESEND_API_KEY is not configured" },
+        { status: 500 }
+      );
+    }
 
-    const origin = request.headers.get("origin") || request.headers.get("referer") || "http://localhost:3000";
-
-    const response = await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        Origin: origin,
-        Referer: origin
-      },
-      body: JSON.stringify({
-        name: name || "Anonymous User",
-        email: email || "No Email Provided",
-        message,
-        _subject: "New Feedback for MedQuiz Pro",
-        _captcha: "false" // Disable Captcha since this is an API call
-      }),
+    const { data, error } = await resend.emails.send({
+      from: "MedQuiz Feedback <onboarding@resend.dev>",
+      to: "lakshya123kl@gmail.com",
+      subject: `New Feedback from ${name || "Anonymous"}`,
+      replyTo: email || undefined,
+      html: `
+        <h2>New Feedback for MedQuiz Pro</h2>
+        <p><strong>Name:</strong> ${name || "Anonymous"}</p>
+        <p><strong>Email:</strong> ${email || "Not provided"}</p>
+        <p><strong>Message:</strong></p>
+        <p style="white-space: pre-wrap;">${message}</p>
+      `,
     });
 
-    let data;
-    const responseText = await response.text();
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      if (!response.ok) {
-        throw new Error("FormSubmit failed: " + responseText.substring(0, 100));
-      }
+    if (error) {
+      console.error("[Resend API Error]:", error);
+      throw new Error(error.message);
     }
 
-    if (data && data.success === "false") {
-       throw new Error(data.message || "FormSubmit failed");
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
+    return NextResponse.json({ success: true, id: data?.id });
+  } catch (error: any) {
     console.error("[Feedback API Error]:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to send feedback. Please try again." },
+      { success: false, error: error.message || "Failed to send feedback" },
       { status: 500 }
     );
   }

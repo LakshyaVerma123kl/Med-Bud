@@ -269,10 +269,10 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
             {currentQuestion.options.map((opt, idx) => {
               const isSelected = answers[currentQuestion.id] === idx;
               return (
-                <button
+                <div
                   key={idx}
                   onClick={() => handleSelect(idx)}
-                  className={`w-full text-left p-3.5 sm:p-5 rounded-2xl border-2 transition-all text-[15px] sm:text-lg font-medium leading-snug flex items-center justify-between gap-4
+                  className={`w-full text-left p-3.5 sm:p-5 rounded-2xl border-2 transition-all text-[15px] sm:text-lg font-medium leading-snug flex items-center justify-between gap-4 cursor-pointer
                     ${isSelected 
                       ? 'border-primary bg-primary/5 text-primary' 
                       : 'border-border/50 bg-card hover:border-primary/30 hover:bg-muted/50'
@@ -286,7 +286,7 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
                     {opt}
                   </span>
                   <TTSButton text={opt} className="shrink-0 z-10" />
-                </button>
+                </div>
               );
             })}
           </div>

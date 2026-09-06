@@ -451,11 +451,10 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
               }
 
               return (
-                <button
+                <div
                   key={originalIndex}
-                  onClick={() => handleSelect(originalIndex)}
-                  disabled={isAnswered}
-                  className={`quiz-option min-h-[64px] ${optionStateClass}`}
+                  onClick={() => !isAnswered && handleSelect(originalIndex)}
+                  className={`quiz-option min-h-[64px] cursor-pointer ${optionStateClass} ${isAnswered ? "opacity-90 cursor-default" : ""}`}
                 >
                   <span className="option-letter">
                     {isAnswered && isCorrect ? (
@@ -472,7 +471,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                     </ReactMarkdown>
                   </span>
                   <TTSButton text={optionText} className="shrink-0 ml-2 z-10" />
-                </button>
+                </div>
               );
             })}
           </div>
