@@ -25,16 +25,17 @@ export function PDFUploader() {
 
   const handleFileSelect = (selectedFile: File) => {
     setError(null);
-    if (selectedFile.type !== "application/pdf") {
-      setError("Please upload a valid PDF file.");
+    const isDocx = selectedFile.name.toLowerCase().endsWith(".docx") || selectedFile.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+    if (selectedFile.type !== "application/pdf" && !isDocx) {
+      setError("Please upload a valid PDF or Word Document (.docx).");
       return;
     }
     if (selectedFile.size > 5 * 1024 * 1024) {
-      setError("File is too large. Please upload a PDF under 5MB.");
+      setError("File is too large. Please upload a document under 5MB.");
       return;
     }
     setFile(selectedFile);
-    setQuizName(selectedFile.name.replace(".pdf", ""));
+    setQuizName(selectedFile.name.replace(/\.(pdf|docx)$/i, ""));
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -63,10 +64,8 @@ export function PDFUploader() {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        throw new Error(data.error || "Failed to process PDF");
+        throw new Error(data.error || "Failed to process document");
       }
-
-      // Removed localStorage tracking since we are querying the DB directly now
 
       // Redirect to the custom quiz
       router.push(`/pdf-quiz?id=${data.id}`);
@@ -82,7 +81,7 @@ export function PDFUploader() {
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
           <FileText className="w-6 h-6 text-primary" />
-          Turn Any PDF into a Quiz
+          Turn Any PDF or Word Doc into a Quiz
         </h2>
         <p className="text-sm text-muted-foreground mt-2">
           Upload your own lecture notes, guidelines, or research papers. Our AI will read it, summarize it, and test your knowledge instantly.
@@ -101,7 +100,7 @@ export function PDFUploader() {
         >
           <input
             type="file"
-            accept="application/pdf"
+            accept="application/pdf, .docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             className="hidden"
             ref={fileInputRef}
             onChange={(e) => {
@@ -112,7 +111,7 @@ export function PDFUploader() {
             <Upload className="w-7 h-7 text-primary" />
           </div>
           <p className="text-foreground font-semibold mb-1">Click to upload or drag and drop</p>
-          <p className="text-xs text-muted-foreground">PDF files up to 5MB</p>
+          <p className="text-xs text-muted-foreground">PDF or DOCX files up to 5MB</p>
           
           {error && (
             <div className="mt-4 flex items-center gap-2 text-error text-sm font-medium">

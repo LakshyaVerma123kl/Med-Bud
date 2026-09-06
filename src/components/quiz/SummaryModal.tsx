@@ -6,6 +6,8 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
+import { TTSButton } from "@/components/ui/TTSButton";
+
 interface SummaryModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -77,12 +79,15 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                     {chapterName}
                   </h2>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
-                >
-                  <X className="w-5 h-5 text-muted-foreground" />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  {summary && <TTSButton text={summary} />}
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-muted rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-muted-foreground" />
+                  </button>
+                </div>
               </div>
 
               {/* Content area */}

@@ -17,9 +17,6 @@ export async function POST(request: Request) {
       (global as any).Path2D = class Path2D {};
     }
 
-    // Require pdf-parse dynamically inside the try/catch block to prevent unhandled crashing
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const pdfParse = require("pdf-parse");
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
@@ -31,18 +28,30 @@ export async function POST(request: Request) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Parse the PDF
-    const parsedData = await pdfParse(buffer);
-    const text = parsedData.text;
+    let text = "";
+    const isDocx = file.name.toLowerCase().endsWith(".docx") || file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+
+    if (isDocx) {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const mammoth = require("mammoth");
+      const result = await mammoth.extractRawText({ buffer });
+      text = result.value;
+    } else {
+      // Require pdf-parse dynamically inside the try/catch block to prevent unhandled crashing
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const pdfParse = require("pdf-parse");
+      const parsedData = await pdfParse(buffer);
+      text = parsedData.text;
+    }
     
     // Extract name from formData, fallback to file name, fallback to title
     let quizName = formData.get("quizName") as string;
     if (!quizName || !quizName.trim()) {
-      quizName = file.name ? file.name.replace(".pdf", "") : "Untitled Document";
+      quizName = file.name ? file.name.replace(/\.(pdf|docx)$/i, "") : "Untitled Document";
     }
 
     if (!text || text.trim().length === 0) {
-      return NextResponse.json({ success: false, error: "Could not extract text from PDF. It might be scanned or image-based." });
+      return NextResponse.json({ success: false, error: "Could not extract text from document. It might be scanned, image-based, or empty." });
     }
 
     // Prepare messages for Gemini

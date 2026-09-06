@@ -9,6 +9,8 @@ import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 
+import { TTSButton } from "@/components/ui/TTSButton";
+
 interface NotesModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -81,12 +83,15 @@ export function NotesModal({ isOpen, onClose, book, chapterId, chapterName }: No
                     {chapterName}
                   </h2>
                 </div>
-                <button
-                  onClick={onClose}
-                  className="p-2 hover:bg-muted rounded-full transition-colors shrink-0"
-                >
-                  <X className="w-5 h-5 text-muted-foreground" />
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  {notes && <TTSButton text={notes} />}
+                  <button
+                    onClick={onClose}
+                    className="p-2 hover:bg-muted rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-muted-foreground" />
+                  </button>
+                </div>
               </div>
 
               {/* Content area */}
