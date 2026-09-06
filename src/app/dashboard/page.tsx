@@ -223,7 +223,7 @@ export default function DashboardPage() {
               {/* Right Col: Weak Areas + Badges + Custom PDFs */}
               <div className="space-y-6">
                 {/* Pomodoro Timer */}
-                <div className="h-[300px]">
+                <div className="w-full">
                   <Pomodoro />
                 </div>
                 
