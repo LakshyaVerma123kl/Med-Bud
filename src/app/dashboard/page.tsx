@@ -13,6 +13,7 @@ import { getBookById } from "@/lib/data/books";
 import { supabase } from "@/lib/supabase";
 
 import { AnalyticsCharts } from "@/components/dashboard/AnalyticsCharts";
+import { Pomodoro } from "@/components/dashboard/Pomodoro";
 
 export default function DashboardPage() {
   const { progress, isLoaded, getWeakChapters } = useProgress();
@@ -221,6 +222,11 @@ export default function DashboardPage() {
 
               {/* Right Col: Weak Areas + Badges + Custom PDFs */}
               <div className="space-y-6">
+                {/* Pomodoro Timer */}
+                <div className="h-[300px]">
+                  <Pomodoro />
+                </div>
+                
                 {/* Custom PDF Library */}
                 {pdfLibrary.length > 0 && (
                   <div className="clean-card rounded-3xl p-6 border-primary/20">

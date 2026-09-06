@@ -15,6 +15,7 @@ import {
   ListTodo
 } from "lucide-react";
 import { Question } from "@/lib/types";
+import { TTSButton } from "@/components/ui/TTSButton";
 
 interface MockExamContentProps {
   questions: Question[];
@@ -155,9 +156,12 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
                   </div>
 
                   <div className="ml-8 p-4 bg-muted/50 rounded-xl text-sm text-muted-foreground">
-                    <strong className="flex items-center gap-2 text-foreground mb-2">
-                      <Lightbulb className="w-4 h-4 text-amber-500" /> Explanation
-                    </strong>
+                    <div className="flex items-center justify-between mb-2">
+                      <strong className="flex items-center gap-2 text-foreground">
+                        <Lightbulb className="w-4 h-4 text-amber-500" /> Explanation
+                      </strong>
+                      <TTSButton text={q.explanation} />
+                    </div>
                     {q.explanation}
                   </div>
                 </div>
@@ -254,9 +258,12 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
 
         {/* Question */}
         <div className="clean-card rounded-3xl p-5 sm:p-10 mb-8 sm:min-h-[400px]">
-          <h2 className="text-[17px] sm:text-2xl font-bold mb-6 sm:mb-8 leading-relaxed">
-            {currentQuestion.question}
-          </h2>
+          <div className="flex items-start gap-4 mb-6 sm:mb-8">
+            <h2 className="text-[17px] sm:text-2xl font-bold leading-relaxed flex-1">
+              {currentQuestion.question}
+            </h2>
+            <TTSButton text={currentQuestion.question} className="shrink-0 mt-1" />
+          </div>
           
           <div className="space-y-2.5 sm:space-y-3">
             {currentQuestion.options.map((opt, idx) => {
@@ -265,17 +272,20 @@ export function MockExamContent({ questions, durationMinutes }: MockExamContentP
                 <button
                   key={idx}
                   onClick={() => handleSelect(idx)}
-                  className={`w-full text-left p-3.5 sm:p-5 rounded-2xl border-2 transition-all text-[15px] sm:text-lg font-medium leading-snug
+                  className={`w-full text-left p-3.5 sm:p-5 rounded-2xl border-2 transition-all text-[15px] sm:text-lg font-medium leading-snug flex items-center justify-between gap-4
                     ${isSelected 
                       ? 'border-primary bg-primary/5 text-primary' 
                       : 'border-border/50 bg-card hover:border-primary/30 hover:bg-muted/50'
                     }
                   `}
                 >
-                  <span className="inline-block w-7 sm:w-8 text-muted-foreground font-bold">
-                    {String.fromCharCode(65 + idx)}.
+                  <span className="flex-1">
+                    <span className="inline-block w-7 sm:w-8 text-muted-foreground font-bold">
+                      {String.fromCharCode(65 + idx)}.
+                    </span>
+                    {opt}
                   </span>
-                  {opt}
+                  <TTSButton text={opt} className="shrink-0 z-10" />
                 </button>
               );
             })}

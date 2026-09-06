@@ -18,6 +18,7 @@ import {
 import { books } from "@/lib/data/books";
 import { seedQuestions } from "@/lib/data/seed-questions";
 import { narayanReddyChapters, parkChapters } from "@/lib/data/chapters";
+import { FeedbackForm } from "@/components/ui/FeedbackForm";
 import { PDFUploader } from "@/components/pdf/PDFUploader";
 import { PDFLibrary } from "@/components/pdf/PDFLibrary";
 
@@ -253,6 +254,13 @@ export default function HomePage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* ── Feedback Section ────────────────────────────────────────────────── */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <FeedbackForm />
         </div>
       </section>
 

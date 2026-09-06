@@ -30,6 +30,7 @@ import { getChapterById } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
 import { getMotivationalFeedback, getStreakMessage, getCompletionMessage } from "@/lib/feedback";
 import { ProgressRing } from "./ProgressRing";
+import { TTSButton } from "@/components/ui/TTSButton";
 import { BookId, QuizMode, Question } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
@@ -424,10 +425,13 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
           </div>
 
           {/* Question Text */}
-          <div className="text-lg sm:text-xl font-bold text-foreground leading-relaxed mb-6 prose dark:prose-invert prose-p:my-0 max-w-none">
-            <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
-              {currentQuestion.question}
-            </ReactMarkdown>
+          <div className="flex items-start gap-4 mb-6">
+            <div className="text-lg sm:text-xl font-bold text-foreground leading-relaxed prose dark:prose-invert prose-p:my-0 max-w-none flex-1">
+              <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                {currentQuestion.question}
+              </ReactMarkdown>
+            </div>
+            <TTSButton text={currentQuestion.question} className="shrink-0 mt-1" />
           </div>
 
           {/* Options */}
@@ -462,11 +466,12 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                       String.fromCharCode(65 + displayIndex)
                     )}
                   </span>
-                  <span className="flex-1 text-[15px] sm:text-base font-medium leading-relaxed prose dark:prose-invert prose-p:my-0 max-w-none">
+                  <span className="flex-1 text-[15px] sm:text-base font-medium leading-relaxed prose dark:prose-invert prose-p:my-0 max-w-none text-left">
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                       {optionText}
                     </ReactMarkdown>
                   </span>
+                  <TTSButton text={optionText} className="shrink-0 ml-2 z-10" />
                 </button>
               );
             })}
@@ -502,9 +507,12 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
 
               {/* Rationale explanation box */}
               <div className="clean-card rounded-xl p-5 border border-border">
-                <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-2">
-                  <Lightbulb className="w-4 h-4 text-amber-500" />
-                  <span>Clinical Rationale & Textbook Reference</span>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+                    <Lightbulb className="w-4 h-4 text-amber-500" />
+                    <span>Clinical Rationale & Textbook Reference</span>
+                  </div>
+                  <TTSButton text={currentQuestion.explanation} />
                 </div>
                 <div className="text-sm text-muted-foreground leading-relaxed prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap">
                   <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>

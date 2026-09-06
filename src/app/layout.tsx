@@ -5,6 +5,7 @@ import "katex/dist/katex.min.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { Navbar } from "@/components/layout/Navbar";
+import { CommandMenu } from "@/components/ui/CommandMenu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <QueryProvider>
             <Navbar />
+            <CommandMenu />
             <main className="flex-1">{children}</main>
           </QueryProvider>
         </ThemeProvider>
