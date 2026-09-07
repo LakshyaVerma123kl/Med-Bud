@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-import { Moon, Sun, Stethoscope, LayoutDashboard, BookOpen, Menu, X } from "lucide-react";
+import { Moon, Sun, Stethoscope, LayoutDashboard, BookOpen, Menu, X, Settings as SettingsIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
@@ -80,6 +80,13 @@ export function Navbar() {
                     <span className="text-xs font-medium text-muted-foreground">
                       {user.email?.split('@')[0]}
                     </span>
+                    <Link
+                      href="/settings"
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      title="Settings"
+                    >
+                      <SettingsIcon className="w-4 h-4" />
+                    </Link>
                     <button
                       onClick={() => supabase.auth.signOut()}
                       className="text-xs font-semibold px-3 py-1.5 rounded-md border border-border hover:bg-muted transition-colors"
