@@ -20,11 +20,16 @@ import {
   CirclePlay,
   Sparkles,
   Bookmark,
+  StickyNote,
+  Brain,
+  PenLine,
   Download,
   Printer
 } from "lucide-react";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
+import { useNotes } from "@/hooks/useNotes";
+import { useMnemonics } from "@/hooks/useMnemonics";
 import { useQuiz } from "@/hooks/useQuiz";
 import { useProgress } from "@/hooks/useProgress";
 import { getQuestionsForChapter, getQuestionsForBook } from "@/lib/data/seed-questions";
@@ -109,9 +114,15 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
   const { updateAfterQuiz } = useProgress();
   const { isBookmarked, toggleBookmark } = useBookmarks();
   const { processAnswer } = useSpacedRepetition();
+  const { getNote, hasNote, setNote: saveNote } = useNotes();
+  const { getCached: getCachedMnemonic, fetchMnemonic } = useMnemonics();
   const [feedback, setFeedback] = useState<{ message: string; emoji: string; type: string } | null>(null);
   const [deepExplanation, setDeepExplanation] = useState<string | null>(null);
   const [deepExplanationLoading, setDeepExplanationLoading] = useState(false);
+  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteText, setNoteText] = useState("");
+  const [mnemonicText, setMnemonicText] = useState<string | null>(null);
+  const [mnemonicLoading, setMnemonicLoading] = useState(false);
 
   // Build a YouTube search URL from the question's topic and book context
   function getYouTubeSearchUrl(q: Question): string {
@@ -124,7 +135,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
 
   // Fetch a deep AI explanation for the current question
   async function fetchDeepExplanation() {
-    if (deepExplanation || deepExplanationLoading) return;
+    if (!currentQuestion || deepExplanation || deepExplanationLoading) return;
     setDeepExplanationLoading(true);
     try {
       const bookLabel = currentQuestion.book === "narayan_reddy"
@@ -154,6 +165,63 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
     }
   }
   const [hasRecordedResult, setHasRecordedResult] = useState(false);
+
+  // handleSelect must be defined before the useEffect that references it,
+  // and both must be above all early returns to satisfy the Rules of Hooks.
+  const handleSelect = (originalIndex: number) => {
+    if (!currentQuestion) return;
+    const isCorrect = originalIndex === currentQuestion.correct_index;
+    const fb = getMotivationalFeedback(isCorrect);
+    setFeedback(fb);
+    
+    // Process spaced repetition only if we haven't answered this yet
+    if (!state.isAnswered) {
+      processAnswer(currentQuestion.id, isCorrect);
+    }
+    
+    selectOption(originalIndex);
+  };
+
+  // Keyboard shortcuts for iPad Magic Keyboards, Folios, and Desktop (A/B/C/D to answer, Space/Enter to advance)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!currentQuestion) return;
+
+      const target = e.target as HTMLElement;
+      if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
+        return;
+      }
+
+      if (!state.isAnswered) {
+        const key = e.key.toUpperCase();
+        let targetIndex = -1;
+        if (key === "A" || key === "1") targetIndex = 0;
+        else if (key === "B" || key === "2") targetIndex = 1;
+        else if (key === "C" || key === "3") targetIndex = 2;
+        else if (key === "D" || key === "4") targetIndex = 3;
+
+        if (targetIndex >= 0 && targetIndex < shuffledOptionIndices.length) {
+          e.preventDefault();
+          handleSelect(shuffledOptionIndices[targetIndex]);
+        }
+      } else {
+        if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
+          e.preventDefault();
+          nextQuestion();
+          setFeedback(null);
+          setDeepExplanation(null);
+          setMnemonicText(null);
+          setNoteOpen(false);
+          setNoteText("");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [state.isAnswered, shuffledOptionIndices, currentQuestion, nextQuestion]);
+
+  const streakMsg = getStreakMessage(state.streak);
 
   // If no questions found
   if (questions.length === 0) {
@@ -362,55 +430,6 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
   // ── Active Question Screen ────────────────────────────────────────────────
   if (!currentQuestion) return null;
 
-  const handleSelect = (originalIndex: number) => {
-    const isCorrect = originalIndex === currentQuestion.correct_index;
-    const fb = getMotivationalFeedback(isCorrect);
-    setFeedback(fb);
-    
-    // Process spaced repetition only if we haven't answered this yet
-    if (!state.isAnswered) {
-      processAnswer(currentQuestion.id, isCorrect);
-    }
-    
-    selectOption(originalIndex);
-  };
-
-  // Keyboard shortcuts for iPad Magic Keyboards, Folios, and Desktop (A/B/C/D to answer, Space/Enter to advance)
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
-        return;
-      }
-
-      if (!state.isAnswered) {
-        const key = e.key.toUpperCase();
-        let targetIndex = -1;
-        if (key === "A" || key === "1") targetIndex = 0;
-        else if (key === "B" || key === "2") targetIndex = 1;
-        else if (key === "C" || key === "3") targetIndex = 2;
-        else if (key === "D" || key === "4") targetIndex = 3;
-
-        if (targetIndex >= 0 && targetIndex < shuffledOptionIndices.length) {
-          e.preventDefault();
-          handleSelect(shuffledOptionIndices[targetIndex]);
-        }
-      } else {
-        if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
-          e.preventDefault();
-          nextQuestion();
-          setFeedback(null);
-          setDeepExplanation(null);
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [state.isAnswered, shuffledOptionIndices, currentQuestion, nextQuestion]);
-
-  const streakMsg = getStreakMessage(state.streak);
-
   return (
     <div className="min-h-screen bg-background py-8 px-4 flex flex-col items-center justify-start">
       <div className="w-full max-w-2xl mx-auto">
@@ -479,6 +498,21 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
               </span>
             )}
             <button
+              onClick={() => {
+                const existing = getNote(currentQuestion.id);
+                setNoteText(existing?.text || "");
+                setNoteOpen(!noteOpen);
+              }}
+              className={`p-1.5 rounded-full transition-colors ${
+                hasNote(currentQuestion.id)
+                  ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                  : "text-muted-foreground hover:bg-muted"
+              }`}
+              title={hasNote(currentQuestion.id) ? "Edit note" : "Add note"}
+            >
+              <StickyNote className="w-4 h-4" fill={hasNote(currentQuestion.id) ? "currentColor" : "none"} />
+            </button>
+            <button
               onClick={() => toggleBookmark(currentQuestion.id)}
               className={`p-1.5 rounded-full transition-colors ${
                 isBookmarked(currentQuestion.id)
@@ -508,6 +542,45 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
             </div>
             <TTSButton text={currentQuestion.question} className="shrink-0 mt-1" />
           </div>
+
+          {/* Inline Note Editor */}
+          <AnimatePresence>
+            {noteOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mb-4"
+              >
+                <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/5">
+                  <div className="flex items-center gap-2 text-xs font-bold text-amber-700 dark:text-amber-400 mb-2">
+                    <PenLine className="w-3.5 h-3.5" />
+                    <span>Personal Note</span>
+                  </div>
+                  <textarea
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                    onBlur={() => saveNote(currentQuestion.id, noteText)}
+                    placeholder="Write your own notes, mnemonics, or key points here..."
+                    rows={3}
+                    className="w-full px-3 py-2 rounded-lg border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-amber-500/30 focus:outline-none resize-none transition-all"
+                  />
+                  <div className="flex items-center justify-between mt-2">
+                    <span className="text-[10px] text-muted-foreground">Auto-saves when you move on</span>
+                    <button
+                      onClick={() => {
+                        saveNote(currentQuestion.id, noteText);
+                        setNoteOpen(false);
+                      }}
+                      className="text-xs font-semibold text-amber-600 dark:text-amber-400 hover:text-amber-700 transition-colors"
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Options */}
           <div className="space-y-3.5 sm:space-y-4">
@@ -594,7 +667,7 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                   </ReactMarkdown>
                 </div>
 
-                {/* Action buttons: Explain Me + YouTube */}
+                {/* Action buttons: Explain Me + Mnemonic + YouTube */}
                 <div className="flex flex-wrap items-center gap-2 mt-4 pt-4 border-t border-border/50">
                   <button
                     onClick={fetchDeepExplanation}
@@ -615,6 +688,49 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                       <>
                         <MessageCircleQuestion className="w-3.5 h-3.5" />
                         <span>Explain in Detail</span>
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      if (mnemonicText || mnemonicLoading) return;
+                      setMnemonicLoading(true);
+                      try {
+                        const bookLabel = currentQuestion.book === "narayan_reddy"
+                          ? "K.S. Narayan Reddy's Forensic Medicine & Toxicology"
+                          : "Park's Textbook of Preventive & Social Medicine";
+                        const result = await fetchMnemonic(currentQuestion.id, {
+                          question: currentQuestion.question,
+                          correctAnswer: currentQuestion.options[currentQuestion.correct_index],
+                          topic: currentQuestion.topic || "",
+                          book: bookLabel,
+                          explanation: currentQuestion.explanation,
+                        });
+                        setMnemonicText(result);
+                      } catch {
+                        setMnemonicText("Failed to generate mnemonic. Try again later.");
+                      } finally {
+                        setMnemonicLoading(false);
+                      }
+                    }}
+                    disabled={mnemonicLoading || !!mnemonicText}
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-violet-500/10 text-violet-600 dark:text-violet-400 hover:bg-violet-500/20 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+                  >
+                    {mnemonicLoading ? (
+                      <>
+                        <Brain className="w-3.5 h-3.5 animate-pulse" />
+                        <span>Creating...</span>
+                      </>
+                    ) : mnemonicText ? (
+                      <>
+                        <Brain className="w-3.5 h-3.5" />
+                        <span>Mnemonic Ready</span>
+                      </>
+                    ) : (
+                      <>
+                        <Brain className="w-3.5 h-3.5" />
+                        <span>Generate Mnemonic</span>
                       </>
                     )}
                   </button>
@@ -652,14 +768,43 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                     </motion.div>
                   )}
                 </AnimatePresence>
+
+                {/* Mnemonic Card */}
+                <AnimatePresence>
+                  {mnemonicText && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="mt-4 pt-4 border-t border-violet-500/20"
+                    >
+                      <div className="flex items-center gap-2 text-sm font-bold text-violet-600 dark:text-violet-400 mb-2">
+                        <Brain className="w-4 h-4" />
+                        <span>Memory Aid</span>
+                      </div>
+                      <div className="text-sm text-foreground/80 leading-relaxed prose prose-sm dark:prose-invert max-w-none">
+                        <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
+                          {mnemonicText}
+                        </ReactMarkdown>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {/* Next Question Button (Desktop) */}
               <button
                 onClick={() => {
+                  // Auto-save note if open
+                  if (noteOpen && noteText) {
+                    saveNote(currentQuestion.id, noteText);
+                  }
                   nextQuestion();
                   setFeedback(null);
                   setDeepExplanation(null);
+                  setMnemonicText(null);
+                  setNoteOpen(false);
+                  setNoteText("");
                 }}
                 className="hidden sm:flex w-full py-4 px-6 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 items-center justify-center gap-2 active:scale-[0.98]"
               >
@@ -682,9 +827,15 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
             >
               <button
                 onClick={() => {
+                  if (noteOpen && noteText) {
+                    saveNote(currentQuestion.id, noteText);
+                  }
                   nextQuestion();
                   setFeedback(null);
                   setDeepExplanation(null);
+                  setMnemonicText(null);
+                  setNoteOpen(false);
+                  setNoteText("");
                 }}
                 className="w-full py-4 min-h-[56px] rounded-xl bg-primary text-white font-bold text-lg shadow-xl shadow-primary/20 flex items-center justify-center gap-2 active:scale-95 transition-transform"
               >

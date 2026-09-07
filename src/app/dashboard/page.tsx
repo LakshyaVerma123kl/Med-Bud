@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Trophy, Target, Flame, BookOpen, TrendingUp, Award,
-  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar, Trash2, Timer, Bookmark
+  BarChart3, ArrowRight, Clock, Star, AlertCircle, FileText, Calendar, Trash2, Timer, Bookmark,
+  StickyNote, PenLine
 } from "lucide-react";
 import { useProgress, availableBadges } from "@/hooks/useProgress";
 import { ProgressRing } from "@/components/quiz/ProgressRing";
@@ -100,7 +101,7 @@ export default function DashboardPage() {
           /* Active Dashboard */
           <div className="space-y-8">
             {/* Quick Actions / Study Tools */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-5 gap-4">
               <Link href="/mock-exam" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-primary/50 transition-colors group">
                 <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
                   <Timer className="w-6 h-6" />
@@ -126,6 +127,24 @@ export default function DashboardPage() {
                 <div>
                   <h3 className="font-bold text-foreground">Bookmarks</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">Your saved questions</p>
+                </div>
+              </Link>
+              <Link href="/notes" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-amber-600/50 transition-colors group">
+                <div className="w-12 h-12 rounded-xl bg-amber-600/10 text-amber-600 dark:text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <StickyNote className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">My Notes</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Personal annotations</p>
+                </div>
+              </Link>
+              <Link href="/create" className="clean-card p-5 rounded-2xl flex items-center gap-4 hover:border-violet-500/50 transition-colors group">
+                <div className="w-12 h-12 rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                  <PenLine className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Create MCQs</h3>
+                  <p className="text-xs text-muted-foreground mt-0.5">Test yourself</p>
                 </div>
               </Link>
             </div>

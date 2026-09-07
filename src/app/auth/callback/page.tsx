@@ -12,6 +12,8 @@ export default function AuthCallbackPage() {
 
   useEffect(() => {
     let isMounted = true;
+    let authSubscription: { unsubscribe: () => void } | null = null;
+    let timer: NodeJS.Timeout | null = null;
 
     async function handleAuth() {
       try {
@@ -53,9 +55,10 @@ export default function AuthCallbackPage() {
             router.replace("/dashboard");
           }
         });
+        authSubscription = subscription;
 
         // Timeout fallback after 6s to avoid infinite spinner
-        const timer = setTimeout(() => {
+        timer = setTimeout(() => {
           if (isMounted) {
             supabase.auth.getSession().then(({ data: { session } }) => {
               if (session) {
@@ -66,11 +69,6 @@ export default function AuthCallbackPage() {
             });
           }
         }, 6000);
-
-        return () => {
-          subscription.unsubscribe();
-          clearTimeout(timer);
-        };
       } catch (err: any) {
         console.error("Callback error:", err);
         if (isMounted) setAuthError(err.message || "An unexpected error occurred during sign-in.");
@@ -81,6 +79,8 @@ export default function AuthCallbackPage() {
 
     return () => {
       isMounted = false;
+      if (authSubscription) authSubscription.unsubscribe();
+      if (timer) clearTimeout(timer);
     };
   }, [router]);
 
