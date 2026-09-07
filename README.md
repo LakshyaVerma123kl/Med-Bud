@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/icon.jpg" alt="MedQuiz Pro Logo" width="120" />
   <h1>🩺 MedQuiz Pro</h1>
-  <p><strong>The Elite AI-Powered Medical Revision Engine</strong></p>
+  <p><strong>AI-Powered Medical Revision Platform for MBBS Students</strong></p>
 
   [![Next.js](https://img.shields.io/badge/Next.js-15+-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
   [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
@@ -14,68 +14,115 @@
 
 ## 🌟 Overview
 
-MedQuiz Pro is a production-grade, highly scalable Medical Revision Platform built for MBBS students preparing for NEET PG and university exams. It bridges the gap between static textbook reading and active recall by transforming standard Indian medical literature (*K.S. Narayan Reddy's Forensic Medicine* and *Park's Preventive & Social Medicine*) into an **interactive, AI-driven learning experience.**
+MedQuiz Pro is a production-grade medical revision platform built for MBBS students preparing for NEET PG and university exams. It transforms standard Indian medical textbooks (*K.S. Narayan Reddy's Forensic Medicine* and *Park's Preventive & Social Medicine*) into an interactive, AI-driven learning experience with active recall, spaced repetition, and custom quiz generation from any uploaded document.
 
-## 🚀 Key Technical Features
+## ✨ Features
 
-### 1. Retrieval-Augmented Generation (RAG) for Custom PDFs
-Users can upload any medical PDF, lecture note, or research paper. The backend parses the document using a memory-safe `pdf-parse` implementation across Next.js Server Components. The extracted text is processed by Google's **Gemini AI** to automatically generate:
-- A structured Markdown summary with key concepts and mnemonics.
-- High-yield, clinical-vignette style MCQs.
-- All stored persistently via Supabase for community access.
+### 📚 Textbook Question Banks
+Pre-loaded, chapter-wise MCQs from K.S. Narayan Reddy (Forensic Medicine) and Park (Preventive & Social Medicine). Questions are AI-generated with detailed clinical explanations and textbook citations.
 
-### 2. Hybrid Data Architecture
-To ensure high availability and minimize API costs, the application employs a hybrid data strategy:
-- **Offline Seed Data**: Statically bundled JSON questions for zero-latency initial loads.
-- **Dynamic Database Caching**: AI-generated chapter questions and summaries are instantly cached in **Supabase (PostgreSQL)**, meaning the AI is only invoked for entirely new requests.
+### 📄 Custom Quiz Generation (Any Document)
+Upload any PDF or DOCX file — medical or non-medical — and the AI generates a structured quiz with a summary, key concepts, and clinical-vignette style MCQs. Supports custom AI instructions like *"Focus on definitions"*, *"Make it True/False"*, or *"Make it extremely difficult"*.
 
-### 3. Advanced Hydration & State Management
-Built entirely with React 19 and Next.js 15 (App Router), the application uses custom hooks (`useQuiz`, `useProgress`) that elegantly handle complex client-side states (like pseudo-random array shuffling and `localStorage` syncing) without triggering React Hydration Mismatch errors.
+### 🧠 Spaced Repetition & Daily Review
+SM-2 algorithm tracks your weak areas and surfaces questions at optimal intervals. Never forget what you've studied.
 
-### 4. Mathematical Formatting & Typographical Excellence
-Complex medical statistics, epidemiological formulas, and LaTeX symbols ($\chi^2$, standard deviation) are beautifully rendered on the fly utilizing a customized `react-markdown` engine injected with `remark-math` and `rehype-katex` plugins. 
+### 📊 Dashboard & Analytics
+Track your streaks, chapter mastery, overall accuracy, and unlock achievement badges. Visualize your progress over time with clean charts.
 
-### 5. Gamification Engine
-Features a robust `localStorage`-synced Progress Dashboard that tracks:
-- **Current & Longest Streaks**
-- **Chapter Mastery & Global Accuracy**
-- **Achievement Badges** (Dynamically unlocked based on performance algorithms)
+### 📝 Notes, Summaries & Flashcards
+AI-generated chapter summaries with key concepts, mnemonics, and tips. Export to **PDF**, **Anki (TSV)**, or **Markdown** for offline study.
+
+### 🏥 Mock Examinations
+Timed, multi-chapter mock exams that simulate real exam conditions with randomized question pools.
+
+### 🔐 Optional Auth & Cloud Sync
+Sign in with Google (via Supabase Auth) to sync your progress, bookmarks, and spaced repetition data across devices. No login required to use the app — it works fully offline with `localStorage`.
+
+### ⚙️ Settings & Account Management
+Manage your profile, force cloud sync, clear local data, or permanently delete your account.
+
+### 🎨 Premium Academic UI
+Hand-crafted "Academic Green + Paper" design system with `Source Serif 4` typography, clean dark mode, and fully responsive layouts. No generic SaaS aesthetics.
 
 ---
 
-## 🛠️ System Architecture
+## 🛠️ Tech Stack
 
-- **Frontend**: Next.js (App Router), React 19, Tailwind CSS v4, Framer Motion
-- **Backend**: Next.js Route Handlers (`/api`), Node.js Runtime
-- **Database**: Supabase PostgreSQL with Row Level Security (RLS)
-- **AI Integrations**: `@google/genai` (Gemini 1.5 Flash/Pro)
-- **Typography & Parsing**: `react-markdown`, `katex`, `@tailwindcss/typography`
+| Layer | Technology |
+|---|---|
+| **Frontend** | Next.js 15 (App Router), React 19, Tailwind CSS v4, Framer Motion |
+| **Backend** | Next.js Route Handlers, Node.js Runtime |
+| **Database** | Supabase PostgreSQL with Row Level Security |
+| **Auth** | Supabase Auth (Google OAuth, Email/Password) |
+| **AI** | Multi-provider failover: Groq, Gemini, OpenRouter |
+| **Typography** | `react-markdown`, KaTeX, `@tailwindcss/typography` |
+| **Exports** | PDF (print layout), Anki TSV, Markdown |
+
+---
 
 ## 📖 Quick Start
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/medquiz-pro.git
-   cd medquiz-pro
+   git clone https://github.com/LakshyaVerma123kl/Med-Bud.git
+   cd Med-Bud
    ```
-2. **Install dependencies:** 
+2. **Install dependencies:**
    ```bash
    npm install
    ```
-3. **Environment Setup:** Create a `.env.local` file at the root.
+3. **Environment Setup:** Create a `.env` file at the root.
    ```env
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
    SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_key
+   GROQ_API_KEY=your_groq_key
    GEMINI_API_KEY=your_gemini_key
+   DATABASE_URL=your_database_url
    ```
-4. **Database Migration:** Use the Supabase SQL editor to create the `questions`, `pdf_quizzes`, and `chapter_summaries` tables.
-5. **Launch:** 
+4. **Database Setup:** Use the Supabase SQL editor to create the required tables:
+   - `questions` — AI-generated chapter questions
+   - `pdf_quizzes` — Custom uploaded document quizzes
+   - `chapter_summaries` — AI-generated chapter summaries and notes
+   - `user_profiles` — User progress sync (with RLS policies)
+5. **Launch:**
    ```bash
    npm run dev
    ```
 
 ---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── api/                # API routes (PDF processing, questions, auth)
+│   ├── book/[bookId]/      # Chapter browser
+│   ├── quiz/               # Quiz engine
+│   ├── dashboard/          # Progress dashboard
+│   ├── login/              # Supabase Auth UI
+│   ├── settings/           # User settings & account management
+│   └── pdf-quiz/           # Custom document quiz viewer
+├── components/             # React components
+│   ├── layout/             # Navbar
+│   ├── quiz/               # QuizContent, NotesModal, SummaryModal
+│   ├── pdf/                # PDFUploader
+│   └── dashboard/          # Pomodoro, analytics charts
+├── hooks/                  # Custom hooks
+│   ├── useProgress.ts      # Progress tracking with cloud sync
+│   ├── useBookmarks.ts     # Bookmarks with cloud sync
+│   ├── useSpacedRepetition.ts  # SM-2 algorithm with cloud sync
+│   └── useSync.ts          # Supabase cloud sync layer
+└── lib/                    # Utilities
+    ├── ai/                 # Multi-provider AI client with failover
+    ├── data/               # Textbook definitions and seed data
+    └── supabase.ts         # Supabase client configuration
+```
+
+---
+
 <div align="center">
-  <i>Engineered with an uncompromising pursuit of perfection.</i>
+  <i>Built for medical students who take their revision seriously.</i>
 </div>
