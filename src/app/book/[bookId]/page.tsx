@@ -21,8 +21,8 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
   const { getChapterMastery, isLoaded } = useProgress();
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [isScrolled, setIsScrolled] = useState(false);
-  const [activeSummaryChapter, setActiveSummaryChapter] = useState<{id: string, name: string} | null>(null);
-  const [activeNotesChapter, setActiveNotesChapter] = useState<{id: string, name: string} | null>(null);
+  const [activeSummaryChapter, setActiveSummaryChapter] = useState<{ id: string, name: string } | null>(null);
+  const [activeNotesChapter, setActiveNotesChapter] = useState<{ id: string, name: string } | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,13 +77,11 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
     <div className="min-h-screen bg-background text-foreground flex flex-col">
       {/* Header Band */}
       <div
-        className={`sticky top-16 z-40 border-b px-4 sm:px-6 lg:px-8 shadow-sm transition-all duration-300 ${
-          isScrolled ? "py-3 sm:py-4" : "py-8 sm:py-12"
-        } ${
-          isReddy
+        className={`sticky top-16 z-40 border-b px-4 sm:px-6 lg:px-8 shadow-sm transition-all duration-300 ${isScrolled ? "py-3 sm:py-4" : "py-8 sm:py-12"
+          } ${isReddy
             ? "bg-gradient-to-r from-blue-950/95 via-slate-900/95 to-indigo-950/95 text-white border-blue-900/40 backdrop-blur-xl"
             : "bg-gradient-to-r from-teal-950/95 via-slate-900/95 to-emerald-950/95 text-white border-teal-900/40 backdrop-blur-xl"
-        }`}
+          }`}
       >
         <div className="max-w-5xl mx-auto">
           {!isScrolled && (
@@ -107,9 +105,8 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                     Standard Medical Reference
                   </span>
                 )}
-                <h1 className={`font-extrabold tracking-tight text-white transition-all duration-300 truncate ${
-                  isScrolled ? "text-lg sm:text-xl" : "text-3xl sm:text-4xl mb-1"
-                }`}>
+                <h1 className={`font-extrabold tracking-tight text-white transition-all duration-300 truncate ${isScrolled ? "text-lg sm:text-xl" : "text-3xl sm:text-4xl mb-1"
+                  }`}>
                   {book.subject}
                 </h1>
                 {!isScrolled && (
@@ -125,8 +122,8 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
               </div>
               <div className="hidden sm:block px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 text-center">
                 <span className="block text-base sm:text-xl font-bold text-white leading-none mb-0.5">
-                  {Object.keys(counts).length > 0 
-                    ? Object.values(counts).reduce((a, b) => a + b, 0) 
+                  {Object.keys(counts).length > 0
+                    ? Object.values(counts).reduce((a, b) => a + b, 0)
                     : book.totalQuestions}+
                 </span>
                 <span className="text-[9px] sm:text-[10px] uppercase font-semibold text-white/70">Qs</span>
@@ -156,11 +153,11 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
             const chapterQuestions = getQuestionsForChapter(chapter.id);
             const liveCount = counts[chapter.id];
             const displayCount = liveCount !== undefined ? liveCount : chapterQuestions.length;
-            
+
             const mastery = isLoaded ? getChapterMastery(bookId as BookId, chapter.id) : null;
             const accuracy = mastery?.accuracy_pct ?? 0;
             const attempted = mastery?.questions_attempted ?? 0;
-            
+
             // Just for UI display, if < 25, we show that they can generate more
             const hasEnoughQuestions = displayCount >= 25;
 
@@ -203,20 +200,17 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                     <span className="text-xs font-medium text-muted-foreground">
                       <strong className="text-foreground">{displayCount}</strong> Qs available
                     </span>
-                    
-                    <div className="grid grid-cols-2 sm:flex sm:flex-nowrap items-center gap-2 w-full">
+                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 mt-auto">
                       {!hasEnoughQuestions && (
                         <button
                           onClick={async () => {
-                            alert(`Generating 10 more questions for ${chapter.name} via AI... This may take 15-30 seconds.`);
                             try {
                               const res = await fetch("/api/admin/generate", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json", "x-admin-key": "super-secret-admin-key-2026" },
-                                body: JSON.stringify({ book: bookId, chapter: chapter.id })
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ book: bookId, chapter: chapter.id }),
                               });
                               if (res.ok) {
-                                alert("Questions generated and added to offline bank!");
                                 window.location.reload();
                               } else {
                                 alert("Failed to generate questions. Check logs.");
@@ -225,7 +219,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                               alert("Error generating questions.");
                             }
                           }}
-                          className="col-span-2 sm:col-span-1 text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center gap-1 transition-colors justify-center whitespace-nowrap w-full"
+                          className="flex-1 min-w-[100px] text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center gap-1 transition-colors justify-center whitespace-nowrap"
                         >
                           <Brain className="w-3.5 h-3.5" />
                           Generate AI
@@ -233,28 +227,28 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                       )}
                       <button
                         onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
+                        className="flex-1 min-w-[80px] text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <Brain className="w-3.5 h-3.5" />
                         Summary
                       </button>
                       <button
                         onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
+                        className="flex-1 min-w-[80px] text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <FileText className="w-3.5 h-3.5" />
                         Notes
                       </button>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
-                        className="col-span-1 text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
+                        className="flex-1 min-w-[90px] text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <Repeat className="w-3.5 h-3.5" />
                         Flashcards
                       </Link>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                        className="col-span-2 sm:col-span-1 text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full mt-1 sm:mt-0"
+                        className="flex-1 min-w-[100px] text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         Start Quiz <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
@@ -275,7 +269,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
         )}
       </div>
 
-      <SummaryModal 
+      <SummaryModal
         isOpen={!!activeSummaryChapter}
         onClose={() => setActiveSummaryChapter(null)}
         book={bookId as BookId}
@@ -283,7 +277,7 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
         chapterName={activeSummaryChapter?.name || ""}
       />
 
-      <NotesModal 
+      <NotesModal
         isOpen={!!activeNotesChapter}
         onClose={() => setActiveNotesChapter(null)}
         book={bookId as BookId}
