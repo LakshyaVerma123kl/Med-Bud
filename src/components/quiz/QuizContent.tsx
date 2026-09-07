@@ -300,6 +300,14 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
                     <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                       Question {index + 1}
                     </span>
+
+                    {qa.question.image_url && (
+                      <div className="w-full max-h-48 flex justify-center mb-6 mt-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={qa.question.image_url} alt="Question figure" className="max-h-48 object-contain rounded-xl border border-border/50 shadow-sm" />
+                      </div>
+                    )}
+
                     <h4 className="text-base font-semibold text-foreground mt-1 leading-snug">
                       {qa.question.question}
                     </h4>
@@ -448,6 +456,14 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
               <Bookmark className="w-4 h-4" fill={isBookmarked(currentQuestion.id) ? "currentColor" : "none"} />
             </button>
           </div>
+
+          {/* Question Image (if any) */}
+          {currentQuestion.image_url && (
+            <div className="w-full max-h-48 flex justify-center mb-6 mt-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={currentQuestion.image_url} alt="Question figure" className="max-h-48 object-contain rounded-xl border border-border/50 shadow-sm" />
+            </div>
+          )}
 
           {/* Question Text */}
           <div className="flex items-start gap-4 mb-6">

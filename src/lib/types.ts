@@ -3,7 +3,7 @@
 export type BookId = "narayan_reddy" | "park";
 export type Difficulty = "easy" | "medium" | "hard";
 export type QuestionSource = "seed" | "ai_variation" | "ai_generated";
-export type QuizMode = "practice" | "timed" | "chapter_mastery" | "weak_areas";
+export type QuizMode = "practice" | "timed" | "chapter_mastery" | "weak_areas" | "flashcard";
 
 export interface Question {
   id: string;
@@ -14,6 +14,7 @@ export interface Question {
   options: string[];
   correct_index: number;
   explanation: string;
+  image_url?: string;
   difficulty: Difficulty;
   source: QuestionSource;
   verified: boolean;

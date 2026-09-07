@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { QuizContent } from "@/components/quiz/QuizContent";
+import { FlashcardContent } from "@/components/quiz/FlashcardContent";
 
 function QuizLoader() {
   return (
@@ -20,6 +21,18 @@ function QuizPageInner() {
   const bookId = searchParams.get("book") || "narayan_reddy";
   const chapterId = searchParams.get("chapter") || "";
   const mode = searchParams.get("mode") || "practice";
+
+  if (mode === "flashcard") {
+    return (
+      <FlashcardContent
+        bookId={bookId as "narayan_reddy" | "park"}
+        chapterId={chapterId}
+        questions={[]} // Will be fetched inside FlashcardContent or passed via context if needed. 
+        // Wait, QuizContent handles its own fetching if `questions` is undefined. 
+        // I need to fetch questions inside FlashcardContent or pass them down.
+      />
+    );
+  }
 
   return (
     <QuizContent

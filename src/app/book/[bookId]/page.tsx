@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2, FileText } from "lucide-react";
+import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2, FileText, Repeat } from "lucide-react";
 import { getChaptersForBook } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
 import { getQuestionsForChapter } from "@/lib/data/seed-questions";
@@ -245,6 +245,13 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                         <FileText className="w-3.5 h-3.5" />
                         Notes
                       </button>
+                      <Link
+                        href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
+                        className="col-span-1 text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full"
+                      >
+                        <Repeat className="w-3.5 h-3.5" />
+                        Flashcards
+                      </Link>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
                         className="col-span-2 sm:col-span-1 text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm w-full mt-1 sm:mt-0"

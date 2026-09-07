@@ -53,33 +53,32 @@ export async function POST(request: Request) {
     const { unique, duplicates } = deduplicateBatch(generation.questions, existingTexts);
     console.log(`[Pipeline] ${unique.length} unique, ${duplicates.length} duplicates removed`);
 
-    // Step 3: Verify each unique question
+    // Step 3: Verify each unique question sequentially to avoid rate limits
     console.log("[Pipeline] Step 3: Verifying...");
-    const results = await Promise.all(
-      unique.map(async (q) => {
-        const { status, verification } = await verifyAndClassify(
-          book,
-          chapter,
-          q.question,
-          q.options,
-          q.correct_index,
-          q.explanation,
-          generation.provider
-        );
+    const results = [];
+    for (const q of unique) {
+      const { status, verification } = await verifyAndClassify(
+        book,
+        chapter,
+        q.question,
+        q.options,
+        q.correct_index,
+        q.explanation,
+        generation.provider
+      );
 
-        return {
-          question: q,
-          status,
-          verification: {
-            isAccurate: verification.isAccurate,
-            confidence: verification.confidence,
-            issues: verification.issues,
-            provider: verification.provider,
-            suggestedCorrection: verification.suggestedCorrection,
-          },
-        };
-      })
-    );
+      results.push({
+        question: q,
+        status,
+        verification: {
+          isAccurate: verification.isAccurate,
+          confidence: verification.confidence,
+          issues: verification.issues,
+          provider: verification.provider,
+          suggestedCorrection: verification.suggestedCorrection,
+        },
+      });
+    }
 
     const approved = results.filter((r) => r.status === "approved");
     const review = results.filter((r) => r.status === "review");
