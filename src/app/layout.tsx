@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Source_Serif_4 } from "next/font/google";
+import { Source_Serif_4, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "katex/dist/katex.min.css";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -12,7 +12,20 @@ const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
   subsets: ["latin"],
   display: "swap",
-  preload: false,
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  display: "swap",
+  weight: ["500", "600"],
 });
 
 export const viewport: Viewport = {
@@ -76,8 +89,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={`${sourceSerif.variable} h-full antialiased`}
+      className={`${sourceSerif.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://gzjbpbkjalygekqoluln.supabase.co" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://gzjbpbkjalygekqoluln.supabase.co" />
+      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <QueryProvider>

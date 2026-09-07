@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
@@ -21,9 +20,9 @@
   --color-error: var(--error);
   --color-error-foreground: var(--error-foreground);
   --color-ring: var(--ring);
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-serif: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-mono: var(--font-jetbrains-mono), 'JetBrains Mono', monospace;
 }
 
 /* Make Tailwind's dark: variant respect the .dark class toggle */
@@ -37,7 +36,7 @@
   --primary-foreground: #FDFCF8;
   --secondary: #ECEBE5;
   --secondary-foreground: #25312E;
-  --accent: #9A7B4F;
+  --accent: #7E5B28;
   --accent-foreground: #FFFFFF;
   --muted: #EFEEE8;
   --muted-foreground: #68736F;

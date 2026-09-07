@@ -38,15 +38,10 @@ export default function HomePage() {
           </motion.div>
 
           {/* Main Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-[1.15] mb-8"
-          >
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-[1.15] mb-8 animate-fade-in">
             Master Medical Knowledge <br className="hidden sm:block" />
             <span className="italic text-primary">with Textbook Accuracy.</span>
-          </motion.h1>
+          </h1>
 
           {/* Subtitle */}
           <motion.p

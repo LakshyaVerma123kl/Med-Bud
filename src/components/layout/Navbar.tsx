@@ -40,7 +40,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-xl overflow-hidden border border-border/60 shadow-sm transition-transform group-hover:scale-105 bg-primary/10">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icon.png" alt="MedQuiz Logo" className="w-full h-full object-cover" />
+              <img src="/logo-sm.webp" alt="MedQuiz Logo" width={40} height={40} className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block">
               <h1 className="text-lg font-serif font-bold text-foreground tracking-tight leading-none">MedQuiz</h1>
