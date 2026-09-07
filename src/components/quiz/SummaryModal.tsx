@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Brain, Sparkles, BookOpen, Download } from "lucide-react";
+import { X, Brain, Sparkles, BookOpen, Download, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { BookId } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
@@ -80,18 +80,40 @@ export function SummaryModal({ isOpen, onClose, book, chapterId, chapterName }: 
                     {chapterName}
                   </h2>
                 </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  {summary && (
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {summary && (
+                      <>
+                        <button
+                          onClick={() => {
+                            import("@/lib/export").then(({ generateAnkiTSVFromNote, downloadFile }) => {
+                              const tsv = generateAnkiTSVFromNote(`Summary: ${chapterName}`, summary);
+                              downloadFile(tsv, `${chapterId}_summary_anki.txt`);
+                            });
+                          }}
+                          title="Export to Anki"
+                          className="p-1.5 sm:p-2 text-muted-foreground hover:bg-primary/10 hover:text-primary rounded-full transition-colors flex items-center justify-center"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </button>
+                        <button
+                          onClick={() => window.open(`/print-note?book=${book}&chapter=${chapterId}&type=summary`, "_blank")}
+                          title="Export as PDF"
+                          className="p-1.5 sm:p-2 text-muted-foreground hover:bg-rose-500/10 hover:text-rose-500 rounded-full transition-colors flex items-center justify-center"
+                        >
+                          <FileText className="w-4.5 h-4.5" />
+                        </button>
+                        <button
+                          onClick={() => downloadMarkdown(summary, `${chapterName} — AI Summary`, `${chapterName.replace(/\s+/g, "_")}_summary.md`)}
+                          title="Download Markdown"
+                          className="p-1.5 sm:p-2 text-muted-foreground hover:bg-muted hover:text-primary rounded-full transition-colors flex items-center justify-center"
+                        >
+                          <Download className="w-4.5 h-4.5" />
+                        </button>
+                        <div className="w-px h-6 bg-border mx-1"></div>
+                      </>
+                    )}
+                    {summary && <TTSButton text={summary} />}
                     <button
-                      onClick={() => downloadMarkdown(summary, `${chapterName} — AI Summary`, `${chapterName.replace(/\s+/g, "_")}_summary.md`)}
-                      title="Download Summary"
-                      className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-primary"
-                    >
-                      <Download className="w-4.5 h-4.5" />
-                    </button>
-                  )}
-                  {summary && <TTSButton text={summary} />}
-                  <button
                     onClick={onClose}
                     className="p-2 hover:bg-muted rounded-full transition-colors"
                   >

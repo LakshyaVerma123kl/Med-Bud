@@ -41,6 +41,19 @@ export function generateAnkiTSV(questions: Question[]): string {
 }
 
 /**
+ * Generates a TSV formatted string for Notes/Summaries.
+ * Format: Front \t Back
+ */
+export function generateAnkiTSVFromNote(title: string, content: string): string {
+  const front = stripMarkdown(title);
+  const back = content
+    .replace(/\n/g, "<br>")
+    .replace(/\t/g, "    ");
+    
+  return `${front}\t${back}\n`;
+}
+
+/**
  * Triggers a browser download of the given content.
  */
 export function downloadFile(content: string, filename: string, mimeType: string = "text/plain") {
