@@ -49,8 +49,12 @@ export const metadata: Metadata = {
     description: "Premium AI-powered medical quiz platform for MBBS students.",
   },
   icons: {
-    icon: "/icon.jpg",
+    icon: [
+      { url: "/icon.png", sizes: "any" },
+      { url: "/icon.png", type: "image/png" },
+    ],
     shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
 };
 

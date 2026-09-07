@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="public/icon.jpg" alt="MedQuiz Pro Logo" width="120" />
+  <img src="public/icon.png" alt="MedQuiz Pro Logo" width="120" style="border-radius: 24px;" />
   <h1>🩺 MedQuiz Pro</h1>
   <p><strong>AI-Powered Medical Revision Platform for MBBS Students</strong></p>
 
