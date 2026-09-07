@@ -375,6 +375,40 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
     selectOption(originalIndex);
   };
 
+  // Keyboard shortcuts for iPad Magic Keyboards, Folios, and Desktop (A/B/C/D to answer, Space/Enter to advance)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA" || target?.isContentEditable) {
+        return;
+      }
+
+      if (!state.isAnswered) {
+        const key = e.key.toUpperCase();
+        let targetIndex = -1;
+        if (key === "A" || key === "1") targetIndex = 0;
+        else if (key === "B" || key === "2") targetIndex = 1;
+        else if (key === "C" || key === "3") targetIndex = 2;
+        else if (key === "D" || key === "4") targetIndex = 3;
+
+        if (targetIndex >= 0 && targetIndex < shuffledOptionIndices.length) {
+          e.preventDefault();
+          handleSelect(shuffledOptionIndices[targetIndex]);
+        }
+      } else {
+        if (e.key === "Enter" || e.key === " " || e.key === "ArrowRight") {
+          e.preventDefault();
+          nextQuestion();
+          setFeedback(null);
+          setDeepExplanation(null);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [state.isAnswered, shuffledOptionIndices, currentQuestion, nextQuestion]);
+
   const streakMsg = getStreakMessage(state.streak);
 
   return (

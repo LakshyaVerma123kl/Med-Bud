@@ -95,12 +95,21 @@ export function Navbar() {
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    href="/login"
-                    className="text-xs font-semibold bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors shadow-sm"
-                  >
-                    Log In
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href="/settings"
+                      className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                      title="Settings"
+                    >
+                      <SettingsIcon className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      href="/login"
+                      className="text-xs font-semibold bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors shadow-sm"
+                    >
+                      Log In
+                    </Link>
+                  </div>
                 )}
               </div>
             )}
@@ -186,13 +195,23 @@ export function Navbar() {
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    href="/login"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center justify-center gap-3 px-5 py-4 min-h-[56px] rounded-xl text-lg font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm mx-2 mt-2"
-                  >
-                    Log In
-                  </Link>
+                  <div className="flex flex-col gap-2">
+                    <Link
+                      href="/settings"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-3 px-5 py-4 min-h-[56px] rounded-xl text-lg font-bold text-muted-foreground hover:text-foreground hover:bg-muted transition-all"
+                    >
+                      <SettingsIcon className="w-5 h-5" />
+                      Settings & Storage
+                    </Link>
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-center gap-3 px-5 py-4 min-h-[56px] rounded-xl text-lg font-bold bg-primary text-primary-foreground hover:bg-primary/90 transition-all shadow-sm mx-2 mt-2"
+                    >
+                      Log In with Google
+                    </Link>
+                  </div>
                 )}
               </div>
             </div>
