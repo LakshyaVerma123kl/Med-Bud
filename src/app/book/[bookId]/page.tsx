@@ -197,10 +197,43 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
 
                 <div className="pt-4 border-t border-border mt-auto">
                   <div className="flex flex-col gap-3">
-                    <span className="text-xs font-medium text-muted-foreground">
-                      <strong className="text-foreground">{displayCount}</strong> Qs available
-                    </span>
-                    <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 mt-auto">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-muted-foreground">
+                        <strong className="text-foreground">{displayCount}</strong> Qs available
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={async () => {
+                            try {
+                              const res = await fetch(`/api/questions?chapter=${chapter.id}`);
+                              const data = await res.json();
+                              if (data.questions && data.questions.length > 0) {
+                                const { generateAnkiTSV, downloadFile } = await import("@/lib/export");
+                                const tsv = generateAnkiTSV(data.questions);
+                                downloadFile(tsv, `${chapter.id}-anki.txt`);
+                              } else {
+                                alert("No questions found for this chapter.");
+                              }
+                            } catch (e) {
+                              alert("Failed to export questions.");
+                            }
+                          }}
+                          className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
+                          title="Export to Anki"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        </button>
+                        <Link
+                          href={`/print?book=${bookId}&chapter=${chapter.id}`}
+                          target="_blank"
+                          className="p-1.5 text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 rounded-md transition-colors"
+                          title="Export as PDF"
+                        >
+                          <FileText className="w-4 h-4" />
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-auto">
                       {!hasEnoughQuestions && (
                         <button
                           onClick={async () => {
@@ -219,36 +252,36 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                               alert("Error generating questions.");
                             }
                           }}
-                          className="flex-1 min-w-[100px] text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center gap-1 transition-colors justify-center whitespace-nowrap"
+                          className="col-span-2 text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
                         >
-                          <Brain className="w-3.5 h-3.5" />
+                          <Brain className="w-4 h-4" />
                           Generate AI
                         </button>
                       )}
                       <button
                         onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                        className="flex-1 min-w-[80px] text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                        className="text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <Brain className="w-3.5 h-3.5" />
                         Summary
                       </button>
                       <button
                         onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                        className="flex-1 min-w-[80px] text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                        className="text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <FileText className="w-3.5 h-3.5" />
                         Notes
                       </button>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
-                        className="flex-1 min-w-[90px] text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                        className="text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         <Repeat className="w-3.5 h-3.5" />
                         Flashcards
                       </Link>
                       <Link
                         href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                        className="flex-1 min-w-[100px] text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-1.5 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                        className="text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
                         Start Quiz <ChevronRight className="w-3.5 h-3.5" />
                       </Link>
