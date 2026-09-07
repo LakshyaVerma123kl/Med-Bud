@@ -1,27 +1,51 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
+import { useSync } from "./useSync";
 
 const BOOKMARKS_KEY = "medquiz_bookmarks";
 
 export function useBookmarks() {
   const [bookmarkedIds, setBookmarkedIds] = useState<Set<string>>(new Set());
   const [isLoaded, setIsLoaded] = useState(false);
+  const { syncBookmarksToCloud, fetchRemoteData } = useSync();
 
   useEffect(() => {
+    let currentBookmarks = new Set<string>();
     try {
       const stored = localStorage.getItem(BOOKMARKS_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setBookmarkedIds(new Set(parsed));
-        }
+        currentBookmarks = new Set(JSON.parse(stored));
       }
-    } catch (err) {
-      console.error("Failed to parse bookmarks", err);
+    } catch (e) {
+      console.error("Failed to load bookmarks from localStorage", e);
     }
+    setBookmarkedIds(currentBookmarks);
     setIsLoaded(true);
-  }, []);
+
+    const initRemoteSync = async () => {
+      const remote = await fetchRemoteData();
+      if (remote?.bookmarks && Array.isArray(remote.bookmarks)) {
+        // Merge bookmarks
+        const merged = new Set([...Array.from(currentBookmarks), ...remote.bookmarks]);
+        setBookmarkedIds(merged);
+        try {
+          localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(Array.from(merged)));
+        } catch {}
+      }
+    };
+
+    initRemoteSync();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        initRemoteSync();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [fetchRemoteData]);
 
   const toggleBookmark = useCallback((questionId: string) => {
     setBookmarkedIds((prev) => {
@@ -34,14 +58,16 @@ export function useBookmarks() {
       
       // Save to localStorage
       try {
-        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(Array.from(next)));
+        const arr = Array.from(next);
+        localStorage.setItem(BOOKMARKS_KEY, JSON.stringify(arr));
+        syncBookmarksToCloud(arr);
       } catch (err) {
-        console.error("Failed to save bookmark", err);
+        console.error("Failed to save bookmarks", err);
       }
       
       return next;
     });
-  }, []);
+  }, [syncBookmarksToCloud]);
 
   const isBookmarked = useCallback(
     (questionId: string) => bookmarkedIds.has(questionId),

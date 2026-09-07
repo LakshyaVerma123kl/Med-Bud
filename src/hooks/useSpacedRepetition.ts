@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { supabase } from "@/lib/supabase";
+import { useSync } from "./useSync";
 
 const SR_KEY = "medquiz_spaced_repetition";
 
@@ -15,18 +17,49 @@ export interface SRItem {
 export function useSpacedRepetition() {
   const [items, setItems] = useState<Record<string, SRItem>>({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const { syncSpacedRepetitionToCloud, fetchRemoteData } = useSync();
 
   useEffect(() => {
+    let currentItems: Record<string, SRItem> = {};
     try {
       const stored = localStorage.getItem(SR_KEY);
       if (stored) {
-        setItems(JSON.parse(stored));
+        currentItems = JSON.parse(stored);
       }
     } catch (err) {
       console.error("Failed to parse SR data", err);
     }
+    setItems(currentItems);
     setIsLoaded(true);
-  }, []);
+
+    const initRemoteSync = async () => {
+      const remote = await fetchRemoteData();
+      if (remote?.spaced_repetition && Object.keys(remote.spaced_repetition).length > 0) {
+        const mergedItems = { ...currentItems };
+        for (const [id, item] of Object.entries(remote.spaced_repetition)) {
+          const typedItem = item as SRItem;
+          // If local doesn't have it, or remote has a later nextReviewDate, take remote
+          if (!mergedItems[id] || new Date(typedItem.nextReviewDate) > new Date(mergedItems[id].nextReviewDate)) {
+            mergedItems[id] = typedItem;
+          }
+        }
+        setItems(mergedItems);
+        try {
+          localStorage.setItem(SR_KEY, JSON.stringify(mergedItems));
+        } catch {}
+      }
+    };
+
+    initRemoteSync();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        initRemoteSync();
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [fetchRemoteData]);
 
   const processAnswer = useCallback((questionId: string, isCorrect: boolean) => {
     setItems((prev) => {
@@ -78,13 +111,14 @@ export function useSpacedRepetition() {
       
       try {
         localStorage.setItem(SR_KEY, JSON.stringify(nextState));
+        syncSpacedRepetitionToCloud(nextState);
       } catch (err) {
         console.error("Failed to save SR data", err);
       }
 
       return nextState;
     });
-  }, []);
+  }, [syncSpacedRepetitionToCloud]);
 
   const getDueItems = useCallback(() => {
     const now = new Date();

@@ -6,14 +6,26 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import { Moon, Sun, Stethoscope, LayoutDashboard, BookOpen, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
 
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => { setMounted(true); }, []);
+  useEffect(() => { 
+    setMounted(true); 
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   const links = [
     { href: "/", label: "Home", icon: BookOpen },
@@ -60,6 +72,32 @@ export function Navbar() {
 
           {/* Right Side */}
           <div className="flex items-center gap-2">
+            {/* Auth Button */}
+            {mounted && (
+              <div className="hidden sm:block mr-2">
+                {user ? (
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-medium text-muted-foreground">
+                      {user.email?.split('@')[0]}
+                    </span>
+                    <button
+                      onClick={() => supabase.auth.signOut()}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-md border border-border hover:bg-muted transition-colors"
+                    >
+                      Log out
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href="/login"
+                    className="text-xs font-semibold bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90 transition-colors shadow-sm"
+                  >
+                    Log In
+                  </Link>
+                )}
+              </div>
+            )}
+
             {/* Theme Toggle */}
             {mounted && (
               <button

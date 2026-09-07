@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { UserProgress, ChapterMastery, Badge, BookId } from "@/lib/types";
+import { supabase } from "@/lib/supabase";
+import { useSync } from "./useSync";
 
 const PROGRESS_KEY = "medquiz_progress";
 
@@ -18,6 +20,7 @@ const defaultProgress: UserProgress = {
   chapterProgress: {},
 };
 
+// ... existing badge definitions ...
 const availableBadges: Badge[] = [
   { id: "first-quiz", name: "First Steps", description: "Complete your first quiz", icon: "🎯", requirement: { type: "total_questions", value: 1 } },
   { id: "ten-questions", name: "Getting Started", description: "Answer 10 questions", icon: "📝", requirement: { type: "total_questions", value: 10 } },
@@ -55,11 +58,37 @@ function saveProgress(progress: UserProgress) {
 export function useProgress() {
   const [progress, setProgress] = useState<UserProgress>(defaultProgress);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { syncProgressToCloud, fetchRemoteData } = useSync();
 
   useEffect(() => {
-    setProgress(loadProgress());
+    let currentData = loadProgress();
+    setProgress(currentData);
     setIsLoaded(true);
-  }, []);
+
+    const initRemoteSync = async () => {
+      const remote = await fetchRemoteData();
+      if (remote?.progress && Object.keys(remote.progress).length > 0) {
+        // Merge logic: in a real app you'd deeply merge or take the newest. 
+        // For simplicity, if remote has more questions answered, take remote.
+        if (remote.progress.totalQuestionsAnswered >= currentData.totalQuestionsAnswered) {
+          setProgress(remote.progress);
+          saveProgress(remote.progress);
+        }
+      }
+    };
+
+    initRemoteSync();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN") {
+        initRemoteSync();
+      } else if (event === "SIGNED_OUT") {
+        // Optionally clear progress on logout, or keep it. We keep it to remain frictionless.
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [fetchRemoteData]);
 
   const updateAfterQuiz = useCallback(
     (
@@ -136,10 +165,11 @@ export function useProgress() {
         };
 
         saveProgress(updated);
+        syncProgressToCloud(updated);
         return updated;
       });
     },
-    []
+    [syncProgressToCloud]
   );
 
   const getChapterMastery = useCallback(
