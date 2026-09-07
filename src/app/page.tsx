@@ -1,11 +1,7 @@
-"use client";
-
 import Link from "next/link";
-import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import {
   ArrowRight,
-  ShieldCheck,
-  GraduationCap,
   ChevronRight,
   Timer,
   Trophy,
@@ -14,8 +10,22 @@ import {
 import { books } from "@/lib/data/books";
 import { seedQuestions } from "@/lib/data/seed-questions";
 import { narayanReddyChapters, parkChapters } from "@/lib/data/chapters";
-import { PDFUploader } from "@/components/pdf/PDFUploader";
-import { PDFLibrary } from "@/components/pdf/PDFLibrary";
+
+const PDFUploader = dynamic(
+  () => import("@/components/pdf/PDFUploader").then((mod) => mod.PDFUploader),
+  {
+    loading: () => (
+      <div className="w-full bg-card rounded-lg p-8 sm:p-10 border border-border animate-pulse h-48" />
+    ),
+  }
+);
+
+const PDFLibrary = dynamic(
+  () => import("@/components/pdf/PDFLibrary").then((mod) => mod.PDFLibrary),
+  {
+    loading: () => null,
+  }
+);
 
 export default function HomePage() {
   const totalQuestions = seedQuestions.length;
@@ -28,39 +38,24 @@ export default function HomePage() {
         <div className="relative max-w-5xl mx-auto px-4 sm:px-6 text-center">
           
           {/* Top Label */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="inline-flex items-center text-[11px] sm:text-xs font-bold tracking-[0.15em] uppercase text-accent mb-6"
-          >
+          <div className="inline-flex items-center text-[11px] sm:text-xs font-bold tracking-[0.15em] uppercase text-accent mb-6">
             Textbook-Based Medical Practice
-          </motion.div>
+          </div>
 
           {/* Main Headline */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-[1.15] mb-8 animate-fade-in">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-foreground leading-[1.15] mb-8">
             Master Medical Knowledge <br className="hidden sm:block" />
             <span className="italic text-primary">with Textbook Accuracy.</span>
           </h1>
 
           {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed"
-          >
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
             Practice chapter-wise authentic MCQs from K.S. Narayan Reddy and Park&apos;s PSM. 
             Every question includes clinical rationale, textbook citations, and instant performance feedback.
-          </motion.p>
+          </p>
 
           {/* Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16"
-          >
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-16">
             <Link
               href="#textbooks"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-semibold text-sm transition-colors hover:bg-primary/90"
@@ -82,15 +77,10 @@ export default function HomePage() {
               <Trophy className="w-4 h-4 text-accent" />
               Dashboard
             </Link>
-          </motion.div>
+          </div>
 
           {/* Academic Metric Strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 max-w-4xl mx-auto border-t border-border pt-8"
-          >
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 max-w-4xl mx-auto border-t border-border pt-8">
             {[
               { label: "CHAPTERS", value: totalChapters.toString() },
               { label: "VERIFIED MCQS", value: `${totalQuestions}+` },
@@ -102,7 +92,7 @@ export default function HomePage() {
                 <span className="text-[10px] sm:text-xs font-bold tracking-widest uppercase text-muted-foreground">{stat.label}</span>
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -115,7 +105,7 @@ export default function HomePage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {books.map((book, idx) => (
+          {books.map((book) => (
             <Link
               key={book.id}
               href={`/book/${book.id}`}

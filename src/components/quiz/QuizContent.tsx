@@ -42,6 +42,7 @@ import { BookId, QuizMode, Question } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 import { generateAnkiTSV, downloadFile } from "@/lib/export";
 
 interface QuizContentProps {

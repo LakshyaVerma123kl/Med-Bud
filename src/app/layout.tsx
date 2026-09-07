@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Source_Serif_4, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import dynamic from "next/dynamic";
 import "./globals.css";
-import "katex/dist/katex.min.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { QueryProvider } from "@/components/query-provider";
 import { Navbar } from "@/components/layout/Navbar";
-import { CommandMenu } from "@/components/ui/CommandMenu";
 import { ServiceWorkerRegister } from "@/components/pwa/ServiceWorkerRegister";
+
+const CommandMenu = dynamic(
+  () => import("@/components/ui/CommandMenu").then((m) => m.CommandMenu)
+);
 
 const sourceSerif = Source_Serif_4({
   variable: "--font-source-serif",
@@ -18,7 +21,6 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -26,6 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
   weight: ["500", "600"],
+  preload: false,
 });
 
 export const viewport: Viewport = {
@@ -92,7 +95,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${sourceSerif.variable} ${plusJakartaSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <head>
-        <link rel="preconnect" href="https://gzjbpbkjalygekqoluln.supabase.co" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://gzjbpbkjalygekqoluln.supabase.co" />
       </head>
       <body className="min-h-full flex flex-col">

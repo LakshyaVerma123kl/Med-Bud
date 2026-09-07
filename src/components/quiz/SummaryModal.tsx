@@ -5,6 +5,7 @@ import { BookId } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 import { TTSButton } from "@/components/ui/TTSButton";
 import { downloadMarkdown } from "@/lib/export";

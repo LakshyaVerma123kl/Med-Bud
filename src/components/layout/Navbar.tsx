@@ -43,7 +43,7 @@ export function Navbar() {
               <img src="/logo-sm.webp" alt="MedQuiz Logo" width={40} height={40} className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-serif font-bold text-foreground tracking-tight leading-none">MedQuiz</h1>
+              <span className="text-lg font-serif font-bold text-foreground tracking-tight leading-none">MedQuiz</span>
               <p className="text-[10px] text-muted-foreground font-semibold tracking-widest uppercase">Pro Edition</p>
             </div>
           </Link>
