@@ -56,7 +56,7 @@ export async function POST(request: Request) {
     const messages: ChatMessage[] = [
       {
         role: "system",
-        content: `You are an expert medical educator. Your task is to analyze the provided medical document text and create 5 new, high-quality multiple-choice questions.${existingContext}
+        content: `You are an expert educator and analyst. Your task is to analyze the provided document text and create 5 new, high-quality multiple-choice questions based strictly on its contents. If the document is non-medical (e.g. a resume, professional document, literature, etc.), adapt your questions to the subject matter of the text.${existingContext}
 Return a JSON object with EXACTLY this structure:
 {
   "summary": "A brief summary of this specific text section (only if no summary exists yet, otherwise leave empty)",

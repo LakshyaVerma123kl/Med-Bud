@@ -113,7 +113,7 @@ export async function POST(request: Request) {
     const messages: ChatMessage[] = [
       {
         role: "system",
-        content: `You are an expert medical educator. Your task is to analyze the provided medical document text and create a high-quality quiz.
+        content: `You are an expert educator and analyst. Your task is to analyze the provided document text and create a high-quality quiz based strictly on its contents. If the document is non-medical (e.g. a resume, professional document, literature, etc.), that is completely fine—adapt your questions to the subject matter of the text.
 Return a JSON object with EXACTLY this structure:
 {
   "title": "A short, descriptive title for the document",

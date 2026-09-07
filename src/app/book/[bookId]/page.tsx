@@ -3,7 +3,7 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2, FileText, Repeat } from "lucide-react";
+import { Search, ArrowLeft, BookOpen, Brain, ChevronRight, CheckCircle2, FileText, Repeat, ArrowRight } from "lucide-react";
 import { getChaptersForBook } from "@/lib/data/chapters";
 import { getBookById } from "@/lib/data/books";
 import { getQuestionsForChapter } from "@/lib/data/seed-questions";
@@ -147,8 +147,8 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
           />
         </div>
 
-        {/* Chapters Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5 sm:gap-6">
+        {/* Chapters List */}
+        <div className="flex flex-col border-t border-border">
           {filtered.map((chapter, idx) => {
             const chapterQuestions = getQuestionsForChapter(chapter.id);
             const liveCount = counts[chapter.id];
@@ -158,50 +158,41 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
             const accuracy = mastery?.accuracy_pct ?? 0;
             const attempted = mastery?.questions_attempted ?? 0;
 
-            // Just for UI display, if < 25, we show that they can generate more
             const hasEnoughQuestions = displayCount >= 25;
 
             return (
               <div
                 key={chapter.id}
-                className="clean-card rounded-2xl p-5 hover:border-primary/50 transition-all hover:shadow-md hover:-translate-y-0.5 flex flex-col justify-between group"
+                className="group flex flex-col sm:flex-row sm:items-center justify-between py-6 border-b border-border hover:bg-muted/30 transition-colors"
               >
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono font-bold text-primary px-2 py-0.5 rounded-md bg-primary/10">
-                      Ch {String(idx + 1).padStart(2, "0")}
-                    </span>
-
-                    {attempted > 0 ? (
-                      <span className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        {accuracy}% accuracy
-                      </span>
-                    ) : (
-                      <span className="text-[11px] font-semibold text-muted-foreground">
-                        Not attempted
-                      </span>
-                    )}
+                <div className="flex items-start gap-4 sm:gap-6 mb-4 sm:mb-0">
+                  <div className="font-serif font-bold text-muted-foreground text-xl sm:text-2xl mt-0.5 w-8 shrink-0">
+                    {String(idx + 1).padStart(2, "0")}
                   </div>
-
-                  <h3 className="text-base font-bold text-foreground group-hover:text-primary transition-colors mb-1.5 leading-snug">
-                    {chapter.name}
-                  </h3>
-
-                  {chapter.description && (
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-4">
-                      {chapter.description}
-                    </p>
-                  )}
-                </div>
-
-                <div className="pt-4 border-t border-border mt-auto">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-medium text-muted-foreground">
-                        <strong className="text-foreground">{displayCount}</strong> Qs available
-                      </span>
-                      <div className="flex items-center gap-1.5">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-serif font-bold text-foreground group-hover:text-primary transition-colors leading-snug mb-1">
+                      {chapter.name}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground font-medium">
+                      <span>{displayCount} questions</span>
+                      {attempted > 0 ? (
+                        <>
+                          <span className="opacity-50">·</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                            <CheckCircle2 className="w-3.5 h-3.5" />
+                            {accuracy}% mastery
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span className="opacity-50">·</span>
+                          <span>Not attempted</span>
+                        </>
+                      )}
+                      
+                      {/* Exports hidden on mobile, shown on desktop hover */}
+                      <div className="hidden sm:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
+                        <span className="opacity-50 mr-1">·</span>
                         <button
                           onClick={async () => {
                             try {
@@ -218,75 +209,72 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                               alert("Failed to export questions.");
                             }
                           }}
-                          className="p-1.5 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-md transition-colors"
+                          className="p-1 hover:text-primary transition-colors"
                           title="Export to Anki"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                         </button>
                         <Link
                           href={`/print?book=${bookId}&chapter=${chapter.id}`}
                           target="_blank"
-                          className="p-1.5 text-muted-foreground hover:text-rose-500 hover:bg-rose-500/10 rounded-md transition-colors"
+                          className="p-1 hover:text-rose-500 transition-colors"
                           title="Export as PDF"
                         >
-                          <FileText className="w-4 h-4" />
+                          <FileText className="w-3.5 h-3.5" />
                         </Link>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-2 mt-auto">
-                      {!hasEnoughQuestions && (
-                        <button
-                          onClick={async () => {
-                            try {
-                              const res = await fetch("/api/admin/generate", {
-                                method: "POST",
-                                headers: { "Content-Type": "application/json" },
-                                body: JSON.stringify({ book: bookId, chapter: chapter.id }),
-                              });
-                              if (res.ok) {
-                                window.location.reload();
-                              } else {
-                                alert("Failed to generate questions. Check logs.");
-                              }
-                            } catch (e) {
-                              alert("Error generating questions.");
-                            }
-                          }}
-                          className="col-span-2 text-[11px] sm:text-xs uppercase font-bold text-amber-500 bg-amber-500/10 hover:bg-amber-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors"
-                        >
-                          <Brain className="w-4 h-4" />
-                          Generate AI
-                        </button>
-                      )}
-                      <button
-                        onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[11px] sm:text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-                      >
-                        <Brain className="w-3.5 h-3.5" />
-                        Summary
-                      </button>
-                      <button
-                        onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                        className="text-[11px] sm:text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-500/10 hover:bg-blue-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-                      >
-                        <FileText className="w-3.5 h-3.5" />
-                        Notes
-                      </button>
-                      <Link
-                        href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
-                        className="text-[11px] sm:text-xs font-semibold text-violet-600 dark:text-violet-400 bg-violet-500/10 hover:bg-violet-500/20 px-2.5 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-                      >
-                        <Repeat className="w-3.5 h-3.5" />
-                        Flashcards
-                      </Link>
-                      <Link
-                        href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                        className="text-[11px] sm:text-xs font-semibold text-white bg-primary hover:bg-primary/90 px-3 py-2 sm:py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-                      >
-                        Start Quiz <ChevronRight className="w-3.5 h-3.5" />
-                      </Link>
-                    </div>
+                    {chapter.description && (
+                      <p className="text-sm text-muted-foreground mt-2 max-w-xl italic">
+                        {chapter.description}
+                      </p>
+                    )}
                   </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 pl-12 sm:pl-0 shrink-0">
+                  {!hasEnoughQuestions && (
+                    <button
+                      onClick={async () => {
+                        try {
+                          const res = await fetch("/api/admin/generate", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ book: bookId, chapter: chapter.id }),
+                          });
+                          if (res.ok) window.location.reload();
+                          else alert("Failed to generate questions. Check logs.");
+                        } catch (e) { alert("Error generating questions."); }
+                      }}
+                      className="text-xs font-semibold text-amber-600 border border-amber-600/30 bg-amber-600/5 hover:bg-amber-600/10 px-3 py-1.5 rounded-md transition-colors"
+                    >
+                      Generate AI
+                    </button>
+                  )}
+                  <button
+                    onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
+                    className="text-xs font-semibold text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-md transition-colors"
+                  >
+                    Summary
+                  </button>
+                  <button
+                    onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
+                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-1.5 rounded-md transition-colors"
+                  >
+                    Notes
+                  </button>
+                  <Link
+                    href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
+                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-1.5 rounded-md transition-colors"
+                  >
+                    Flashcards
+                  </Link>
+                  <Link
+                    href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
+                    className="text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 px-4 py-1.5 rounded-md transition-colors flex items-center gap-1.5 shadow-sm"
+                  >
+                    Start Quiz <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
               </div>
             );

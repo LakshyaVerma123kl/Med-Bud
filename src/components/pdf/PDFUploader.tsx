@@ -77,14 +77,13 @@ export function PDFUploader() {
   };
 
   return (
-    <div className="w-full clean-card rounded-3xl p-8 border border-border shadow-sm">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
-          <FileText className="w-6 h-6 text-primary" />
-          Turn Any PDF or Word Doc into a Quiz
-        </h2>
-        <p className="text-sm text-muted-foreground mt-2">
-          Upload your own lecture notes, guidelines, or research papers. Our AI will read it, summarize it, and test your knowledge instantly.
+    <div className="w-full bg-card rounded-lg p-8 sm:p-10 border border-border">
+      <div className="text-center mb-8">
+        <div className="inline-block px-2.5 py-1 rounded bg-accent/10 text-accent text-[10px] font-bold tracking-widest uppercase mb-4">
+          FROM YOUR NOTES
+        </div>
+        <p className="text-base sm:text-lg text-muted-foreground mt-2 font-serif italic max-w-lg mx-auto">
+          Turn lecture notes, guidelines, and research material into questions for revision.
         </p>
       </div>
 
@@ -94,8 +93,8 @@ export function PDFUploader() {
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-2xl p-6 sm:p-10 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
-            isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/50"
+          className={`border border-dashed rounded-lg p-10 sm:p-16 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
+            isDragging ? "border-primary bg-primary/5" : "border-border hover:border-primary/50 hover:bg-muted/30"
           }`}
         >
           <input
@@ -107,33 +106,32 @@ export function PDFUploader() {
               if (e.target.files && e.target.files[0]) handleFileSelect(e.target.files[0]);
             }}
           />
-          <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <Upload className="w-7 h-7 text-primary" />
+          <div className="text-muted-foreground font-semibold mb-2 tracking-wide uppercase text-sm">
+            [ Upload / Drag & Drop Area ]
           </div>
-          <p className="text-foreground font-semibold mb-1">Click to upload or drag and drop</p>
-          <p className="text-xs text-muted-foreground">PDF or DOCX files up to 50MB</p>
+          <p className="text-xs text-muted-foreground mt-2">PDF or DOCX · up to 50 MB</p>
           
           {error && (
-            <div className="mt-4 flex items-center gap-2 text-error text-sm font-medium">
+            <div className="mt-6 flex items-center gap-2 text-error text-sm font-medium bg-error/10 px-3 py-2 rounded">
               <AlertCircle className="w-4 h-4" />
               {error}
             </div>
           )}
         </div>
       ) : (
-        <div className="border border-primary/20 bg-primary/5 rounded-2xl p-6 flex flex-col items-center justify-center">
+        <div className="border border-border bg-muted/20 rounded-lg p-8 flex flex-col items-center justify-center">
           
           <div className="w-full max-w-sm mb-6 space-y-4">
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-background border border-border shadow-sm">
-              <FileText className="w-8 h-8 text-primary shrink-0" />
+            <div className="flex items-center gap-4 p-4 rounded-md bg-background border border-border shadow-sm">
+              <FileText className="w-8 h-8 text-muted-foreground shrink-0" />
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground truncate">{file.name}</p>
-                <p className="text-xs text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                <p className="text-sm font-bold text-foreground truncate">{file.name}</p>
+                <p className="text-xs font-serif text-muted-foreground">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
               </div>
               {!isProcessing && (
                 <button 
                   onClick={(e) => { e.stopPropagation(); setFile(null); }}
-                  className="text-xs text-muted-foreground hover:text-error transition-colors p-2"
+                  className="text-xs font-semibold text-muted-foreground hover:text-error transition-colors p-2"
                 >
                   Clear
                 </button>
@@ -158,18 +156,21 @@ export function PDFUploader() {
 
           <button
             onClick={processPDF}
-            disabled={isProcessing || !quizName.trim()}
-            className="w-full max-w-sm inline-flex items-center justify-center gap-2 px-6 py-4 min-h-[56px] rounded-xl bg-primary text-white font-semibold text-lg shadow-md hover:bg-primary/90 disabled:opacity-70 transition-all active:scale-[0.98]"
+            disabled={isProcessing}
+            className={`w-full max-w-sm py-3 px-6 rounded-md font-semibold flex items-center justify-center gap-2 transition-colors ${
+              isProcessing 
+                ? "bg-muted text-muted-foreground cursor-not-allowed border border-border" 
+                : "bg-primary text-primary-foreground hover:bg-primary/90"
+            }`}
           >
             {isProcessing ? (
               <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                Analyzing PDF...
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Processing Document...
               </>
             ) : (
               <>
-                <SparklesIcon className="w-5 h-5" />
-                Save & Generate Quiz
+                Generate Custom Quiz
               </>
             )}
           </button>

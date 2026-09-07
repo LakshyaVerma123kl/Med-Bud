@@ -130,46 +130,38 @@ export default function DashboardPage() {
               </Link>
             </div>
 
-            {/* Top 4 Metrics Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {/* Academic Metric Strip */}
+            <div className="flex flex-wrap items-center justify-between gap-6 py-6 border-y border-border">
               {[
                 {
                   label: "Questions Answered",
                   value: progress.totalQuestionsAnswered,
                   icon: Target,
-                  color: "text-blue-500",
-                  bg: "bg-blue-500/10",
                 },
                 {
                   label: "Overall Accuracy",
                   value: `${progress.overallAccuracy}%`,
                   icon: TrendingUp,
-                  color: "text-emerald-500",
-                  bg: "bg-emerald-500/10",
                 },
                 {
                   label: "Longest Streak",
                   value: progress.longestStreak,
                   icon: Flame,
-                  color: "text-amber-500",
-                  bg: "bg-amber-500/10",
                 },
                 {
                   label: "Chapters Mastered",
                   value: progress.chaptersMastered,
                   icon: Trophy,
-                  color: "text-purple-500",
-                  bg: "bg-purple-500/10",
                 },
               ].map((stat) => (
-                <div key={stat.label} className="clean-card rounded-2xl p-5">
-                  <div className={`w-9 h-9 rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center mb-3`}>
-                    <stat.icon className="w-4 h-4" />
+                <div key={stat.label} className="flex flex-col">
+                  <div className="flex items-center gap-2 mb-1 text-muted-foreground">
+                    <stat.icon className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold tracking-widest uppercase">{stat.label}</span>
                   </div>
-                  <span className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight">
+                  <span className="text-2xl sm:text-3xl font-serif font-bold text-foreground">
                     {stat.value}
                   </span>
-                  <p className="text-xs font-medium text-muted-foreground mt-1">{stat.label}</p>
                 </div>
               ))}
             </div>

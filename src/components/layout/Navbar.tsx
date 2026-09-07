@@ -26,17 +26,18 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
-              <Stethoscope className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-lg overflow-hidden border border-border/50 shadow-sm transition-transform group-hover:scale-105">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icon.jpg" alt="MedQuiz Logo" className="w-full h-full object-cover" />
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-foreground tracking-tight">MedQuiz</h1>
-              <p className="text-[10px] text-muted-foreground -mt-1 font-medium tracking-wide uppercase">Pro Edition</p>
+              <h1 className="text-lg font-serif font-bold text-foreground tracking-tight leading-none">MedQuiz</h1>
+              <p className="text-[10px] text-muted-foreground font-semibold tracking-widest uppercase">Pro Edition</p>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-1.5">
             {links.map((link) => {
               const isActive = pathname === link.href;
               const Icon = link.icon;
@@ -44,13 +45,13 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 hover:scale-105 ${
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-sm font-semibold transition-colors ${
                     isActive
                       ? "bg-primary/10 text-primary dark:bg-primary/20"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                   }`}
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="w-4 h-4 stroke-[1.5]" />
                   {link.label}
                 </Link>
               );
