@@ -1,0 +1,37 @@
+{
+  "name": "MedQuiz Pro — Clinical Medical Revision",
+  "short_name": "MedQuiz Pro",
+  "description": "AI-Powered Medical Revision Platform for MBBS and NEET PG Students. Master Forensic & Community Medicine with active recall.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121817",
+  "theme_color": "#185C55",
+  "orientation": "any",
+  "categories": ["education", "medical", "productivity"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

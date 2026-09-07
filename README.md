@@ -42,6 +42,9 @@ Sign in with Google (via Supabase Auth) to sync your progress, bookmarks, and sp
 ### ⚙️ Settings & Account Management
 Manage your profile, force cloud sync, clear local data, or permanently delete your account.
 
+### 📱 Progressive Web App (PWA) & Tablet Ready
+Installable on iOS, iPadOS, Android, and Desktop with standalone full-screen view. Tuned touch targets, safe-area inset management for iPad split-screen and Stage Manager, and offline shell caching via Service Worker.
+
 ### 🎨 Premium Academic UI
 Hand-crafted "Academic Green + Paper" design system with `Source Serif 4` typography, clean dark mode, and fully responsive layouts. No generic SaaS aesthetics.
 

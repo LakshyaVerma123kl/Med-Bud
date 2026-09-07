@@ -101,11 +101,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.6;
-    /* iPhone Safe Areas */
-    padding-top: env(safe-area-inset-top);
-    padding-right: env(safe-area-inset-right);
-    padding-bottom: env(safe-area-inset-bottom);
-    padding-left: env(safe-area-inset-left);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    /* Safe areas for iOS/iPadOS notch, dynamic island, and home indicator */
+    padding-right: env(safe-area-inset-right, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    padding-left: env(safe-area-inset-left, 0px);
   }
 
   /* Scrollbar – WebKit */

@@ -33,7 +33,7 @@ export function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300">
+    <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm transition-all duration-300 pt-[env(safe-area-inset-top,0px)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
@@ -136,7 +136,7 @@ export function Navbar() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden overflow-hidden border-t border-border/50 bg-background/95 backdrop-blur-xl absolute top-16 left-0 right-0 shadow-2xl"
+            className="md:hidden overflow-hidden border-t border-border/50 bg-background/95 backdrop-blur-xl absolute top-full left-0 right-0 shadow-2xl"
           >
             <div className="px-4 py-4 space-y-2 pb-6">
               {links.map((link) => {

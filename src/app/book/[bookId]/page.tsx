@@ -190,9 +190,9 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                         </>
                       )}
                       
-                      {/* Exports hidden on mobile, shown on desktop hover */}
-                      <div className="hidden sm:flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2">
-                        <span className="opacity-50 mr-1">·</span>
+                      {/* Exports accessible on touch devices and desktop */}
+                      <div className="flex items-center gap-1.5 sm:opacity-80 group-hover:opacity-100 transition-opacity ml-1">
+                        <span className="opacity-50 mr-0.5">·</span>
                         <button
                           onClick={async () => {
                             try {
@@ -209,16 +209,18 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                               alert("Failed to export questions.");
                             }
                           }}
-                          className="p-1 hover:text-primary transition-colors"
+                          className="p-1.5 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-md hover:bg-muted/80 hover:text-primary transition-colors text-muted-foreground"
                           title="Export to Anki"
+                          aria-label="Export to Anki"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                         </button>
                         <Link
                           href={`/print?book=${bookId}&chapter=${chapter.id}`}
                           target="_blank"
-                          className="p-1 hover:text-rose-500 transition-colors"
+                          className="p-1.5 min-w-[28px] min-h-[28px] flex items-center justify-center rounded-md hover:bg-muted/80 hover:text-rose-500 transition-colors text-muted-foreground"
                           title="Export as PDF"
+                          aria-label="Export as PDF"
                         >
                           <FileText className="w-3.5 h-3.5" />
                         </Link>
@@ -246,32 +248,32 @@ export default function BookPage({ params }: PageProps<"/book/[bookId]">) {
                           else alert("Failed to generate questions. Check logs.");
                         } catch (e) { alert("Error generating questions."); }
                       }}
-                      className="text-xs font-semibold text-amber-600 border border-amber-600/30 bg-amber-600/5 hover:bg-amber-600/10 px-3 py-1.5 rounded-md transition-colors"
+                      className="text-xs font-semibold text-amber-600 border border-amber-600/30 bg-amber-600/5 hover:bg-amber-600/10 px-3 py-2 min-h-[36px] rounded-md transition-colors"
                     >
                       Generate AI
                     </button>
                   )}
                   <button
                     onClick={() => setActiveSummaryChapter({ id: chapter.id, name: chapter.name })}
-                    className="text-xs font-semibold text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 px-3 py-1.5 rounded-md transition-colors"
+                    className="text-xs font-semibold text-primary border border-primary/20 bg-primary/5 hover:bg-primary/10 px-3 py-2 min-h-[36px] rounded-md transition-colors"
                   >
                     Summary
                   </button>
                   <button
                     onClick={() => setActiveNotesChapter({ id: chapter.id, name: chapter.name })}
-                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-1.5 rounded-md transition-colors"
+                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-2 min-h-[36px] rounded-md transition-colors"
                   >
                     Notes
                   </button>
                   <Link
                     href={`/quiz?book=${bookId}&chapter=${chapter.id}&mode=flashcard`}
-                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-1.5 rounded-md transition-colors"
+                    className="text-xs font-semibold text-muted-foreground border border-border bg-transparent hover:bg-muted/50 px-3 py-2 min-h-[36px] rounded-md transition-colors inline-flex items-center"
                   >
                     Flashcards
                   </Link>
                   <Link
                     href={`/quiz?book=${bookId}&chapter=${chapter.id}`}
-                    className="text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 px-4 py-1.5 rounded-md transition-colors flex items-center gap-1.5 shadow-sm"
+                    className="text-xs font-bold text-primary-foreground bg-primary hover:bg-primary/90 px-4 py-2 min-h-[36px] rounded-md transition-colors flex items-center gap-1.5 shadow-sm"
                   >
                     Start Quiz <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
