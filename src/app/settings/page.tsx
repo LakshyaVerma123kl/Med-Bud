@@ -19,6 +19,10 @@ import {
   Cloud,
   LogIn,
   Share2,
+  Copy,
+  MessageCircle,
+  Check,
+  FileText,
 } from "lucide-react";
 import { useSync } from "@/hooks/useSync";
 
@@ -37,43 +41,164 @@ export default function SettingsPage() {
   const { fetchRemoteData } = useSync();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleExportBackup = () => {
-    try {
-      const backupData = {
-        app: "MedQuiz Pro",
-        version: 1,
-        exportedAt: new Date().toISOString(),
-        data: {
-          notes: JSON.parse(localStorage.getItem("medquiz_notes") || "{}"),
-          customQuestions: JSON.parse(localStorage.getItem("medquiz_custom_questions") || "[]"),
-          bookmarks: JSON.parse(localStorage.getItem("medquiz_bookmarks") || "[]"),
-          progress: JSON.parse(localStorage.getItem("medquiz_progress") || "{}"),
-          spacedRepetition: JSON.parse(localStorage.getItem("medquiz_sr_state") || "{}"),
-          mnemonics: JSON.parse(localStorage.getItem("medquiz_mnemonics") || "{}"),
-        },
-      };
+  const [pasteInput, setPasteInput] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
 
-      const blob = new Blob([JSON.stringify(backupData, null, 2)], {
+  const getExportPayload = () => {
+    return {
+      app: "MedQuiz Pro",
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      data: {
+        notes: JSON.parse(localStorage.getItem("medquiz_notes") || "{}"),
+        customQuestions: JSON.parse(localStorage.getItem("medquiz_custom_questions") || "[]"),
+        bookmarks: JSON.parse(localStorage.getItem("medquiz_bookmarks") || "[]"),
+        progress: JSON.parse(localStorage.getItem("medquiz_progress") || "{}"),
+        spacedRepetition: JSON.parse(localStorage.getItem("medquiz_sr_state") || "{}"),
+        mnemonics: JSON.parse(localStorage.getItem("medquiz_mnemonics") || "{}"),
+      },
+    };
+  };
+
+  const handleCopyWhatsAppCode = async () => {
+    try {
+      const payload = getExportPayload();
+      const jsonStr = JSON.stringify(payload);
+      const code = btoa(encodeURIComponent(jsonStr));
+      const questionsCount = payload.data.customQuestions.length;
+      const notesCount = Object.keys(payload.data.notes).length;
+
+      const shareText = `🩺 *MedQuiz Pro Study Deck*\n${questionsCount} custom MCQs • ${notesCount} high-yield notes\n\nTo load this in your app:\n1. Open MedQuiz Pro ➔ Settings\n2. Paste in "Load Study Deck":\n\nMEDQUIZ_${code}`;
+
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareText);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = shareText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+      setMessage({
+        type: "success",
+        text: "Study Code copied! Paste it into your WhatsApp or Telegram study group.",
+      });
+    } catch (e) {
+      console.error(e);
+      setMessage({ type: "error", text: "Could not generate share code." });
+    }
+  };
+
+  const handleDownloadStudyFile = () => {
+    try {
+      const payload = getExportPayload();
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {
         type: "application/json",
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       const dateStr = new Date().toISOString().split("T")[0];
       a.href = url;
-      a.download = `medquiz-backup-${dateStr}.json`;
+      a.download = `MedQuiz-StudyDeck-${dateStr}.medquiz`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
 
-      setMessage({ type: "success", text: "Backup file downloaded successfully!" });
+      setMessage({ type: "success", text: "Study deck file (.medquiz) downloaded!" });
     } catch (e) {
       console.error(e);
-      setMessage({ type: "error", text: "Failed to create backup." });
+      setMessage({ type: "error", text: "Failed to download study file." });
     }
   };
 
-  const handleImportBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const processImportPayload = (parsed: any) => {
+    if (!parsed?.data) {
+      throw new Error("Invalid study deck format");
+    }
+    const { notes, customQuestions, bookmarks, progress, spacedRepetition, mnemonics } = parsed.data;
+
+    let restoredNotes = 0;
+    let restoredQuestions = 0;
+
+    // Smart merge notes
+    if (notes && typeof notes === "object") {
+      const existing = JSON.parse(localStorage.getItem("medquiz_notes") || "{}");
+      const merged = { ...existing, ...notes };
+      localStorage.setItem("medquiz_notes", JSON.stringify(merged));
+      restoredNotes = Object.keys(notes).length;
+    }
+
+    // Smart merge custom questions without duplicates
+    if (Array.isArray(customQuestions)) {
+      const existing: any[] = JSON.parse(localStorage.getItem("medquiz_custom_questions") || "[]");
+      const existingHashes = new Set(existing.map((q) => q.content_hash || q.id));
+      const newQuestions = customQuestions.filter((q) => !existingHashes.has(q.content_hash || q.id));
+      const merged = [...newQuestions, ...existing];
+      localStorage.setItem("medquiz_custom_questions", JSON.stringify(merged));
+      restoredQuestions = customQuestions.length;
+    }
+
+    // Merge bookmarks
+    if (Array.isArray(bookmarks)) {
+      const existing: string[] = JSON.parse(localStorage.getItem("medquiz_bookmarks") || "[]");
+      const merged = Array.from(new Set([...existing, ...bookmarks]));
+      localStorage.setItem("medquiz_bookmarks", JSON.stringify(merged));
+    }
+
+    if (progress && typeof progress === "object") {
+      localStorage.setItem("medquiz_progress", JSON.stringify(progress));
+    }
+    if (spacedRepetition && typeof spacedRepetition === "object") {
+      localStorage.setItem("medquiz_sr_state", JSON.stringify(spacedRepetition));
+    }
+    if (mnemonics && typeof mnemonics === "object") {
+      const existing = JSON.parse(localStorage.getItem("medquiz_mnemonics") || "{}");
+      localStorage.setItem("medquiz_mnemonics", JSON.stringify({ ...existing, ...mnemonics }));
+    }
+
+    return { restoredNotes, restoredQuestions };
+  };
+
+  const handleLoadPastedCode = () => {
+    if (!pasteInput.trim()) return;
+    try {
+      const raw = pasteInput.trim();
+      const match = raw.match(/MEDQUIZ_([A-Za-z0-9+/=]+)/);
+      if (match) {
+        const decoded = decodeURIComponent(atob(match[1]));
+        const parsed = JSON.parse(decoded);
+        const { restoredNotes, restoredQuestions } = processImportPayload(parsed);
+        setMessage({
+          type: "success",
+          text: `Study deck loaded! Merged ${restoredQuestions} custom MCQs & ${restoredNotes} notes.`,
+        });
+        setPasteInput("");
+        return;
+      }
+
+      // Fallback for raw JSON paste
+      const parsed = JSON.parse(raw);
+      const { restoredNotes, restoredQuestions } = processImportPayload(parsed);
+      setMessage({
+        type: "success",
+        text: `Study deck loaded! Merged ${restoredQuestions} custom MCQs & ${restoredNotes} notes.`,
+      });
+      setPasteInput("");
+    } catch (e) {
+      console.error(e);
+      setMessage({
+        type: "error",
+        text: "Could not read that study code. Make sure you copied the whole WhatsApp message.",
+      });
+    }
+  };
+
+  const handleImportFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -82,44 +207,17 @@ export default function SettingsPage() {
       try {
         const content = event.target?.result as string;
         const parsed = JSON.parse(content);
-
-        if (!parsed.data) {
-          throw new Error("Invalid backup file format");
-        }
-
-        const { notes, customQuestions, bookmarks, progress, spacedRepetition, mnemonics } = parsed.data;
-
-        let restoredItems = 0;
-        if (notes && typeof notes === "object") {
-          localStorage.setItem("medquiz_notes", JSON.stringify(notes));
-          restoredItems += Object.keys(notes).length;
-        }
-        if (Array.isArray(customQuestions)) {
-          localStorage.setItem("medquiz_custom_questions", JSON.stringify(customQuestions));
-          restoredItems += customQuestions.length;
-        }
-        if (Array.isArray(bookmarks)) {
-          localStorage.setItem("medquiz_bookmarks", JSON.stringify(bookmarks));
-        }
-        if (progress && typeof progress === "object") {
-          localStorage.setItem("medquiz_progress", JSON.stringify(progress));
-        }
-        if (spacedRepetition && typeof spacedRepetition === "object") {
-          localStorage.setItem("medquiz_sr_state", JSON.stringify(spacedRepetition));
-        }
-        if (mnemonics && typeof mnemonics === "object") {
-          localStorage.setItem("medquiz_mnemonics", JSON.stringify(mnemonics));
-        }
+        const { restoredNotes, restoredQuestions } = processImportPayload(parsed);
 
         setMessage({
           type: "success",
-          text: `Backup restored successfully! (${restoredItems} notes & custom items restored)`,
+          text: `Study deck loaded from file! Merged ${restoredQuestions} MCQs & ${restoredNotes} notes.`,
         });
       } catch (err) {
         console.error(err);
         setMessage({
           type: "error",
-          text: "Failed to parse backup file. Please select a valid MedQuiz JSON backup.",
+          text: "Failed to read file. Please select a valid .medquiz study deck.",
         });
       }
     };
@@ -401,63 +499,99 @@ export default function SettingsPage() {
           </div>
         </section>
 
-        {/* Data Management Section */}
+        {/* Study Decks & Classmate Sharing Section */}
         <section className="clean-card rounded-2xl p-6 sm:p-8">
           <h2 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
-            <RefreshCw className="w-4 h-4 text-primary" />
-            Data Portability & Storage Management
+            <Share2 className="w-4 h-4 text-primary" />
+            Study Decks & Classmate Sharing
           </h2>
-          <p className="text-xs text-muted-foreground mb-4">
-            Export offline backups, restore your notes and custom MCQs, or sync across devices.
+          <p className="text-xs text-muted-foreground mb-5 leading-relaxed">
+            Share your custom questions and high-yield notes with your batchmates on WhatsApp, or save an offline study file.
           </p>
 
-          {/* Hidden file input for JSON import */}
+          {/* Hidden file input for .medquiz or JSON import */}
           <input
             type="file"
             ref={fileInputRef}
-            accept=".json,application/json"
-            onChange={handleImportBackup}
+            accept=".medquiz,.json,application/json"
+            onChange={handleImportFile}
             className="hidden"
           />
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {/* Export Backup Card */}
+            {/* Share Deck Card */}
             <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
               <div>
                 <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
-                  <Download className="w-3.5 h-3.5 text-primary" />
-                  Export Full Backup
+                  <MessageCircle className="w-4 h-4 text-emerald-500" />
+                  Share with Batchmates
                 </h3>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Download a JSON file containing all your notes, custom MCQs, bookmarks, and spaced repetition progress.
+                  Copies a formatted text code you can send directly in your WhatsApp or Telegram study groups.
                 </p>
               </div>
-              <button
-                onClick={handleExportBackup}
-                className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
-              >
-                <Download className="w-4 h-4 text-primary" />
-                Export Backup (JSON)
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={handleCopyWhatsAppCode}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 px-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                >
+                  {isCopied ? (
+                    <>
+                      <Check className="w-4 h-4" />
+                      <span>Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Copy WhatsApp Study Code</span>
+                    </>
+                  )}
+                </button>
+                <button
+                  onClick={handleDownloadStudyFile}
+                  className="w-full bg-background border border-border hover:bg-muted text-xs font-semibold py-2 px-3 rounded-xl transition-colors flex items-center justify-center gap-1.5 text-muted-foreground hover:text-foreground"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  Save .medquiz Study File
+                </button>
+              </div>
             </div>
 
-            {/* Import Backup Card */}
+            {/* Load Deck Card */}
             <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
               <div>
                 <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
-                  <Upload className="w-3.5 h-3.5 text-violet-500" />
-                  Restore / Import Backup
+                  <Upload className="w-4 h-4 text-violet-500" />
+                  Load Deck from Classmate
                 </h3>
-                <p className="text-xs text-muted-foreground mb-4">
-                  Restore previously exported notes and custom questions onto this device from a JSON file.
+                <p className="text-xs text-muted-foreground mb-3">
+                  Paste the message from WhatsApp, or load a shared study file.
                 </p>
+
+                <div className="flex gap-1.5 mb-2">
+                  <input
+                    type="text"
+                    value={pasteInput}
+                    onChange={(e) => setPasteInput(e.target.value)}
+                    placeholder="Paste WhatsApp code here..."
+                    className="flex-1 px-3 py-2 text-xs rounded-xl border border-border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary min-w-0"
+                  />
+                  <button
+                    onClick={handleLoadPastedCode}
+                    disabled={!pasteInput.trim()}
+                    className="px-3 py-2 rounded-xl bg-primary text-white text-xs font-bold shrink-0 disabled:opacity-50 hover:bg-primary/90 transition-colors"
+                  >
+                    Load
+                  </button>
+                </div>
               </div>
+
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                className="w-full bg-background border border-border hover:bg-muted text-xs font-semibold py-2 px-3 rounded-xl transition-colors flex items-center justify-center gap-1.5 text-muted-foreground hover:text-foreground"
               >
-                <Upload className="w-4 h-4 text-violet-500" />
-                Import Backup (JSON)
+                <FileText className="w-3.5 h-3.5 text-violet-500" />
+                Pick .medquiz Study File
               </button>
             </div>
 
@@ -467,33 +601,33 @@ export default function SettingsPage() {
                 <div>
                   <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
                     <Cloud className="w-3.5 h-3.5 text-blue-500" />
-                    Force Cloud Sync
+                    Cloud Sync
                   </h3>
                   <p className="text-xs text-muted-foreground mb-4">Pull latest cloud stats and merge with this device.</p>
                 </div>
                 <button
                   onClick={handleForceSync}
                   disabled={isSaving}
-                  className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors disabled:opacity-50"
+                  className="w-full bg-background border border-border hover:bg-muted text-xs font-semibold py-2 rounded-xl transition-colors disabled:opacity-50"
                 >
                   {isSaving ? "Syncing..." : "Sync Cloud Now"}
                 </button>
               </div>
             )}
 
-            {/* Clear Local Data */}
+            {/* Reset Study Progress */}
             <div className={`p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between ${!user ? "" : ""}`}>
               <div>
-                <h3 className="font-semibold text-sm mb-1 text-foreground">Clear Local Device Progress</h3>
+                <h3 className="font-semibold text-sm mb-1 text-foreground">Reset Quiz Progress</h3>
                 <p className="text-xs text-muted-foreground mb-4">
-                  Wipes quizzes, bookmarks, and spaced repetition cached in this browser. {user ? "Your cloud backup remains intact." : ""}
+                  Resets practice scores and spaced repetition timers on this device. Your custom questions & notes remain safe.
                 </p>
               </div>
               <button
                 onClick={handleClearLocal}
-                className="w-full bg-background border border-border hover:bg-rose-500/10 hover:text-rose-600 hover:border-rose-500/30 text-sm font-semibold py-2 rounded-xl transition-colors"
+                className="w-full bg-background border border-border hover:bg-rose-500/10 hover:text-rose-600 hover:border-rose-500/30 text-xs font-semibold py-2 rounded-xl transition-colors"
               >
-                Clear Local Data
+                Reset Progress Only
               </button>
             </div>
           </div>

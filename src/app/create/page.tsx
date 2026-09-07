@@ -15,6 +15,7 @@ import {
   Save,
   RotateCcw,
   Play,
+  MessageCircle,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCustomQuestions, CustomQuestionInput } from "@/hooks/useCustomQuestions";
@@ -35,8 +36,41 @@ export default function CreatePage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [preview, setPreview] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
 
   const allQuestions = getAll();
+
+  const handleShareCustomQuestions = async () => {
+    try {
+      const payload = {
+        app: "MedQuiz Pro",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        data: {
+          customQuestions: allQuestions,
+        },
+      };
+      const jsonStr = JSON.stringify(payload);
+      const code = btoa(encodeURIComponent(jsonStr));
+      const shareText = `🩺 *MedQuiz Pro Custom MCQs*\nHere are ${allQuestions.length} custom questions I created for revision!\n\nTo load this deck:\n1. Open MedQuiz Pro ➔ Settings\n2. Paste in "Load Study Deck":\n\nMEDQUIZ_${code}`;
+
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(shareText);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = shareText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+
+      setCopiedShare(true);
+      setTimeout(() => setCopiedShare(false), 2500);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   const updateOption = (index: number, value: string) => {
     const newOptions = [...form.options] as [string, string, string, string];
@@ -313,19 +347,29 @@ export default function CreatePage() {
         {/* Existing Questions List */}
         {allQuestions.length > 0 && (
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
               <h2 className="text-lg font-bold text-foreground">
                 Your Custom Questions ({allQuestions.length})
               </h2>
-              {allQuestions.length >= 2 && (
-                <Link
-                  href="/custom-quiz"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all shadow-sm"
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleShareCustomQuestions}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-sm active:scale-95"
+                  title="Share custom questions with classmates on WhatsApp"
                 >
-                  <Play className="w-3.5 h-3.5" />
-                  Quiz Yourself
-                </Link>
-              )}
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  {copiedShare ? "Copied Code!" : "Share Deck"}
+                </button>
+                {allQuestions.length >= 2 && (
+                  <Link
+                    href="/custom-quiz"
+                    className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground text-xs font-bold hover:bg-primary/90 transition-all shadow-sm"
+                  >
+                    <Play className="w-3.5 h-3.5" />
+                    Quiz Yourself
+                  </Link>
+                )}
+              </div>
             </div>
 
             <div className="space-y-3">
