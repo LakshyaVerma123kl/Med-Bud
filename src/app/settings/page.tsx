@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
@@ -15,6 +15,7 @@ import {
   Smartphone,
   CheckCircle2,
   Download,
+  Upload,
   Cloud,
   LogIn,
   Share2,
@@ -34,6 +35,97 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const { fetchRemoteData } = useSync();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleExportBackup = () => {
+    try {
+      const backupData = {
+        app: "MedQuiz Pro",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        data: {
+          notes: JSON.parse(localStorage.getItem("medquiz_notes") || "{}"),
+          customQuestions: JSON.parse(localStorage.getItem("medquiz_custom_questions") || "[]"),
+          bookmarks: JSON.parse(localStorage.getItem("medquiz_bookmarks") || "[]"),
+          progress: JSON.parse(localStorage.getItem("medquiz_progress") || "{}"),
+          spacedRepetition: JSON.parse(localStorage.getItem("medquiz_sr_state") || "{}"),
+          mnemonics: JSON.parse(localStorage.getItem("medquiz_mnemonics") || "{}"),
+        },
+      };
+
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      const dateStr = new Date().toISOString().split("T")[0];
+      a.href = url;
+      a.download = `medquiz-backup-${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setMessage({ type: "success", text: "Backup file downloaded successfully!" });
+    } catch (e) {
+      console.error(e);
+      setMessage({ type: "error", text: "Failed to create backup." });
+    }
+  };
+
+  const handleImportBackup = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const parsed = JSON.parse(content);
+
+        if (!parsed.data) {
+          throw new Error("Invalid backup file format");
+        }
+
+        const { notes, customQuestions, bookmarks, progress, spacedRepetition, mnemonics } = parsed.data;
+
+        let restoredItems = 0;
+        if (notes && typeof notes === "object") {
+          localStorage.setItem("medquiz_notes", JSON.stringify(notes));
+          restoredItems += Object.keys(notes).length;
+        }
+        if (Array.isArray(customQuestions)) {
+          localStorage.setItem("medquiz_custom_questions", JSON.stringify(customQuestions));
+          restoredItems += customQuestions.length;
+        }
+        if (Array.isArray(bookmarks)) {
+          localStorage.setItem("medquiz_bookmarks", JSON.stringify(bookmarks));
+        }
+        if (progress && typeof progress === "object") {
+          localStorage.setItem("medquiz_progress", JSON.stringify(progress));
+        }
+        if (spacedRepetition && typeof spacedRepetition === "object") {
+          localStorage.setItem("medquiz_sr_state", JSON.stringify(spacedRepetition));
+        }
+        if (mnemonics && typeof mnemonics === "object") {
+          localStorage.setItem("medquiz_mnemonics", JSON.stringify(mnemonics));
+        }
+
+        setMessage({
+          type: "success",
+          text: `Backup restored successfully! (${restoredItems} notes & custom items restored)`,
+        });
+      } catch (err) {
+        console.error(err);
+        setMessage({
+          type: "error",
+          text: "Failed to parse backup file. Please select a valid MedQuiz JSON backup.",
+        });
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
 
   useEffect(() => {
     // Detect PWA Standalone status & iOS
@@ -311,15 +403,72 @@ export default function SettingsPage() {
 
         {/* Data Management Section */}
         <section className="clean-card rounded-2xl p-6 sm:p-8">
-          <h2 className="text-base font-bold text-foreground mb-4 flex items-center gap-2">
+          <h2 className="text-base font-bold text-foreground mb-1 flex items-center gap-2">
             <RefreshCw className="w-4 h-4 text-primary" />
-            Data & Storage Management
+            Data Portability & Storage Management
           </h2>
+          <p className="text-xs text-muted-foreground mb-4">
+            Export offline backups, restore your notes and custom MCQs, or sync across devices.
+          </p>
+
+          {/* Hidden file input for JSON import */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept=".json,application/json"
+            onChange={handleImportBackup}
+            className="hidden"
+          />
+
           <div className="grid sm:grid-cols-2 gap-4">
+            {/* Export Backup Card */}
+            <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
+              <div>
+                <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
+                  <Download className="w-3.5 h-3.5 text-primary" />
+                  Export Full Backup
+                </h3>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Download a JSON file containing all your notes, custom MCQs, bookmarks, and spaced repetition progress.
+                </p>
+              </div>
+              <button
+                onClick={handleExportBackup}
+                className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Download className="w-4 h-4 text-primary" />
+                Export Backup (JSON)
+              </button>
+            </div>
+
+            {/* Import Backup Card */}
+            <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
+              <div>
+                <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
+                  <Upload className="w-3.5 h-3.5 text-violet-500" />
+                  Restore / Import Backup
+                </h3>
+                <p className="text-xs text-muted-foreground mb-4">
+                  Restore previously exported notes and custom questions onto this device from a JSON file.
+                </p>
+              </div>
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5"
+              >
+                <Upload className="w-4 h-4 text-violet-500" />
+                Import Backup (JSON)
+              </button>
+            </div>
+
+            {/* Cloud Sync (if logged in) */}
             {user && (
               <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-semibold text-sm mb-1 text-foreground">Force Cloud Sync</h3>
+                  <h3 className="font-semibold text-sm mb-1 text-foreground flex items-center gap-1.5">
+                    <Cloud className="w-3.5 h-3.5 text-blue-500" />
+                    Force Cloud Sync
+                  </h3>
                   <p className="text-xs text-muted-foreground mb-4">Pull latest cloud stats and merge with this device.</p>
                 </div>
                 <button
@@ -327,11 +476,13 @@ export default function SettingsPage() {
                   disabled={isSaving}
                   className="w-full bg-background border border-border hover:bg-muted text-sm font-semibold py-2 rounded-xl transition-colors disabled:opacity-50"
                 >
-                  {isSaving ? "Syncing..." : "Sync Now"}
+                  {isSaving ? "Syncing..." : "Sync Cloud Now"}
                 </button>
               </div>
             )}
-            <div className={`p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between ${!user ? "sm:col-span-2" : ""}`}>
+
+            {/* Clear Local Data */}
+            <div className={`p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between ${!user ? "" : ""}`}>
               <div>
                 <h3 className="font-semibold text-sm mb-1 text-foreground">Clear Local Device Progress</h3>
                 <p className="text-xs text-muted-foreground mb-4">

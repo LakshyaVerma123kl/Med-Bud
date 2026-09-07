@@ -173,6 +173,19 @@ export function QuizContent({ bookId, chapterId, mode, questions: initialQuestio
     const isCorrect = originalIndex === currentQuestion.correct_index;
     const fb = getMotivationalFeedback(isCorrect);
     setFeedback(fb);
+
+    // Tactile haptic feedback for mobile / PWA touch devices
+    if (typeof window !== "undefined" && "vibrate" in navigator) {
+      try {
+        if (isCorrect) {
+          navigator.vibrate(35); // Crisp success tap
+        } else {
+          navigator.vibrate([40, 50, 40]); // Double pulse alert for mistakes
+        }
+      } catch {
+        // Silently fall back if blocked by browser policy
+      }
+    }
     
     // Process spaced repetition only if we haven't answered this yet
     if (!state.isAnswered) {

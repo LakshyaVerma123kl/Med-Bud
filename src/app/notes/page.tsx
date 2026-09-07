@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, StickyNote, Search, Trash2, ArrowRight, BookOpen } from "lucide-react";
+import { ArrowLeft, StickyNote, Search, Trash2, ArrowRight, BookOpen, Printer } from "lucide-react";
 import { useNotes } from "@/hooks/useNotes";
 import { useCustomQuestions } from "@/hooks/useCustomQuestions";
 import { getChapterById } from "@/lib/data/chapters";
@@ -64,30 +64,43 @@ export default function NotesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background text-foreground py-10 px-4 sm:px-6">
+    <div className="min-h-screen bg-background text-foreground py-10 px-4 sm:px-6 print:py-2 print:px-2 print:bg-white print:text-black">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
-          <Link
-            href="/dashboard"
-            className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-foreground flex items-center gap-2">
-              <StickyNote className="w-6 h-6 text-amber-500" />
-              My Notes
-            </h1>
-            <p className="text-xs sm:text-sm text-muted-foreground">
-              {allNotes.length} note{allNotes.length !== 1 ? "s" : ""} across your quiz sessions
-            </p>
+        <div className="flex items-center justify-between gap-3 mb-8 print:mb-4">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/dashboard"
+              className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground print:hidden"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold text-foreground print:text-black flex items-center gap-2">
+                <StickyNote className="w-6 h-6 text-amber-500 print:text-black" />
+                My Notes & Revision Sheet
+              </h1>
+              <p className="text-xs sm:text-sm text-muted-foreground print:text-neutral-600">
+                {allNotes.length} high-yield note{allNotes.length !== 1 ? "s" : ""} across your study sessions
+              </p>
+            </div>
           </div>
+
+          {allNotes.length > 0 && (
+            <button
+              onClick={() => window.print()}
+              className="print:hidden inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-muted/80 hover:bg-muted text-foreground transition-all border border-border shadow-sm active:scale-95"
+              title="Print high-yield notes revision sheet"
+            >
+              <Printer className="w-4 h-4 text-primary" />
+              <span>Print Revision Sheet</span>
+            </button>
+          )}
         </div>
 
         {/* Search */}
         {allNotes.length > 0 && (
-          <div className="relative mb-6">
+          <div className="relative mb-6 print:hidden">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
@@ -119,13 +132,14 @@ export default function NotesPage() {
           </div>
         )}
 
-        {/* Notes by Chapter */}
+        {/* Notes grouped by chapter */}
         {Object.entries(grouped).map(([chapterName, notes]) => (
-          <div key={chapterName} className="mb-8">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground mb-3 flex items-center gap-2">
-              <BookOpen className="w-3.5 h-3.5" />
-              {chapterName}
+          <div key={chapterName} className="mb-8 print:mb-5">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-muted-foreground print:text-neutral-800 mb-3 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-amber-500 print:bg-black" />
+              {chapterName} ({notes.length})
             </h2>
+
             <div className="space-y-3">
               {notes.map((note) => {
                 const q = questionMap[note.questionId];
@@ -133,23 +147,23 @@ export default function NotesPage() {
                 return (
                   <div
                     key={note.questionId}
-                    className="clean-card rounded-2xl p-5 border-l-4 border-l-amber-500/50"
+                    className="clean-card rounded-2xl p-5 border-l-4 border-l-amber-500/50 print:border print:border-neutral-300 print:shadow-none print:break-inside-avoid print:p-4"
                   >
                     {/* Question preview */}
                     {q && (
-                      <p className="text-sm font-semibold text-foreground mb-2 line-clamp-2 leading-snug">
+                      <p className="text-sm font-semibold text-foreground print:text-black mb-2 line-clamp-2 print:line-clamp-none leading-snug">
                         {q.question}
                       </p>
                     )}
 
                     {/* Note text */}
-                    <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/15 text-sm text-foreground/80 leading-relaxed whitespace-pre-wrap mb-3">
+                    <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/15 print:bg-neutral-50 print:border-neutral-200 text-sm text-foreground/80 print:text-black leading-relaxed whitespace-pre-wrap mb-3">
                       {note.text}
                     </div>
 
                     {/* Footer */}
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground font-medium">
+                      <span className="text-[10px] text-muted-foreground print:text-neutral-500 font-medium">
                         {new Date(note.updatedAt).toLocaleDateString(undefined, {
                           month: "short",
                           day: "numeric",
@@ -157,7 +171,7 @@ export default function NotesPage() {
                         })}
                         {book && ` • ${book.subject}`}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 print:hidden">
                         <button
                           onClick={() => {
                             if (confirm("Delete this note?")) {
