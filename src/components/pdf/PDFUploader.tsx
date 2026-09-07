@@ -20,6 +20,7 @@ export function PDFUploader() {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [quizName, setQuizName] = useState("");
+  const [customInstructions, setCustomInstructions] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,6 +56,9 @@ export function PDFUploader() {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("quizName", quizName);
+      if (customInstructions.trim()) {
+        formData.append("customInstructions", customInstructions.trim());
+      }
 
       const res = await fetch("/api/pdf", {
         method: "POST",
@@ -150,6 +154,21 @@ export function PDFUploader() {
                 disabled={isProcessing}
                 placeholder="e.g. Pathology Chapter 4 Notes"
                 className="w-full px-4 py-3 sm:py-3.5 rounded-xl border border-border bg-background text-base font-medium focus:ring-2 focus:ring-primary focus:outline-none transition-all"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                <Edit2 className="w-3.5 h-3.5" />
+                Custom AI Instructions (Optional)
+              </label>
+              <textarea 
+                value={customInstructions}
+                onChange={(e) => setCustomInstructions(e.target.value)}
+                disabled={isProcessing}
+                placeholder="e.g. Focus on definitions, make it True/False, or make it extremely difficult."
+                rows={3}
+                className="w-full px-4 py-3 rounded-xl border border-border bg-background text-sm font-medium focus:ring-2 focus:ring-primary focus:outline-none transition-all resize-none"
               />
             </div>
           </div>
